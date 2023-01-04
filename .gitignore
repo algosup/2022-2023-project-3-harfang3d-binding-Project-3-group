@@ -259,3 +259,6 @@ paket-files/
 
 # Coverage Report
 MyProject_coverage.xml
+
+# DS store
+.DS_Store
