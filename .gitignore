@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /.idea
 *.pyc
 =======
@@ -260,4 +259,3 @@ paket-files/
 
 # Coverage Report
 MyProject_coverage.xml
->>>>>>> d07f2ec (Create .gitignore)
