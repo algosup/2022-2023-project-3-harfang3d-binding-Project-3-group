@@ -51,6 +51,7 @@ Fabgen is licensed under the GPLv3.
 - CPython 3.2+ using the CPython limited API (`Py_Limited_API`) (generated modules can be used on all CPython version >=3.2)
 - Lua 5.3+
 - Go 1.11+ (use of go module)
+- F# 7.0
 
 ## Contributions
 
@@ -75,6 +76,9 @@ Installation:
 
 Refer to the provided example and the tests for how to write your own API binding script.
 
+Generate binding for F# 7.0
+
+`bind.py api_binding_script.py --fsharp --out d:\`
 ## Extending through feature
 
 Type converters and function prototypes all accept a list or dictionary of features when declared.
