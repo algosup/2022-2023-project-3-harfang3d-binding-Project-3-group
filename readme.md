@@ -1,4 +1,4 @@
-# Fabgen - The fabulous generator
+# Fabgen - The fabulous generator Group 3
 
 [![Build Status](https://travis-ci.org/ejulien/FABGen.svg?branch=master)](https://travis-ci.org/ejulien/FABGen)
 [![Coverage Status](https://coveralls.io/repos/github/ejulien/FABGen/badge.svg?branch=master)](https://coveralls.io/github/ejulien/FABGen)
