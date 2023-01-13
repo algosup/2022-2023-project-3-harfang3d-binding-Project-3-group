@@ -71,7 +71,7 @@ In this category, we will list the acceptance criteria for the F# binding. The a
 | Gérard 	| 50  	| senior dev | Gerard is a senior developer. He often uses Harfang3D and to improve his skills, he wants to learn F# and be able to use his new skills on Harfang3D.                                                             	|
 # Design
 Below is a diagram of FABGen and existings bindings. The F# binding will be added to this diagram. We need to apply the same principle as the other bindings to F#.<br><br>
-![Architecture](../img/am-ADDC_fabgen.drawio.png "diagram")
+![Architecture](../img/Architecture_diagram-ADDC_fabgen.drawio.png"diagram")
 
 # Non-functional requirements
 Non-functional requirements for our solution are the following:
