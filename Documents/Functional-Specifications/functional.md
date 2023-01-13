@@ -84,7 +84,7 @@ Non-functional requirements for our solution are the following:
 |Robustness| The binding generator must be able to handle a variety of programming languages and use cases, and should not crash or produce errors when faced with invalid or incomplete input.| 
 | Security 	| The binding generator should not introduce any security vulnerabilities to the generated code or to the system on which it is run.| 
 | Usability 	|The binding generator should have an easy-to-use user interface, clear error messages and should generate readable and well-structured code.	|  
-| Compatibility 	| The generated binding code should be compatible with the target programming language, operating system (Win32, Win64 Intel, Linux 64 Intel and Aarch 64 ARM), and other technologies and libraries. 	|   
+| Compatibility 	| The generated binding code should be compatible with the target programming language, operating system (Win32, Win64 Intel, Linux 64 Intel and Aarch 64 ARM), and other technologies and libraries. SEE: https://github.com/algosup/2022-2023-project-3-harfang3d-binding-Project-3-group/blob/main/Documents/Technical-Specifications/technical-Specification.md	|   
 | Maintainability 	| The binding generator should be easy to maintain, and should be designed in such a way that it is easy to fix bugs and add new features in the future.|   
 
 
