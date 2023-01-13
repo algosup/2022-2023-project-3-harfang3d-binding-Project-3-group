@@ -40,7 +40,7 @@ FABGen was written for the HARFANG®3D project to bring the C++ engine to langua
 The goal is to implement F# in FABGen to allow non-coding experts to have access to this software. C++ is a very specific language for non-coding experts  people so implementing other languages such as Python, F# and Rust allows other experts to easily use FABGen. Adding F# to FABgen will benefit to the F# users who need a 3D engine. In addition, people looking for an alternative to SWIG when binding a C++ library to F# might find it useful. F# is known for being a relatively concise and easy to learn language, which can allow you to write code more quickly and with fewer errors. Also F# uses the .NET "int" data type, which is natively optimized for mathematical calculations and bit operations, which can make F# code runs faster than code written in other languages.<br><br>
 Attached below is a diagram illustrating the relationship between HARFANG®3D and FABGen in this project.
 
-![Schema](../img/Schema.png "Schema").
+![Schema](../img/Schema.png "Schema")
 
 
 **Company distribution**
@@ -71,7 +71,7 @@ In this category, we will list the acceptance criteria for the F# binding. The a
 | Gérard 	| 50  	| senior dev | Gerard is a senior developer. He often uses Harfang3D and to improve his skills, he wants to learn F# and be able to use his new skills on Harfang3D.                                                             	|
 # Design
 Below is a diagram of FABGen and existings bindings. The F# binding will be added to this diagram. We need to apply the same principle as the other bindings to F#.<br><br>
-![Architecture](../img/Mock-Up.png "diagram").
+![Architecture](../img/Mock-Up.png "diagram")
 
 # Non-functional requirements
 Non-functional requirements for our solution are the following:
