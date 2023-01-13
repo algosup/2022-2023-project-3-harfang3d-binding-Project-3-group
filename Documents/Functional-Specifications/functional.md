@@ -84,7 +84,7 @@ Non-functional requirements for our solution are the following:
 |Robustness| The binding generator must be able to handle a variety of programming languages and use cases, and should not crash or produce errors when faced with invalid or incomplete input.| 
 | Security 	| The binding generator should not introduce any security vulnerabilities to the generated code or to the system on which it is run.| 
 | Usability 	|The binding generator should have an easy-to-use user interface, clear error messages and should generate readable and well-structured code.	|  
-| Compatibility 	| The generated binding code should be compatible with the target programming language, operating system, and other technologies and libraries.	|   
+| Compatibility 	| The generated binding code should be compatible with the target programming language, operating system (Win32, Win64 Intel, Linux 64 Intel and Aarch 64 ARM), and other technologies and libraries. 	|   
 | Maintainability 	| The binding generator should be easy to maintain, and should be designed in such a way that it is easy to fix bugs and add new features in the future.|   
 
 
@@ -97,7 +97,7 @@ In this section, we will list the constraints and assumptions that we have made 
 -  We cannot allocate new memories during the compilation of the code. We cannot use malloc such as “New” in C. Like HARFANG®3D is used mainly for industry it is mandatory to deal with this.  
 
 # Security
-Security part : 
+For the security part, we haven't added anything new that is not already implemented in the current version of FABGen: 
 - **Defense in depth**: the Binding generator should provide multiple layers of security in order to make it harder for an attacker to find and exploit a vulnerability.
 - **Least privilege principle**: The binding generator should run with the minimal access and privilege level required for its task.
 - **Input validation**: The binding generator should validate all input and reject any that does not meet specific requirements or may be harmful.
