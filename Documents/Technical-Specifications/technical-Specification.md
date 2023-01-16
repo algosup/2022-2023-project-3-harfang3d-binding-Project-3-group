@@ -66,7 +66,7 @@
 ## a. Overview
 
 FABgen is a code generator for C/C++ libraries. It is a tool that takes a C/C++ library and generates a Python, Lua, or Go module that can be used to access the library from the target language.
-FABgen was written for the Harfang 3D project to bring the C++ engine to languages such as Python, Lua, and Go. It was written as a replacement for SWIG, a very well-known binding generator supporting a lot of target languages.
+FABgen was written for the Harfang 3D project to bring the C++ engine to languages such as Python, Lua and Go. It was written as a replacement for SWIG, a very well-known binding generator supporting a lot of target languages.
 
 FABgen is a code generator for C/C++ libraries. It is a tool that takes a C/C++ library and generates a Python, Lua, or Go module that can be used to access the library from the target language.
 
@@ -78,8 +78,8 @@ Using Python to implement FABgen and the binding definitions themselves. Impleme
 
 ## b. Goal
 
-FABgen was written for the [HARFANG®3D](https://www.harfang3d.com/en_US/) project to bring the C++ engine to languages such as Python, Lua, and Go. It was written as a replacement for SWIG, a very well-known binding generator supporting a lot of target languages. SWIG has different issues and that's why HARFANG®3D company create another binding generator. Our objective is to create a binding for F#.<br><br>
-The goal is to implement F# in FABgen to allow non-coding experts to have access to this software. C++ is a very specific language for non-coding experts people so implementing other languages such as Python, F# and Rust allows other experts to easily use FABgen. Adding F# to FABgen will benefit the F# users who need a 3D engine. In addition, people looking for an alternative to SWIG when binding a C++ library to F# might find it useful. F# is known for being a relatively concise and easy-to-learn language, which can allow you to write code more quickly and with fewer errors. Also, F# uses the .NET "int" data type, which is natively optimized for mathematical calculations and bit operations, which can make F# code runs faster than code is written in other languages.<br><br>
+FABGen was written for the [HARFANG®3D](https://www.harfang3d.com/en_US/) project to bring the C++ engine to languages such as Python, Lua and Go. It was written as a replacement for SWIG, a very well-known binding generator supporting a lot of target languages. SWIG has different issues and that's why HARFANG®3D company create another binding generator. Our objective is to create a binding for F#.<br><br>
+The goal is to implement F# in FABgen to allow non-coding experts to have access to this software. C++ is a very specific language for non-coding experts people so implementing other languages such as Python, F# and Rust allows other experts to easily use FABGen. Adding F# to FABGen will benefit the F# users who need a 3D engine. In addition, people looking for an alternative to SWIG when binding a C++ library to F# might find it useful. F# is known for being a relatively concise and easy-to-learn language, which can allow you to write code more quickly and with fewer errors. Also, F# uses the .NET "int" data type, which is natively optimized for mathematical calculations and bit operations, which can make F# code runs faster than code is written in other languages.<br><br>
 
 ## c. Context
 At the moment, the 3D engine created by [HARFANG3D](https://www.harfang3d.com/en_US/) is not allowed in all programming languages. Users can't use F# language or Rust language at this moment. This poses a problem especially now when users want to code in these languages. With this project the company wants its future users to be able to use these different languages.
@@ -105,7 +105,7 @@ To create our solution product, we need like written the code in python to trans
 
 For the past years, Harfang3D used to work with SWIG, but they had issues like:
 
--   Very old and complex codebase. Language support is written partially in C and SWIG interface files which are almost a language by themselves. The C codebase does everything through a single Object struct hiding the real type of variables making it extremely difficult to debug and extend the SWIG core.
+-   Very old and complex codebase. Language support was written partially in C and SWIG interface files which are almost a language by themselves. The C codebase does everything through a single Object struct hiding the real type of variables making it extremely difficult to debug and extend the SWIG core.
 -   Uneven feature support between languages with missing features although the target language could support them.
 
 So they decided to develop FABGen to solve these issues by:
@@ -131,7 +131,7 @@ The proposed solution is to add more languages, starting with Rust.
 
 This solution will be added to the existing code of the [FABGen repository](https://github.com/ejulien/FABGen).
 
-We recommend using Docker to avoid problems during development. It will emulate an os, which is interesting because the most part of the team use Mac M1.
+We recommend using Docker to avoid problems during development. It will emulate an OS, Which is interesting because most of the team uses a Mac M1.
 
 The F# language is a statically typed language. It is compiled to IL (Intermediate Language) and then JIT compiled to native code. This means that it is possible to call into a C-style ABI from F# using the F# FFI (Foreign Function Interface) mechanism. This is the same mechanism that is used to call into native code from F#.
 
@@ -224,15 +224,11 @@ FABGen had already a specific architecture for files and folders, so you must fo
 
  ## b. European considerations
 
-HARFANG3D is implemented all over Europe and the regulation about An iso-surface represents points of a constant value within a volume of space. This class holds a fixed-size 3-dimensional grid of values that can efficiently be converted to an iso-surface at runtime for example are the same from all countries.
+HARFANG3D is implemented all over Europe and the regulation about an iso-surface represents points of a constant value within a volume of space. This class holds a fixed-size 3-dimensional grid of values that can efficiently be converted to an iso-surface at runtime for example are the same from all countries.
 
 ## c. Security considerations
 
 The main element of safety is the safety of the software. The software must be safe for customers. We must avoid any problems related to malware and hackers. The software must be safe for the company. We must avoid any problems related to the company's reputation. The software must be safe for the users. We must avoid any problems related to the users' reputation.
-
-## e. Privacy considerations
-
-We use Lora to avoid a lot of problems with data privacy, and data leaks. If instead of using Lora, we used wifi, it would have been much more problematic, because wifi is weaker in terms of security.
 
 ## f. Legal considerations
 
@@ -254,17 +250,17 @@ But we don't need to concern about the certification because the customers said 
 ## b. Milestones
 | Number of weeks                        | Work we need to do             |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|1st week| In The first week we will finish the introduction of the project, writing the documentation and the functional specification. Writing the technical and the Architecture diagram|
-|2nd week|We look at how to use the FABgen already exists. After that, we try to use FABgen.|
-|3rd and 4th week|We are going deeper and starting to launch the. test<br> Test the Go part<br>Test the Lua part<br>Check the quality<br>|
+|1st week| In The first week we will finish the introduction of the project, writing the documentation and the functional specification. Writing the technical and the Architecture diagram.|
+|2nd week|We look at how to use the FABGen already exists. After that, we try to use FABGen.|
+|3rd and 4th week|We are going deeper and starting to launch the test<br> Test the Go part<br>Test the Lua part<br>Check the quality<br>|
 |5th and 6th week|We finish all the test with F#. We start to prepare the presentation.|
-|7th week|This is the last step of the project, everything should be done and ready to present to the client !<br>Oral presentation
+|7th week|This is the last step of the project, everything should be done and ready to present to the client !<br>Oral presentation.
 
 # 6. Implement functions
   
 ## a. Function 1 : Add a new language 
 
-inside the folder lang we create a file fsharp.py
+Inside the lang folder we create a fsharp.py file.
 
 ```python
 class StdSharedPtrProxyFeature:
@@ -284,11 +280,11 @@ class StdSharedPtrProxyFeature:
 
 ## b. Function 2 : Add a folder fsharp
 
-Inside the folder lib we create a folder fsharp in this folder we have the same file than others languages so, __ init__.py, std.py and stl.py 
+Inside the lib folder, we create a Fsharp folder. In this folder we have the same files as other languages so, __ init__.py, std.py and stl.py .
 
 ## c. Function 3 : Add a function for fsharp
 
-Inside the file __ init__.py we add to the existing function the language for fsharp
+Inside the __ init__.py file, we add to the existing function the language for Fsharp.
 
 ```python
 elif gen.get_language() == 'FSharp':
@@ -301,7 +297,7 @@ elif gen.get_language() == 'FSharp':
 
 ## d. Function 4 : Import the new language
 
-Inside the file bind .py we import the new language
+Inside the bind.py file we import the new language.
 
 ```python
 import lang.fsharp
@@ -355,7 +351,7 @@ string|string|
 
 ## a. Function to convert python types into C++ types
 
-We take at the base the function in python to convert the python into C++
+We take at the base the function in python to convert it into C++.
   
   ```python
   def bind_std(gen):
@@ -367,13 +363,13 @@ We take at the base the function in python to convert the python into C++
 
 	gen.bind_type(PyObjectPtrTypeConverter('PyObject *'))
   ```
-  for example this one convert an object python into an object in C++
+For example this one convert an object python into an object in C++.
 
 
-After that we need to convert each types of the python into C++ to after convert the F# into C++
+After that we need to convert each types of the python into C++, then convert the F# into C++.
 
 
-The first one is the bool type
+The first one is the bool type:
 ```python
 
   class PythonBoolConverter(lang.cpython.PythonTypeConverterCommon):
@@ -386,7 +382,7 @@ The first one is the bool type
 
  ```
 
-The second one is the int and string type
+The second one is the int and string type:
 
 ```python
 class PythonIntConverter(lang.cpython.PythonTypeConverterCommon):
@@ -407,7 +403,7 @@ class PythonIntConverter(lang.cpython.PythonTypeConverterCommon):
 
  ```
 
-The third one is the unsigned int and unsigned string type until 32 bits
+The third one is the unsigned int and unsigned string type until 32 bits:
 
 ```python
 
@@ -427,7 +423,7 @@ class PythonUnsignedIntConverter(lang.cpython.PythonTypeConverterCommon):
 
  ```
 
-The fourth one is the int type for the 64 bits
+The fourth one is the int type for the 64 bits:
 
 ```python
 
@@ -441,7 +437,7 @@ class PythonInt64Converter(lang.cpython.PythonTypeConverterCommon):
 
  ```
 
-the fifth one is the unsigned int type for the 64 bits
+The fifth one is the unsigned int type for the 64 bits:
 
 ```python
 
@@ -455,7 +451,7 @@ class PythonUnsignedInt64Converter(lang.cpython.PythonTypeConverterCommon):
 
  ```
 
-The sixth one is the void pointer type 
+The sixth one is the void pointer type:
 
 ```python
 
@@ -468,7 +464,7 @@ class PythonVoidPtrConverter(lang.cpython.PythonTypeConverterCommon):
 	gen.bind_type(PythonVoidPtrConverter('intptr_t'))
 
  ```
-The seventh one is the convert size type
+The seventh one is the convert size type:
 
 ```python
 
@@ -482,7 +478,7 @@ class PythonSize_tConverter(lang.cpython.PythonTypeConverterCommon):
 
  ```
 
-The eighth one is the convert float type
+The eighth one is the convert float type:
 
 ```python
 
@@ -497,7 +493,7 @@ class PythonFloatConverter(lang.cpython.PythonTypeConverterCommon):
 
  ```
 
-The ninth one is the convert const char type
+The ninth one is the convert const char type:
 
 ```python
 
@@ -521,27 +517,27 @@ class PythonConstCharPtrConverter(lang.cpython.PythonTypeConverterCommon):
 
  ```
 
- When we have all of this conversion types in Python we can made the same to convert the F# types into C++ types. 
+ When we have all of these conversions types in Python we can make the same to convert the F# types into C++ types. 
 
 ## b. function to convert F# types into C++ types
 
 
 # 9.Test plan
 
-Here is the [Test plan](https://github.com/algosup/2022-2023-project-3-harfang3d-binding-Project-3-group) for the project. It is a document that describes the test cases that will be used to verify that the software product meets or exceeds the customer’s requirements, and that all of the software product’s features work as expected.
+Here is the [Test plan](https://github.com/algosup/2022-2023-project-3-harfang3d-binding-Project-3-group) for the project. It is a document that describes the test cases that will be used to verify that the software product meets or exceeds the customer’s requirements and that all of the software product’s features work as expected.
 
 # 10. Glossary
 
 | Terms                        | Definition             |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ISO|(International Standards Organisation) is an organization that makes international rules about the quality of products and services:|
-| MISRA|(Motor Industry Software Reliability Association), is a consortium of companies in the automotive industry that develops guidelines and standards for the development of safety-critical software. |
+| ISO|International Standards Organisation is an organization that makes international rules about the quality of products and services. |
+| MISRA|Motor Industry Software Reliability Association is a consortium of companies in the automotive industry that develops guidelines and standards for the development of safety-critical software. |
 | API|They are mechanisms that enable two software components to communicate with each other using a set of definitions and protocols.|
-| ABI | An application binary interface (ABI) is an interface between two binary program modules. Often, one of these modules is a library or operating system facility, and the other is a program that is being run by a user.|
+| ABI | An application binary interface is an interface between two binary program modules. Often, one of these modules is a library or operating system facility, and the other is a program that is being run by a user.|
 | Unit Test | It's a type of software testing where individual units or components of the software are tested.|
 | Statically-typed language  | It's a language (such as Java, C, or C++) where variable types are known at compile time.|
-| Dynamically typed languages | Type checking takes place at runtime or execution time. This means that variables are checked against types only when the program is executing|
-| AUTOSAR | AUTomotive Open System ARchitecture), a standard for the development of automotive software that provides a set of guidelines and tools for the development of software that is portable across different hardware platforms.|
+| Dynamically typed languages | Type checking takes place at runtime or execution time. This means that variables are checked against types only when the program is executing. |
+| AUTOSAR | AUTomotive Open System ARchitecture is a standard for the development of automotive software that provides a set of guidelines and tools for the development of software that is portable across different hardware platforms.|
 | C++ | C++ is a general-purpose programming language created by Bjarne Stroustrup as an extension of the C programming language, or "C with Classes".|
 | F# | F# is a functional programming language that is also object-oriented and imperative. It is a multi-paradigm language that supports both functional and object-oriented programming.|
 | Python | Python is an interpreted, high-level, general-purpose programming language.|
