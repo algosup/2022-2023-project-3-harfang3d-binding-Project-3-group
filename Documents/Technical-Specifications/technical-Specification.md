@@ -35,7 +35,6 @@
 	- [a. Impact on customers of HARFANG3D](#a-impact-on-customers-of-harfang3d)
 	- [b. European considerations](#b-european-considerations)
 	- [c. Security considerations](#c-security-considerations)
-	- [e. Privacy considerations](#e-privacy-considerations)
 	- [f. Legal considerations](#f-legal-considerations)
 - [5. Work](#5-work)
 	- [a. Prioritization](#a-prioritization)
@@ -238,6 +237,12 @@ But we don't need to concern about the certification because the customers said 
 # 5. Work
 ## a. Prioritization
 
+| Flexibility                        | importance             |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| F0| Most important |
+| F1| Important |
+| F2| Less important |
+
 | Function                        | Flexibility         |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Test if it works with Lua| F1 |
@@ -312,7 +317,7 @@ byte|(signed) char|
 int16|short|
 int|int|
 int64|long|
-int64long long int|
+int64|long long int|
 sbyte|unsigned char|
 uint16|unsigned short|
 uint|unsigned int|
