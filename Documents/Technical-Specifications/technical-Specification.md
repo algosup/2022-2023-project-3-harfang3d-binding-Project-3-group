@@ -35,10 +35,11 @@
 	- [a. Impact on customers of HARFANG3D](#a-impact-on-customers-of-harfang3d)
 	- [b. European considerations](#b-european-considerations)
 	- [c. Security considerations](#c-security-considerations)
-	- [f. Legal considerations](#f-legal-considerations)
+	- [d. Legal considerations](#d-legal-considerations)
 - [5. Work](#5-work)
-	- [a. Prioritization](#a-prioritization)
-	- [b. Milestones](#b-milestones)
+	- [a Architecture Diagram](#a-architecture-diagram)
+	- [b. Prioritization](#b-prioritization)
+	- [c. Milestones](#c-milestones)
 - [6. Implement functions](#6-implement-functions)
 	- [a. Function 1 : Add a new language](#a-function-1--add-a-new-language)
 	- [b. Function 2 : Add a folder fsharp](#b-function-2--add-a-folder-fsharp)
@@ -50,8 +51,8 @@
 	- [c. Boolean type](#c-boolean-type)
 	- [d. Void type](#d-void-type)
 	- [e. String type](#e-string-type)
-- [8. Function change to convert the python into C++ to after convert the F# into C++](#8-function-change-to-convert-the-python-into-c-to-after-convert-the-f-into-c)
-	- [a. Function to convert python types into C++ types](#a-function-to-convert-python-types-into-c-types)
+- [8. Function change to convert the Go into C++ to after convert the F# into C++](#8-function-change-to-convert-the-go-into-c-to-after-convert-the-f-into-c)
+	- [a. Function to convert Go types into C++ types](#a-function-to-convert-go-types-into-c-types)
 	- [b. function to convert F# types into C++ types](#b-function-to-convert-f-types-into-c-types)
 - [9.Test plan](#9test-plan)
 - [10. Glossary](#10-glossary)
@@ -229,13 +230,19 @@ HARFANG3D is implemented all over Europe and the regulation about an iso-surface
 
 The main element of safety is the safety of the software. The software must be safe for customers. We must avoid any problems related to malware and hackers. The software must be safe for the company. We must avoid any problems related to the company's reputation. The software must be safe for the users. We must avoid any problems related to the users' reputation.
 
-## f. Legal considerations
+## d. Legal considerations
 
 The legal aspect is very important. Indeed, the product must be certified. For example, in Europe, the certification is ISO. ISO permits have a good quality product.
 But we don't need to concern about the certification because the customers said we don't need to take this into account.
 
 # 5. Work
-## a. Prioritization
+
+
+## a Architecture Diagram
+
+<img src="../img/Architecture_diagram-ADDC_fabgen.drawio.png" alt="Architecture_diagram-ADDC_fabgen.drawio"/>
+
+## b. Prioritization
 
 | Flexibility                        | importance             |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -252,7 +259,7 @@ But we don't need to concern about the certification because the customers said 
 | Permit the user to use F#|F0|
 
 
-## b. Milestones
+## c. Milestones
 | Number of weeks                        | Work we need to do             |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 |1st week| In The first week we will finish the introduction of the project, writing the documentation and the functional specification. Writing the technical and the Architecture diagram.|
@@ -352,177 +359,147 @@ string|string|
 
 
 
-# 8. Function change to convert the python into C++ to after convert the F# into C++
+# 8. Function change to convert the Go into C++ to after convert the F# into C++
 
-## a. Function to convert python types into C++ types
+## a. Function to convert Go types into C++ types
 
 We take at the base the function in python to convert it into C++.
   
   ```python
   def bind_std(gen):
-	class PyObjectPtrTypeConverter(lang.cpython.PythonTypeConverterCommon):
+	class GoConstCharPtrConverter(lang.go.GoTypeConverterCommon):
+		def __init__(self, type, to_c_storage_type=None, bound_name=None, from_c_storage_type=None, needs_c_storage_class=False):
+			super().__init__(type, to_c_storage_type, bound_name, from_c_storage_type, needs_c_storage_class)
+			self.go_to_c_type = "*C.char"
+			self.go_type = "string"
+			
 		def get_type_glue(self, gen, module_name):
-			return 'bool %s(PyObject *o) { return true; }\n' % self.check_func +\
-			'void %s(PyObject *o, void *obj) { *(void **)obj = o; }\n' % self.to_c_func +\
-			'PyObject *%s(void *o, OwnershipPolicy) { return *(PyObject **)o; }\n' % self.from_c_func
+			return ''
 
-	gen.bind_type(PyObjectPtrTypeConverter('PyObject *'))
+		def get_type_api(self, module_name):
+			return ''
+
+		def to_c_call(self, in_var, out_var_p, is_pointer=False):
+			if is_pointer:
+				out = f"{out_var_p.replace('&', '_')}1 := C.CString(*{in_var})\n"
+				out += f"{out_var_p.replace('&', '_')} := &{out_var_p.replace('&', '_')}1\n"
+			else:
+				out = f"{out_var_p.replace('&', '_')}, idFin{out_var_p.replace('&', '_')} := wrapString({in_var})\n"
+				out += f"defer idFin{out_var_p.replace('&', '_')}()\n"
+			return out
+
+		def from_c_call(self, out_var, expr, ownership):
+			return "C.GoString(%s)" % (out_var)
+
+	gen.bind_type(GoConstCharPtrConverter("const char *"))
+
   ```
-For example this one convert an object python into an object in C++.
+For example this one convert a String in Go into a String in C++.
 
 
-After that we need to convert each types of the python into C++, then convert the F# into C++.
+After that we need to convert each types of the Go language into C++, then convert the F# into C++.
 
 
-The first one is the bool type:
-```python
-
-  class PythonBoolConverter(lang.cpython.PythonTypeConverterCommon):
-		def get_type_glue(self, gen, module_name):
-			return 'bool %s(PyObject *o) { return PyBool_Check(o) ? true : false; }\n' % self.check_func +\
-			'void %s(PyObject *o, void *obj) { *((%s*)obj) = o == Py_True; }\n' % (self.to_c_func, self.ctype) +\
-			'PyObject *%s(void *obj, OwnershipPolicy) { return PyBool_FromLong(*((%s*)obj)); }\n' % (self.from_c_func, self.ctype)
-
-	gen.bind_type(PythonBoolConverter('bool'))
-
- ```
-
-The second one is the int and string type:
-
-```python
-class PythonIntConverter(lang.cpython.PythonTypeConverterCommon):
-		def get_type_glue(self, gen, module_name):
-			return 'bool %s(PyObject *o) { return PyLong_CheckExact(o) ? true : false; }\n' % self.check_func +\
-			'void %s(PyObject *o, void *obj) { *((%s*)obj) = (%s)PyLong_AsLong(o); }\n' % (self.to_c_func, self.ctype, self.ctype) +\
-			'PyObject *%s(void *obj, OwnershipPolicy) { return PyLong_FromLong(*((%s*)obj)); }\n' % (self.from_c_func, self.ctype)
-
-	gen.bind_type(PythonIntConverter('char'))
-	gen.bind_type(PythonIntConverter('short'))
-	gen.bind_type(PythonIntConverter('int'))
-	gen.bind_type(PythonIntConverter('long'))
-	gen.bind_type(PythonIntConverter('int8_t'))
-	gen.bind_type(PythonIntConverter('int16_t'))
-	gen.bind_type(PythonIntConverter('int32_t'))
-	gen.bind_type(PythonIntConverter('char16_t'))
-	gen.bind_type(PythonIntConverter('char32_t'))
-
- ```
-
-The third one is the unsigned int and unsigned string type until 32 bits:
+After that we need to convert each types of the Go language into C++, then convert the F# into C++.
+For this we need to create a basic type converter. This converter will be used to convert the Go types into C++ types.
 
 ```python
 
-class PythonUnsignedIntConverter(lang.cpython.PythonTypeConverterCommon):
-		def get_type_glue(self, gen, module_name):
-			return 'bool %s(PyObject *o) { return PyLong_CheckExact(o) ? true : false; }\n' % self.check_func +\
-			'void %s(PyObject *o, void *obj) { *((%s*)obj) = (%s)PyLong_AsUnsignedLong(o); }\n' % (self.to_c_func, self.ctype, self.ctype) +\
-			'PyObject *%s(void *obj, OwnershipPolicy) { return PyLong_FromUnsignedLong(*((%s*)obj)); }\n' % (self.from_c_func, self.ctype)
+  class GoBasicTypeConverter(lang.go.GoTypeConverterCommon):
+		def __init__(self, type, c_type, go_type, to_c_storage_type=None, bound_name=None, from_c_storage_type=None, needs_c_storage_class=False):
+			super().__init__(type, to_c_storage_type, bound_name, from_c_storage_type, needs_c_storage_class)
+			self.go_to_c_type = c_type
+			self.go_type = go_type
 
-	gen.bind_type(PythonUnsignedIntConverter('unsigned char'))
-	gen.bind_type(PythonUnsignedIntConverter('unsigned short'))
-	gen.bind_type(PythonUnsignedIntConverter('unsigned int'))
-	gen.bind_type(PythonUnsignedIntConverter('unsigned long'))
-	gen.bind_type(PythonUnsignedIntConverter('uint8_t'))
-	gen.bind_type(PythonUnsignedIntConverter('uint16_t'))
-	gen.bind_type(PythonUnsignedIntConverter('uint32_t'))
+		def get_type_glue(self, gen, module_name):
+			return ''
+
+		def get_type_api(self, module_name):
+			return ''
+
+		def to_c_call(self, in_var, out_var_p, is_pointer):
+			if is_pointer:
+				out = f"{out_var_p.replace('&', '_')} := (*{self.go_to_c_type})(unsafe.Pointer({in_var}))\n"
+			else:
+				out = f"{out_var_p.replace('&', '_')} := {self.go_to_c_type}({in_var})\n"
+			return out
+
+		def from_c_call(self, out_var, expr, ownership):
+			return f"{self.go_type}({out_var})"
 
  ```
 
-The fourth one is the int type for the 64 bits:
+With this converter we can convert the Go types into C++ types except the String and the boolean types.
 
 ```python
 
-class PythonInt64Converter(lang.cpython.PythonTypeConverterCommon):
-		def get_type_glue(self, gen, module_name):
-			return 'bool %s(PyObject *o) { return PyLong_CheckExact(o) ? true : false; }\n' % self.check_func +\
-			'void %s(PyObject *o, void *obj) { *((%s*)obj) = PyLong_AsLongLong(o); }\n' % (self.to_c_func, self.ctype) +\
-			'PyObject *%s(void *obj, OwnershipPolicy) { return PyLong_FromLongLong(*((%s*)obj)); }\n' % (self.from_c_func, self.ctype)
+gen.bind_type(GoBasicTypeConverter("char", "C.char", "int8"))
 
-	gen.bind_type(PythonInt64Converter('int64_t'))
+	gen.bind_type(GoBasicTypeConverter("unsigned char", "C.uchar", "uint8"))
+	gen.bind_type(GoBasicTypeConverter("uint8_t", "C.uchar", "uint8"))
+
+	gen.bind_type(GoBasicTypeConverter("short", "C.short", "int16"))
+	gen.bind_type(GoBasicTypeConverter("int16_t", "C.short", "int16"))
+	gen.bind_type(GoBasicTypeConverter("char16_t", "C.short", "int16"))
+
+	gen.bind_type(GoBasicTypeConverter("uint16_t", "C.ushort", "uint16"))
+	gen.bind_type(GoBasicTypeConverter("unsigned short", "C.ushort ", "uint16"))
+	
+	gen.bind_type(GoBasicTypeConverter("int32", "C.int32_t", "int32"))
+	gen.bind_type(GoBasicTypeConverter("int", "C.int32_t", "int32"))
+	gen.bind_type(GoBasicTypeConverter("int32_t", "C.int32_t", "int32"))
+	gen.bind_type(GoBasicTypeConverter("char32_t", "C.int32_t", "int32"))
+	gen.bind_type(GoBasicTypeConverter("size_t", "C.size_t", "int32"))
+
+	gen.bind_type(GoBasicTypeConverter("uint32_t", "C.uint32_t", "uint32"))
+	gen.bind_type(GoBasicTypeConverter("unsigned int32_t", "C.uint32_t", "uint32"))
+	gen.bind_type(GoBasicTypeConverter("unsigned int", "C.uint32_t", "uint32"))
+
+	gen.bind_type(GoBasicTypeConverter("int64_t", "C.int64_t", "int64"))
+	gen.bind_type(GoBasicTypeConverter("long", "C.int64_t", "int64"))
+
+	gen.bind_type(GoBasicTypeConverter("float32", "C.float", "float32"))
+	gen.bind_type(GoBasicTypeConverter("float", "C.float", "float32"))
+	
+	gen.bind_type(GoBasicTypeConverter("intptr_t", "C.intptr_t", "uintptr"))
+
+	gen.bind_type(GoBasicTypeConverter("unsigned long", "C.uint64_t", "uint64"))
+	gen.bind_type(GoBasicTypeConverter("uint64_t", "C.uint64_t ", "uint64"))
+	gen.bind_type(GoBasicTypeConverter("double", "C.double", "float64"))
+
 
  ```
 
-The fifth one is the unsigned int type for the 64 bits:
+For the Boolean type we need to create a new converter.
 
 ```python
 
-class PythonUnsignedInt64Converter(lang.cpython.PythonTypeConverterCommon):
-		def get_type_glue(self, gen, module_name):
-			return 'bool %s(PyObject *o) { return PyLong_CheckExact(o) ? true : false; }\n' % self.check_func +\
-			'void %s(PyObject *o, void *obj) { *((%s*)obj) = PyLong_AsUnsignedLongLong(o); }\n' % (self.to_c_func, self.ctype) +\
-			'PyObject *%s(void *obj, OwnershipPolicy) { return PyLong_FromUnsignedLongLong(*((%s*)obj)); }\n' % (self.from_c_func, self.ctype)
+  class GoBoolConverter(lang.go.GoTypeConverterCommon):
+		def __init__(self, type, c_type, go_type, to_c_storage_type=None, bound_name=None, from_c_storage_type=None, needs_c_storage_class=False):
+			super().__init__(type, to_c_storage_type, bound_name, from_c_storage_type, needs_c_storage_class)
+			self.go_to_c_type = c_type
+			self.go_type = go_type
 
-	gen.bind_type(PythonUnsignedInt64Converter('uint64_t'))
+		def get_type_glue(self, gen, module_name):
+			return ''
+
+		def get_type_api(self, module_name):
+			return ''
+
+		def to_c_call(self, in_var, out_var_p, is_pointer):
+			if is_pointer:
+				out = f"{out_var_p.replace('&', '_')} := (*{self.go_to_c_type})(unsafe.Pointer({in_var}))\n"
+			else:
+				out = f"{out_var_p.replace('&', '_')} := {self.go_to_c_type}({in_var})\n"
+			return out
+
+		def from_c_call(self, out_var, expr, ownership):
+			return f"{self.go_type}({out_var})"
+	gen.bind_type(GoBoolConverter('bool')).nobind = True
 
  ```
 
-The sixth one is the void pointer type:
-
-```python
-
-class PythonVoidPtrConverter(lang.cpython.PythonTypeConverterCommon):
-		def get_type_glue(self, gen, module_name):
-			return 'bool %s(PyObject *o) { return PyLong_CheckExact(o) ? true : false; }\n' % self.check_func +\
-			'void %s(PyObject *o, void *obj) { *((%s*)obj) = (%s)PyLong_AsVoidPtr(o); }\n' % (self.to_c_func, self.ctype, self.ctype) +\
-			'PyObject *%s(void *obj, OwnershipPolicy) { return PyLong_FromVoidPtr((void *)(*((%s*)obj))); }\n' % (self.from_c_func, self.ctype)
-
-	gen.bind_type(PythonVoidPtrConverter('intptr_t'))
-
- ```
-The seventh one is the convert size type:
-
-```python
-
-class PythonSize_tConverter(lang.cpython.PythonTypeConverterCommon):
-		def get_type_glue(self, gen, module_name):
-			return 'bool %s(PyObject *o) { return PyLong_CheckExact(o) ? true : false; }\n' % self.check_func +\
-			'void %s(PyObject *o, void *obj) { *((%s*)obj) = PyLong_AsSize_t(o); }\n' % (self.to_c_func, self.ctype) +\
-			'PyObject *%s(void *obj, OwnershipPolicy) { return PyLong_FromSize_t(*((%s*)obj)); }\n' % (self.from_c_func, self.ctype)
-
-	gen.bind_type(PythonSize_tConverter('size_t'))
-
- ```
-
-The eighth one is the convert float type:
-
-```python
-
-class PythonFloatConverter(lang.cpython.PythonTypeConverterCommon):
-		def get_type_glue(self, gen, module_name):
-			return 'bool %s(PyObject *o) { return PyFloat_Check(o) || PyLong_Check(o) ? true : false; }\n' % self.check_func +\
-			'void %s(PyObject *o, void *obj) { *((%s*)obj) = (%s)PyFloat_AsDouble(o); }\n' % (self.to_c_func, self.ctype, self.ctype) +\
-			'PyObject *%s(void *obj, OwnershipPolicy) { return PyFloat_FromDouble(*((%s*)obj)); }\n' % (self.from_c_func, self.ctype)
-
-	gen.bind_type(PythonFloatConverter('float'))
-	gen.bind_type(PythonFloatConverter('double'))
-
- ```
-
-The ninth one is the convert const char type:
-
-```python
-
-class PythonConstCharPtrConverter(lang.cpython.PythonTypeConverterCommon):
-		def __init__(self, type, to_c_storage_type=None, bound_name=None, from_c_storage_type=None):
-			super().__init__(type, to_c_storage_type, bound_name, from_c_storage_type, True)
-
-		def get_type_glue(self, gen, module_name):
-			return 'struct %s { std::string s; };\n' % self.c_storage_class +\
-			'bool %s(PyObject *o) { return PyUnicode_Check(o) ? true : false; }\n' % self.check_func +\
-			'''void %s(PyObject *o, void *obj, %s &storage) {
-	PyObject *utf8_pyobj = PyUnicode_AsUTF8String(o);
-	storage.s = PyBytes_AsString(utf8_pyobj);
-	*((%s*)obj) = storage.s.data();
-	Py_DECREF(utf8_pyobj);
-}
-''' % (self.to_c_func, self.c_storage_class, self.ctype) +\
-			'PyObject *%s(void *obj, OwnershipPolicy) { return PyUnicode_FromString(*((%s*)obj)); }\n' % (self.from_c_func, self.ctype)
-
-	gen.bind_type(PythonConstCharPtrConverter('const char *'))
-
- ```
-
- When we have all of these conversions types in Python we can make the same to convert the F# types into C++ types. 
+ When we have all of these conversions types in Go we can make the same to convert the F# types into C++ types. 
 
 ## b. function to convert F# types into C++ types
 
