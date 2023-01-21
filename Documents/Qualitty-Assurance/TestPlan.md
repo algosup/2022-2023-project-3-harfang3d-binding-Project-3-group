@@ -21,6 +21,7 @@
   - [Test objectives](#test-objectives)
     - [Test level performed](#test-level-performed)
   - [Test strategy](#test-strategy)
+- [Glossary](#glossary)
 
 # Test policy
 ## Mission of testing
@@ -43,4 +44,12 @@ We also comply with legal and regulatory requirements. We need to bring a soluti
 
 ## Test strategy
 
+# Glossary
 
+| ISO (International Organization for Standardization)                      	| It's a worldwide federation of national standards bodies                                                                                                                                                                                                                                                                                                                                                              	|
+|---------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+| Standards (from ISO)                                                      	| They are the distilled wisdom of people with expertise in their subject matter and who know the needs of the organizations they represent – people such as manufacturers, sellers, buyers, customers, trade associations, users or regulators. For instance, quality management standards to help work more efficiently and reduce product failures. IT security standards to help keep sensitive information secure. 	|
+| IEC (The International Electrotechnical Commission)                       	| It's an international standards organization that prepares and publishes international standards for all electrical, electronic and related technologies                                                                                                                                                                                                                                                              	|
+| IEEE (Institute of Electrical and Electronics Engineers)                  	| "It's the trusted voice for engineering, computing, and technology information around the globe." (cf About in [IEEE website](https://www.ieee.org/about/index.html))                                                                                                                                                                                                                                                  	|
+| ISO/IEC/IEEE 29119 (Software and systems engineering -- Software testing) 	| It's a series of five international standards for software testing                                                                                                                                                                                                                                                                                                                                                    	|
+|                                                                           	|                                                                                                                                                                                                                                                                                                                                                                                                                       	|
