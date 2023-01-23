@@ -27,7 +27,10 @@
     - [Software used](#software-used)
     - [Bug reporting](#bug-reporting)
   - [Test Environment Management](#test-environment-management)
+  - [Features need to be tested](#features-need-to-be-tested)
+  - [Features need not be tested](#features-need-not-be-tested)
   - [Configuration management](#configuration-management)
+- [Test case](#test-case)
 - [Glossary](#glossary)
 
 # Test policy
@@ -85,10 +88,14 @@ List of the different activities used for an efficient test management:
 5. Issues on the environment's monitoring
 6. Co-ordination untill an issue resolution.
 
-
+## Features need to be tested
+- Transform a C++ function in F# function
+## Features need not be tested
+- Transform a F# function in C++ function
 ## Configuration management
-
-
+<!-- WIP -->
+# Test case
+<!-- WIP -->
 # Glossary
 | Words                                                                     	| Definition                                                                                                                                                                                                                                                                                                                                                                                                            	|
 |---------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
