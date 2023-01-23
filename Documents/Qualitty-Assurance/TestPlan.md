@@ -20,7 +20,7 @@
   - [Mission of testing](#mission-of-testing)
   - [Test objectives](#test-objectives)
     - [Test level performed](#test-level-performed)
-  - [Test strategy](#test-strategy)
+- [Test strategy](#test-strategy)
 - [Glossary](#glossary)
 
 # Test policy
@@ -41,7 +41,7 @@ We also comply with legal and regulatory requirements. We need to bring a soluti
 | Operational testing     	| Checks the reliability and performance of the software and should be tested to find out if it works as expected 	|
 
 
-## Test strategy
+# Test strategy
 # Glossary
 | Words                                                                     	| Definition                                                                                                                                                                                                                                                                                                                                                                                                            	|
 |---------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
