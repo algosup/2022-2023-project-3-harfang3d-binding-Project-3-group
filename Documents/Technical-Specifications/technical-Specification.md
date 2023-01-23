@@ -53,7 +53,6 @@
 	- [e. String type](#e-string-type)
 - [8. Function change to convert the Go into C++ to after convert the F# into C++](#8-function-change-to-convert-the-go-into-c-to-after-convert-the-f-into-c)
 	- [a. Function to convert Go types into C++ types](#a-function-to-convert-go-types-into-c-types)
-	- [b. function to convert F# types into C++ types](#b-function-to-convert-f-types-into-c-types)
 - [9.Test plan](#9test-plan)
 - [10. Glossary](#10-glossary)
 - [11. End matter](#11-end-matter)
@@ -341,7 +340,7 @@ uint64|unsigned long long int|
 
 ## c. Boolean type
 F#|C & C++|
-|----|----|-------|
+|----|----|
 |bool|bool|
 
 ## d. Void type
@@ -500,8 +499,6 @@ For the Boolean type we need to create a new converter.
  ```
 
  When we have all of these conversions types in Go we can make the same to convert the F# types into C++ types. 
-
-## b. function to convert F# types into C++ types
 
 
 # 9.Test plan
