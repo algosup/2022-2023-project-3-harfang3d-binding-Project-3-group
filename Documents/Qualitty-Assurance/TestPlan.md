@@ -22,6 +22,12 @@
   - [Test objectives](#test-objectives)
     - [Test level performed](#test-level-performed)
     - [Test types performed](#test-types-performed)
+  - [Test environment](#test-environment)
+    - [Hardware used](#hardware-used)
+    - [Software used](#software-used)
+    - [Bug reporting](#bug-reporting)
+  - [Test Environment Management](#test-environment-management)
+  - [Configuration management](#configuration-management)
 - [Glossary](#glossary)
 
 # Test policy
@@ -48,7 +54,39 @@ We also comply with legal and regulatory requirements. We need to bring a soluti
 | Functional     	| Verifies that the operational execution of the program happens according to the technical specifications                                                            	|
 | Non-functional 	| Make sure that the interests of the end-user are respected by checking these different aspect: performance, usability, scalability, and reliability of the software 	|
 
+## Test environment
+Following people are involved in test environment setup:
+- Lucas Aubard as a Software engineer
+- Robin Debry  as Tech lead 
+- Laura-Lee Hollande as Quality assurance
+- Vivien Bistrel Tsangue as a Project manager
 
+### Hardware used
+- MacBook Air M1 running on macOS Monterey version 12.3.1 <!-- update my mac -->
+- ThinkBook running on Windows 11
+
+### Software used
+- Visual Studio Code version: 1.74.3 (Universal)
+- Github
+- Language used:
+  - F#
+  - C++
+
+### Bug reporting
+Bug reporting tools are used and provided to testers.
+<!-- link to the db of bug -->
+
+## Test Environment Management
+List of the different activities used for an efficient test management: 
+1. Maintenance of a [central repository](https://github.com/algosup/2022-2023-project-3-harfang3d-binding-Project-3-group) with all the updated version of test environments 
+2. Create new environments depending on the new requirments
+3. Environments's monitoring
+4. Updating and deleting outdated test-environments
+5. Issues on the environment's monitoring
+6. Co-ordination untill an issue resolution.
+
+
+## Configuration management
 
 
 # Glossary
