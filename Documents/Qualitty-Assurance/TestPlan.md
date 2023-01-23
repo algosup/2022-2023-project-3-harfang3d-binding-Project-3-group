@@ -18,30 +18,39 @@
 - [Test plan - Harfang 3D](#test-plan---harfang-3d)
 - [Test policy](#test-policy)
   - [Mission of testing](#mission-of-testing)
+- [Test strategy](#test-strategy)
   - [Test objectives](#test-objectives)
     - [Test level performed](#test-level-performed)
-- [Test strategy](#test-strategy)
+    - [Test types performed](#test-types-performed)
 - [Glossary](#glossary)
 
 # Test policy
 ## Mission of testing
 We realize a test process to anticipate all the risks that would impact our solution and make sure to deliver a working solution to our customer HARFANG 3D.
 
+# Test strategy
 ## Test objectives
 The objective of our software testing is to integrate the risk management process to identify any risk as soon as possible in the development process.
 We also comply with legal and regulatory requirements. We need to bring a solution that verifies the test object’s compliance with such requirements or standards:
 - This objective ensures that our software is developed to be in line with the national and international standards of testing.
 - We have ISO, IEC and IEEE 29119 standards that deal with the software testing concept.
 ### Test level performed
-| Level                   	| Objectives                                                                                                      	|
+| Test level                   	| Objectives                                                                                                      	|
 |-------------------------	|-----------------------------------------------------------------------------------------------------------------	|
 | Unit test               	| Detect defective code in units and reduce risk of unit failure in Production                                    	|
 | Regression testing      	| Ensure no new defects have been introduced (in case of enhancements or defect fix)                              	|
 | User acceptance testing 	| Confirm the system works as expected by the customer and the end-user                                           	|
 | Operational testing     	| Checks the reliability and performance of the software and should be tested to find out if it works as expected 	|
 
+### Test types performed
+| Test types     	| Objectives                                                                                                                                                          	|
+|----------------	|---------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+| Functional     	| Verifies that the operational execution of the program happens according to the technical specifications                                                            	|
+| Non-functional 	| Make sure that the interests of the end-user are respected by checking these different aspect: performance, usability, scalability, and reliability of the software 	|
 
-# Test strategy
+
+
+
 # Glossary
 | Words                                                                     	| Definition                                                                                                                                                                                                                                                                                                                                                                                                            	|
 |---------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
