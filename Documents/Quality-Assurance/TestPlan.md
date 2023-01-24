@@ -27,8 +27,6 @@
     - [Software used](#software-used)
     - [Bug reporting](#bug-reporting)
   - [Test Environment Management](#test-environment-management)
-  - [Features need to be tested](#features-need-to-be-tested)
-  - [Features need not be tested](#features-need-not-be-tested)
   - [Configuration management](#configuration-management)
 - [Test case](#test-case)
 - [Glossary](#glossary)
@@ -69,11 +67,12 @@ Following people are involved in test environment setup:
 - ThinkBook running on Windows 11
 
 ### Software used
-- Visual Studio Code version: 1.74.3 (Universal)
+- Visual Studio Code version 1.74.3 (Universal)
 - Github
-- Language used:
+- Languages used:
   - F#
   - C++
+  - C
 
 ### Bug reporting
 Bug reporting tools are used and provided to testers.
@@ -88,14 +87,15 @@ List of the different activities used for an efficient test management:
 5. Issues on the environment's monitoring
 6. Co-ordination untill an issue resolution.
 
-## Features need to be tested
-- Transform a C++ function in F# function
-## Features need not be tested
-- Transform a F# function in C++ function
 ## Configuration management
 <!-- WIP -->
 # Test case
 <!-- WIP -->
+**Features need to be tested:** Transform a C++ function in F# function
+**Features need not be tested:** Transform a F# function in C++ function
+
+
+
 # Glossary
 | Words                                                                     	| Definition                                                                                                                                                                                                                                                                                                                                                                                                            	|
 |---------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
