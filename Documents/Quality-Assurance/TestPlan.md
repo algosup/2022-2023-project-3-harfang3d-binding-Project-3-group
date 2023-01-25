@@ -90,9 +90,14 @@ List of the different activities used for an efficient test management:
 ## Configuration management
 <!-- WIP -->
 # Test case
-<!-- WIP -->
 **Features need to be tested:** Transform a C++ function in F# function
 **Features need not be tested:** Transform a F# function in C++ function
+| Test Case ID 	| Test Case Description 	| Test Steps 	| Test Data 	| Expected Results 	| Actual Results 	| Pass/Fail 	|
+|--------------	|-----------------------	|------------	|-----------	|------------------	|----------------	|-----------	|
+|              	|                       	|            	|           	|                  	|                	|           	|
+|              	|                       	|            	|           	|                  	|                	|           	|
+|              	|                       	|            	|           	|                  	|                	|           	|
+|              	|                       	|            	|           	|                  	|                	|           	|
 
 
 
