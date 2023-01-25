@@ -1,5 +1,5 @@
 <hr>
-<p  align="center"  style="font-weight: bold; font-size: 21px"> ALGOSUP Binding Project </p>
+<p  align="center"  style="font-weight: bold; font-size: 21px"> ALGOSUP Binding | </p>
 
 <p  align="center"  style="font-weight: bold; font-size: 18px"> Technical Specification</p>
 
@@ -58,6 +58,7 @@
 - [11. End matter](#11-end-matter)
 	- [a. References](#a-references)
 	- [b. Acknowledgement](#b-acknowledgement)
+	- [c. Team members](#c-team-members)
 </details>
 
 # 1. Introduction
@@ -65,7 +66,7 @@
 ## a. Overview
 
 FABgen is a code generator for C/C++ libraries. It is a tool that takes a C/C++ library and generates a Python, Lua, or Go module that can be used to access the library from the target language.
-FABgen was written for the Harfang 3D project to bring the C++ engine to languages such as Python, Lua and Go. It was written as a replacement for SWIG, a very well-known binding generator supporting a lot of target languages.
+FABgen was written for the Harfang 3D | to bring the C++ engine to languages such as Python, Lua and Go. It was written as a replacement for SWIG, a very well-known binding generator supporting a lot of target languages.
 
 FABgen is a code generator for C/C++ libraries. It is a tool that takes a C/C++ library and generates a Python, Lua, or Go module that can be used to access the library from the target language.
 
@@ -73,15 +74,15 @@ SWIG has different issues we wished to address:
 
 Very old and complex codebase. Language support is written partially in C and SWIG interface files which are almost a language by themselves. The C codebase does everything through a single Object struct hiding the real type of variables making it extremely difficult to debug and extend the SWIG core. Uneven feature support between languages with missing features although the target language could support them. FABgen tries to solve this issue by:
 
-Using Python to implement FABgen and the binding definitions themselves. Implementing as much as possible of the features in a common part of the program. As a newer project FABgen also tries to leverage newer APIs whenever possible for example by supporting CPython limited ABI so that extension modules it generates can be used by any version of CPython >3.2 without recompilation (at least in theory, the Py_LIMITED_API support in CPython is finicky at best).
+Using Python to implement FABgen and the binding definitions themselves. Implementing as much as possible of the features in a common part of the program. As a newer | FABgen also tries to leverage newer APIs whenever possible for example by supporting CPython limited ABI so that extension modules it generates can be used by any version of CPython >3.2 without recompilation (at least in theory, the Py_LIMITED_API support in CPython is finicky at best).
 
 ## b. Goal
 
-FABGen was written for the [HARFANG®3D](https://www.harfang3d.com/en_US/) project to bring the C++ engine to languages such as Python, Lua and Go. It was written as a replacement for SWIG, a very well-known binding generator supporting a lot of target languages. SWIG has different issues and that's why HARFANG®3D company create another binding generator. Our objective is to create a binding for F#.<br><br>
+FABGen was written for the [HARFANG®3D](https://www.harfang3d.com/en_US/) | to bring the C++ engine to languages such as Python, Lua and Go. It was written as a replacement for SWIG, a very well-known binding generator supporting a lot of target languages. SWIG has different issues and that's why HARFANG®3D company create another binding generator. Our objective is to create a binding for F#.<br><br>
 The goal is to implement F# in FABgen to allow non-coding experts to have access to this software. C++ is a very specific language for non-coding experts people so implementing other languages such as Python, F# and Rust allows other experts to easily use FABGen. Adding F# to FABGen will benefit the F# users who need a 3D engine. In addition, people looking for an alternative to SWIG when binding a C++ library to F# might find it useful. F# is known for being a relatively concise and easy-to-learn language, which can allow you to write code more quickly and with fewer errors. Also, F# uses the .NET "int" data type, which is natively optimized for mathematical calculations and bit operations, which can make F# code runs faster than code is written in other languages.<br><br>
 
 ## c. Context
-At the moment, the 3D engine created by [HARFANG3D](https://www.harfang3d.com/en_US/) is not allowed in all programming languages. Users can't use F# language or Rust language at this moment. This poses a problem especially now when users want to code in these languages. With this project the company wants its future users to be able to use these different languages.
+At the moment, the 3D engine created by [HARFANG3D](https://www.harfang3d.com/en_US/) is not allowed in all programming languages. Users can't use F# language or Rust language at this moment. This poses a problem especially now when users want to code in these languages. With this | the company wants its future users to be able to use these different languages.
 
 ## d. Product and Technical Requirements
 
@@ -90,7 +91,7 @@ Product requirements :
 
 Technical requirements :
 - Following the company's need, **HARFANG3D** advised us to use the same principle to add F# support to FABgen as the one used to add GO support. 
-- Like in addition to being a real project it's also a school project. 
+- Like in addition to being a real | it's also a school |. 
 
 ## e. Future Goals
 At the moment, the customer only needs to add the F# language. They just want to see our ideas and how we solve this problem technically. So the main goal is to bring a solution to the customer. For the future, it's to add some other languages.
@@ -130,7 +131,7 @@ The proposed solution is to add more languages, starting with Rust.
 
 This solution will be added to the existing code of the [FABGen repository](https://github.com/ejulien/FABGen).
 
-For this project we need to use CLANG to parse the C++ code and generate the F# code, with the help of the DLL file generated by the C/C++ code to link and make the conversion between the F# code to the C/C++ code.
+For this | we need to use CLANG to parse the C++ code and generate the F# code, with the help of the DLL file generated by the C/C++ code to link and make the conversion between the F# code to the C/C++ code.
 
 The F# language is a statically typed language. It is compiled to IL (Intermediate Language) and then JIT compiled to native code. This means that it is possible to call into a C-style ABI from F# using the F# FFI (Foreign Function Interface) mechanism. This is the same mechanism that is used to call into native code from F#.
 
@@ -263,11 +264,11 @@ But we don't need to concern about the certification because the customers said 
 ## c. Milestones
 | Number of weeks                        | Work we need to do             |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|1st week| In The first week we will finish the introduction of the project, writing the documentation and the functional specification. Writing the technical and the Architecture diagram.|
+|1st week| In The first week we will finish the introduction of the |, writing the documentation and the functional specification. Writing the technical and the Architecture diagram.|
 |2nd week|We look at how to use the FABGen already exists. After that, we try to use FABGen.|
 |3rd and 4th week|We are going deeper and starting to launch the test<br> Test the Go part<br>Test the Lua part<br>Check the quality<br>Create all dynamic link library(dll) to use C code for the F#|
 |5th and 6th week|We finish all the test with F#. We start to prepare the presentation.|
-|7th week|This is the last step of the project, everything should be done and ready to present to the client !<br>Oral presentation.
+|7th week|This is the last step of the |, everything should be done and ready to present to the client !<br>Oral presentation.
 
 # 6. Implement functions
   
@@ -502,7 +503,7 @@ For the Boolean type we need to create a new converter.
 
  When we have all of these conversions types in Go we can make the same to convert the C++ types into F# types. 
 
-This is the command line to generate the DLL file we will use in the F# project.
+This is the command line to generate the DLL file we will use in the F# |.
  ```
  clang++  -shared -o <name_for_dll_file>.dll <name_of_cpp_file>.cpp
  ```
@@ -510,7 +511,7 @@ This is the command line to generate the DLL file we will use in the F# project.
 
 # 9.Test plan
 
-Here is the [Test plan](https://github.com/algosup/2022-2023-project-3-harfang3d-binding-Project-3-group/blob/main/Documents/Quality-Assurance/TestPlan.md) for the project. It is a document that describes the test cases that will be used to verify that the software product meets or exceeds the customer’s requirements and that all of the software product’s features work as expected.
+Here is the [Test plan](https://github.com/algosup/2022-2023-|-3-harfang3d-binding-|-3-group/blob/main/Documents/Quality-Assurance/TestPlan.md) for the |. It is a document that describes the test cases that will be used to verify that the software product meets or exceeds the customer’s requirements and that all of the software product’s features work as expected.
 
 # 10. Glossary
 
@@ -551,13 +552,21 @@ https://www.swig.org/doc.html
 
 ## b. Acknowledgement
 
-Robert Pickering -- contact: robertfpickering@fastmail.com
-Delphine Prousteau -- contact: dprousteau@quanaup.fr
-Jihane Billacois -- contact: jihb@sent.com
-François Gutherz -- contact: francois.gutherz@harfang3d.com
-Emmanuel Julien -- contact: emmanuel.julien@harfang3d.com
-[Vivien Bistrel Tsangue ](https://github.com/Bistrel2002) -  Project Manager
-[Thomas PLANCHARD](https://github.com/thomas-planchard) - Program Manager
-[Robin DEBRY](https://github.com/robin-debry) - Technical Leader
-[Lucas AUBARD](https://github.com/robin-debry) - Software Engineer
-[Laura-Lee HOLLANDE](https://github.com/lauraleehollande) - Quality Assurance
+| Name | Contact             |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|Robert Pickering|robertfpickering@fastmail.com|
+|Delphine Prousteau|dprousteau@quanaup.fr|
+|Jihane Billacois|jihb@sent.com|
+|Caroline Cordier|caroline.cordier@gmail.com|
+|François Gutherz|francois.gutherz@harfang3d.com|
+|Emmanuel Julien|emmanuel.julien@harfang3d.com|
+
+## c. Team members
+
+| Name and Github| Role             |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|[Vivien Bistrel Tsangue ](https://github.com/Bistrel2002) |Project Manager|
+|[Thomas PLANCHARD](https://github.com/thomas-planchard) |Program Manager|
+|[Robin DEBRY](https://github.com/robin-debry)|Technical Leader
+|[Lucas AUBARD](https://github.com/LucasAub)|Software Engineer|
+|[Laura-Lee HOLLANDE](https://github.com/lauraleehollande) |Quality Assurance|
