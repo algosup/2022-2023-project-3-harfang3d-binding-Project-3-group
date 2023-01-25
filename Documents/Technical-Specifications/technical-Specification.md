@@ -534,7 +534,7 @@ Here is the [Test plan](https://github.com/algosup/2022-2023-project-3-harfang3d
 | JIT | Just-in-time compilation (JIT) is a way of executing computer code that involves compilation during execution of a program - at run time - rather than prior to execution.|
 | IL | Intermediate Language is a stack-based instruction set and computer programming language, intermediate between high-level languages and the computer's native machine code.|
 | DLL | A dynamic-link library (DLL) is a library that contains code and data that can be used by more than one program at the same time.|
-|CLANG|Clang is a compiler front-end for the C, C++, Objective-C, and Objective-C++ programming languages.|
+|Clang|Clang is a compiler front-end for the C, C++, Objective-C, and Objective-C++ programming languages.|
 
 
 
