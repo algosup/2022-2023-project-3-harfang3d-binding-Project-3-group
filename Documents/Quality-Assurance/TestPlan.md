@@ -85,7 +85,15 @@ For this project we separate our database of tester in two groupes, the intern a
 **Extern testers:** are people who are not working on this project and not be concerned by his development. These people are pretty near to the final user of this binding project.
 
 #### How to report a bug
-There is two ways to do this. The person who finds a bug and want to report it can sent a request to our database with this [link](https://docs.google.com/spreadsheets/d/1fDos23q6zS2Z5zB_uRxEs8iQ92olEdAjjrUPKbLEBtk/edit?usp=sharing) our directly send me an email at <laura-lee.hollande@algosup.com>. No matter how a bug is reports, these following information need to appear when it is reported
+There is two ways to do this. The person who finds a bug and want to report it can sent a request to our database with this [link](https://docs.google.com/spreadsheets/d/1fDos23q6zS2Z5zB_uRxEs8iQ92olEdAjjrUPKbLEBtk/edit?usp=sharing) our directly send me an email at <laura-lee.hollande@algosup.com>. No matter how a bug is reported, these following information need to appear when it is reported:
+| Information                                  	| Description                                                                                	|
+|----------------------------------------------	|--------------------------------------------------------------------------------------------	|
+| Defect description                           	| A detailed description of the bug                                                          	|
+| Version of the application                   	| The version of the application in which bug was found                                      	|
+| Version and operating system of the hardware 	| The version and the operating system of the hardware in which bug was found                	|
+| Steps                                        	| The detailed steps so that the developer can reproduce the defects. Can include screenshot 	|
+| Date raised                                  	| The date when the bug is raised                                                            	|
+| ID tester/Name                               	| The ID/Name of the tester who raised the defect                                            	|
 
 ## Test Environment Management
 List of the different activities used for an efficient test management: 
@@ -104,11 +112,6 @@ List of the different activities used for an efficient test management:
 | Test Case ID 	| Test Case Description 	| Test Steps 	| Test Data 	| Expected Results 	| Actual Results 	| Pass/Fail 	|
 |--------------	|-----------------------	|------------	|-----------	|------------------	|----------------	|-----------	|
 |              	|                       	|            	|           	|                  	|                	|           	|
-|              	|                       	|            	|           	|                  	|                	|           	|
-|              	|                       	|            	|           	|                  	|                	|           	|
-|              	|                       	|            	|           	|                  	|                	|           	|
-
-
 
 # Glossary
 | Words                                                                     	| Definition                                                                                                                                                                                                                                                                                                                                                                                                            	|
