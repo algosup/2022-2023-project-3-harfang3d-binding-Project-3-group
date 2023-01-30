@@ -15,6 +15,7 @@ public:
     double distanceTo(Vector2 pos) {
         return sqrt((pos.y - y) * (pos.y - y) + (pos.x - x) * (pos.x - x));
     }
+
     void vectorMovement(double plusx, double plusy) {
         x += plusx;
         y += plusy;
