@@ -87,7 +87,7 @@ We have recruited our tester based on several points:
 - C developpers or have knowledge about C
 - Software development students
 
-For this project we separate our database of tester in two groups, the intern and extern testers. All the people selected as testers have an ID tester and  an access to report any bugs.
+For this project we split our database of tester in two groups, the intern and extern testers. All the people selected as testers have an ID tester and  an access to report any bugs.
 **Intern testers:** are people who is currently working on this project and his development and be able to directly report any bug a resquest in our database of bugs. Can be people of the group 3 but also people from the other groups or Harfang 3D.
 **Extern testers:** are people who are not working on this project and not be concerned by his development. These people are pretty near to the final user of this binding project.
 
