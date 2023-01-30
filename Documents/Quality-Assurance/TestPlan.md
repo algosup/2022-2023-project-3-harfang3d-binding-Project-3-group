@@ -26,6 +26,7 @@
     - [Hardware used](#hardware-used)
     - [Software used](#software-used)
     - [Bug reporting](#bug-reporting)
+      - [Testers](#testers)
   - [Test Environment Management](#test-environment-management)
   - [Configuration management](#configuration-management)
 - [Test case](#test-case)
@@ -77,6 +78,10 @@ Following people are involved in test environment setup:
 ### Bug reporting
 Bug reporting tools are used and provided to testers.
 <!-- link to the db of bug -->
+#### Testers
+For this project we separate our database of tester in two groupes, the intern and extern testers.
+**Intern testers:** are people who is currently working on this project and his development and be able to directly report any bug a resquest in our database of bugs. Can be people of the group 3 but also people from the other groups or Harfang 3D.
+**Extern testers:** are people who are not working on this project and not be concerned by his development. These people are pretty near to the final user of this binding project.
 
 ## Test Environment Management
 List of the different activities used for an efficient test management: 
