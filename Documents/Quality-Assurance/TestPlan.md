@@ -78,9 +78,16 @@ Following people are involved in test environment setup:
 
 ### Bug reporting
 Bug reporting tools are used and provided to testers.
-<!-- link to the db of bug -->
+
 #### Testers
-For this project we separate our database of tester in two groupes, the intern and extern testers. All the people selected as testers have an ID tester and  an access to report any bugs.
+We have recruited our tester based on several points:
+- potential end-users
+- F# developpers or have knowledge about F#
+- C++ developpers or have knowledge about C++
+- C developpers or have knowledge about C
+- Software development students
+
+For this project we separate our database of tester in two groups, the intern and extern testers. All the people selected as testers have an ID tester and  an access to report any bugs.
 **Intern testers:** are people who is currently working on this project and his development and be able to directly report any bug a resquest in our database of bugs. Can be people of the group 3 but also people from the other groups or Harfang 3D.
 **Extern testers:** are people who are not working on this project and not be concerned by his development. These people are pretty near to the final user of this binding project.
 
@@ -94,6 +101,8 @@ There is two ways to do this. The person who finds a bug and want to report it c
 | Steps                                        	| The detailed steps so that the developer can reproduce the defects. Can include screenshot 	|
 | Date raised                                  	| The date when the bug is raised                                                            	|
 | ID tester/Name                               	| The ID/Name of the tester who raised the defect                                            	|
+
+In the ```Database-of-Bugs.md``` file, the bugs are reported from the original database manually by Hollande Laura-Lee.
 
 ## Test Environment Management
 List of the different activities used for an efficient test management: 
