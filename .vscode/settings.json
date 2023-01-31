@@ -3,5 +3,6 @@
 	"files.associations": {
 		"cmath": "cpp"
 	},
-	"cmake.configureOnOpen": true
+	"cmake.sourceDirectory": "${workspaceFolder}/TestLyb"
+
 }
