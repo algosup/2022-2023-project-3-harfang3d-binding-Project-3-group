@@ -65,7 +65,7 @@ Following people are involved in test environment setup:
 - Vivien Bistrel Tsangue as a Project manager
 
 ### Hardware used
-- MacBook Air M1 running on macOS Monterey version 12.3.1 <!-- update my mac -->
+- MacBook Air M1 running on macOS Monterey version 13.2 <!-- update my mac -->
 - ThinkBook running on Windows 11
 
 ### Software used
