@@ -1,4 +1,4 @@
-
+namespace Vector
 open System.Runtime.InteropServices
 open System
 
@@ -72,3 +72,4 @@ else
     v3DistanceTo |> printfn "Distance to origin in Vector 3: %f"
     v3PercentDistance |> printfn "Percent distance to origin in Vector 3: %f"
 // ! Vector 3
+

@@ -8,6 +8,19 @@
 
 <ItemGroup>
 	<Compile Include="vector.fs" />
+	<Compile Include="Test/testVector.fs" />
+	<None Include="TestLyb/lib/libvector.dylib">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+
+
+</ItemGroup>
+
+<ItemGroup>
+  <PackageReference Include="FsUnit" Version="5.2.0" />
+  <PackageReference Include="NUnit" Version="3.13.3" />
+  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+  <PackageReference Include="NUnit3TestAdapter" Version="4.2.0" />
 </ItemGroup>
 
 </Project>
