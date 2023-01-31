@@ -3,11 +3,13 @@ set(lib_name vector)
 project(${lib_name})
 
 set(HEADERS
-    ../vector_test.h
+    ../vector/vector2.h
+    ../vector/vector3.h
 )
 
 set(SOURCES
-    ../vector_test.cpp)
+    ../vector/vector2.cpp
+    ../vector/vector3.cpp)
 
 add_library(${lib_name} SHARED ${HEADERS} ${SOURCES} )
 

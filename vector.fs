@@ -29,8 +29,8 @@ extern double distanceTo(Vector2 pos)
 // extern double percentDistance(Vector3 pos, double percentOfDistance)
 
 // ! Vector 2 
-let v2 = Vector2(1.0, 2.0)
-let v2DistanceTo = Vector2_distanceTo(v2)
+let v2 = Vector2(2.0, 2.0)
+let v2DistanceTo = distanceTo(v2)
 // let v2PercentDistance = percentDistance(v2, 0.5)
 
 // ! Vector 3

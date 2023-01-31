@@ -57,7 +57,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb
+CMAKE_BINARY_DIR = /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -81,14 +81,14 @@ clean: CMakeFiles/vector.dir/clean
 CMakeFiles/vector.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/vector.dir/build.make CMakeFiles/vector.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/vector.dir/build.make CMakeFiles/vector.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb/CMakeFiles --progress-num=1,2,3 "Built target vector"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/build/CMakeFiles --progress-num=1,2,3 "Built target vector"
 .PHONY : CMakeFiles/vector.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/vector.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/build/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/vector.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/build/CMakeFiles 0
 .PHONY : CMakeFiles/vector.dir/rule
 
 # Convenience name for target.

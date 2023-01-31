@@ -56,7 +56,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb
+CMAKE_BINARY_DIR = /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/vector.dir/depend.make
@@ -72,30 +72,30 @@ include CMakeFiles/vector.dir/flags.make
 CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.o: CMakeFiles/vector.dir/flags.make
 CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.o: /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp
 CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.o: CMakeFiles/vector.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.o -MF CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.o.d -o CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.o -c /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.o"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.o -MF CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.o.d -o CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.o -c /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp
 
 CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp > CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp > CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.i
 
 CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp -o CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp -o CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector2.cpp.s
 
 CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.o: CMakeFiles/vector.dir/flags.make
 CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.o: /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp
 CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.o: CMakeFiles/vector.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.o -MF CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.o.d -o CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.o -c /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.o"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.o -MF CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.o.d -o CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.o -c /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp
 
 CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp > CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp > CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.i
 
 CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp -o CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp -o CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.s
 
 # Object files for target vector
 vector_OBJECTS = \
@@ -109,7 +109,7 @@ lib/libvector.dylib: CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-
 lib/libvector.dylib: CMakeFiles/vector.dir/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/vector/vector3.cpp.o
 lib/libvector.dylib: CMakeFiles/vector.dir/build.make
 lib/libvector.dylib: CMakeFiles/vector.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library lib/libvector.dylib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX shared library lib/libvector.dylib"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/vector.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -121,6 +121,6 @@ CMakeFiles/vector.dir/clean:
 .PHONY : CMakeFiles/vector.dir/clean
 
 CMakeFiles/vector.dir/depend:
-	cd /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb/CMakeFiles/vector.dir/DependInfo.cmake --color=$(COLOR)
+	cd /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/TestLyb /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/build /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/build /Users/thomasplanchard/Documents/2022-2023-project-3-harfang3d-binding-Project-3-group/build/CMakeFiles/vector.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/vector.dir/depend
 
