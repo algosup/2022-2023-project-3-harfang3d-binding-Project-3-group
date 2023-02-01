@@ -18,17 +18,18 @@ module VectorProgramm=
         val mutable z: double
         new(x: double, y: double, z: double) = {x = x; y = y; z = z}
 
-    [<DllImport("TestLyb/lib/libvector.dylib")>]
-    extern double distanceTo(Vector2 pos)
+    [<DllImport("lib/libvector.dylib")>]
+    extern double v2distanceTo(Vector2 pos)
 
-    [<DllImport("TestLyb/lib/libvector.dylib")>]
-    extern double percentDistance(Vector2 pos, double percentOfDistance)
+    [<DllImport("lib/libvector.dylib")>]
+    extern double v2percentDistance(Vector2 pos, double percentOfDistance)
         
-    [<DllImport("TestLyb/lib/libvector.dylib")>]
+    [<DllImport("lib/libvector.dylib")>]
     extern double v3distanceTo(Vector3 pos)
 
-    [<DllImport("TestLyb/lib/libvector.dylib")>]
+    [<DllImport("lib/libvector.dylib")>]
     extern double v3percentDistance(Vector3 pos, double percentOfDistance)
+
 
 
     

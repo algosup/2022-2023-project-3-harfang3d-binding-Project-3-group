@@ -10,7 +10,7 @@ module testVector =
     let ``Test distanceTo for Vector2``() = 
         let v2 = Vector2(2.0, 2.0)
         let expectedDistance = 2.83
-        let actualDistance = distanceTo(v2)
+        let actualDistance = v2distanceTo(v2)
         let round(f : float) = System.Math.Round(f, 2)
         let roundedActualDistance = round(actualDistance)
         roundedActualDistance |> should equal expectedDistance
@@ -20,7 +20,7 @@ module testVector =
     let ``Test percentDistance for Vector2``() = 
         let v2 = Vector2(2.0, 2.0)
         let expectedPercentDistance = 1.41
-        let actualPercentDistance = percentDistance(v2, 0.5)
+        let actualPercentDistance = v2percentDistance(v2, 0.5)
         let round(f : float) = System.Math.Round(f, 2)
         let roundedActualPercentDistance = round(actualPercentDistance)
         roundedActualPercentDistance |> should equal expectedPercentDistance

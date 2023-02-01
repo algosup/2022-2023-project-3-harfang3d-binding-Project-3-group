@@ -10,7 +10,7 @@
 	<Compile Include="vector.fs" />
 	<Compile Include="Test/testVector.fs" />
 	<Compile Include="main.fs" />
-	<None Include="TestLyb/lib/libvector.dylib">
+	<None Include="lib/libvector.dylib">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </None>
 </ItemGroup>
