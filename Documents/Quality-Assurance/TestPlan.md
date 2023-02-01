@@ -96,7 +96,6 @@ There is two ways to do this. The person who finds a bug and want to report it c
 | Information                                  	| Description                                                                                	|
 |----------------------------------------------	|--------------------------------------------------------------------------------------------	|
 | Defect description                           	| A detailed description of the bug                                                          	|
-| Version of the application                   	| The version of the application in which bug was found                                      	|
 | Version and operating system of the hardware 	| The version and the operating system of the hardware in which bug was found                	|
 | Steps                                        	| The detailed steps so that the developer can reproduce the defects. Can include screenshot 	|
 | Date raised                                  	| The date when the bug is raised                                                            	|
