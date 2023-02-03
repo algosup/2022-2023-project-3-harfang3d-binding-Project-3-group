@@ -2,14 +2,14 @@
 ## Who is the client
 <!-- write down here your research on who is the client, his priorities, his specificities, etc -->
 ​HARFANG®3D is a 3D engine that allows professionals to create 3D games and applications. HARFANG®3D builds real-time 3D tools for industry professionals. Its software suite is tailored to developers, designers and engineers aiming to efficiently and seamlessly develop, implement & deploy 3D solutions (HMI, VR/AR, simulation, interactive 3D), regardless of development language or platform constraints.
+- Was founded in 2016
 
 Some of their customers:
 - Valeo
 - SNCF
 ​
 ## His/her field
-​
-​
+​- Software development
 ​
 ## Competition
 **[Unity](https://unity.com/):**
@@ -44,8 +44,13 @@ Some of their customers:
 - [Emmanuel Julien](https://www.linkedin.com/in/ejulien/), Lead developer HARFANG®3D
 
 **Other contact link with ​HARFANG®3D:**
+- [Philippe Herber](https://www.linkedin.com/in/philippe-herber-9787929/), Founding Director at MOVIDA PRODUCTION
 - [Thomas Simonet](https://www.linkedin.com/in/thomas-simonnet-39968480/), Lead Developer R&D VR and Car simulation
+- [NWNC](https://www.societe.com/societe/nwnc-890866486.html), presentation of the NWNC company
+- [NWNC](https://www.societe.com/societe/movida-production-398868109.html), presentation of Movida Production company
 - [Movida Production](https://www.linkedin.com/company/movida-production/), Production of audiovisual and 3D content
+- [Movida Production Instagram](https://www.instagram.com/movidaprod/)
+- [Movida Production website](https://www.movida-prod.com/en/)
 ​
 **Competition:**
 - [OpenSpace Linkedin](https://www.linkedin.com/company/openspace.ai/)
