@@ -47,8 +47,8 @@ Some of their customers:
 - [Philippe Herber](https://www.linkedin.com/in/philippe-herber-9787929/), Founding Director at MOVIDA PRODUCTION
 - [Thomas Simonet](https://www.linkedin.com/in/thomas-simonnet-39968480/), Lead Developer R&D VR and Car simulation
 - [NWNC](https://www.societe.com/societe/nwnc-890866486.html), presentation of the NWNC company
-- [NWNC](https://www.societe.com/societe/movida-production-398868109.html), presentation of Movida Production company
-- [Movida Production](https://www.linkedin.com/company/movida-production/), Production of audiovisual and 3D content
+- [Movida Production](https://www.societe.com/societe/movida-production-398868109.html), presentation of Movida Production company
+- [Movida Production Linkedin](https://www.linkedin.com/company/movida-production/), Production of audiovisual and 3D content
 - [Movida Production Instagram](https://www.instagram.com/movidaprod/)
 - [Movida Production website](https://www.movida-prod.com/en/)
 ​
