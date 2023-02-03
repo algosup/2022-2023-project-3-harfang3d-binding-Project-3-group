@@ -65,7 +65,7 @@ Following people are involved in test environment setup:
 - Vivien Bistrel Tsangue as a Project manager
 
 ### Hardware used
-- MacBook Air M1 running on macOS Monterey version 12.3.1 <!-- update my mac -->
+- MacBook Air M1 running on macOS Monterey version 13.2 <!-- update my mac -->
 - ThinkBook running on Windows 11
 
 ### Software used
@@ -96,7 +96,6 @@ There is two ways to do this. The person who finds a bug and want to report it c
 | Information                                  	| Description                                                                                	|
 |----------------------------------------------	|--------------------------------------------------------------------------------------------	|
 | Defect description                           	| A detailed description of the bug                                                          	|
-| Version of the application                   	| The version of the application in which bug was found                                      	|
 | Version and operating system of the hardware 	| The version and the operating system of the hardware in which bug was found                	|
 | Steps                                        	| The detailed steps so that the developer can reproduce the defects. Can include screenshot 	|
 | Date raised                                  	| The date when the bug is raised                                                            	|
@@ -118,9 +117,13 @@ List of the different activities used for an efficient test management:
 # Test case
 **Features need to be tested:** Transform a C++ function in F# function
 **Features need not be tested:** Transform a F# function in C++ function
-| Test Case ID 	| Test Case Description 	| Test Steps 	| Test Data 	| Expected Results 	| Actual Results 	| Pass/Fail 	|
-|--------------	|-----------------------	|------------	|-----------	|------------------	|----------------	|-----------	|
-|              	|                       	|            	|           	|                  	|                	|           	|
+| Test Case ID 	| Test Case Description                                               	| Test Steps                 	| Test Data              	| Expected Results                                 	| Actual Results                                   	| Pass/Fail 	|
+|--------------	|---------------------------------------------------------------------	|----------------------------	|------------------------	|--------------------------------------------------	|--------------------------------------------------	|-----------	|
+| TC_1         	| Check the distance to origin in Vector 2                            	| Dotnet run on the project  	| Vector2(2.0, 2.0)      	| Distance to origin in Vector 2: 2.828427         	| Distance to origin in Vector 2: 2.828427         	| Pass      	|
+| TC_2         	| Check the percent distance to origin in Vector 2                    	| Dotnet run on the project  	| Vector2(2.0, 2.0)      	| Percent distance to origin in Vector 2: 1.414214 	| Percent distance to origin in Vector 2: 1.414214 	| Pass      	|
+| TC_3         	| Check the distance to origin in Vector 3                            	| Dotnet run on the project  	| Vector3(1.0, 2.0, 3.0) 	| Distance to origin in Vector 3: 3.741657         	| Distance to origin in Vector 3: 3.741657         	| Pass      	|
+| TC_4         	| Check the percent distance to origin in Vector 3                    	| Dotnet run on the project  	| Vector3(1.0, 2.0, 3.0) 	| Percent distance to origin in Vector 3: 1.870829 	| Percent distance to origin in Vector 3: 1.870829 	| Pass      	|
+| TC_5         	| Know if the user use a Mac or a Windows to import dll or dylib file 	| Dotnet run on the project  	| /                      	| Run successfully on Windows                      	| Not as expected                                  	| Fail      	|
 
 # Glossary
 | Words                                                                     	| Definition                                                                                                                                                                                                                                                                                                                                                                                                            	|
