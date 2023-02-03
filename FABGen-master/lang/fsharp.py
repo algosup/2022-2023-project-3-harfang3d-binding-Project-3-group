@@ -19,7 +19,35 @@ def route_lambda(name):
 
 def clean_name(name):
     new_name = str(name).strip().replace("_", "").replace(":", "")
-    if new_name in ["break", "default", "func", "interface", "select", "case", "defer", "go", "map", "struct", "chan", "else", "goto", "package", "switch", "const", "fallthrough", "if", "range", "type", "continue", "for", "import", "return", "var" ]:
+    if new_name in [
+		"let",
+		"in",
+		"match",
+		"with",
+		"try",
+		"type",
+		"module",
+		"namespace",
+		"and",
+		"or",
+		"not",
+		"fun",
+		"rec",
+		"yield",
+		"abstract",
+		"static",
+		"member",
+		"upcast",
+		"downcast",
+		"as",
+		"of",
+		"struct",
+		"interface",
+		"delegate",
+		"inline",
+		"unsigned",
+		"extern"
+]:
         return new_name + "FSharp"
     return new_name
 
@@ -55,8 +83,8 @@ class FSharpTypeConverterCommon(gen.TypeConverter):
 	def __init__(self, type, to_c_storage_type=None, bound_name=None, from_c_storage_type=None, needs_c_storage_class=False):
 		super().__init__(type, to_c_storage_type, bound_name, from_c_storage_type, needs_c_storage_class)
 		self.base_type = type
-		self.go_to_c_type = None
-		self.go_type = None
+		self.fsharp_to_c_type = None
+		self.fsharp_type = None
 
 	def get_type_api(self, module_name):
 		out = "// type API for %s\n" % self.ctype
@@ -190,11 +218,11 @@ class FSharpGenerator(gen.FABGen):
 	def __init__(self):
 		super().__init__()
 		self.check_self_type_in_ops = True
-		self.go = ""
-		self.cgo_directives = ""
+		self.fsharp = ""
+		self.cfsharp_directives = ""
 
 	def get_language(self):
-		return "Go"
+		return "FSharp"
 
 	def output_includes(self):
 		pass
@@ -205,7 +233,7 @@ class FSharpGenerator(gen.FABGen):
 		self._source += self.get_binding_api_declaration()
 
 	def set_compilation_directives(self, directives):
-		self.cgo_directives = directives
+		self.cfsharp_directives = directives
 
 	# kill a bunch of functions we don't care about
 	def set_error(self, type, reason):
@@ -301,7 +329,7 @@ uint32_t %s(void* p) {
 
 	#
 	def get_output(self):
-		return {"wrapper.cpp": self.go_c, "wrapper.h": self.go_h, "bind.fs": self.go_bind, "translate_file.json": self.go_translate_file}
+		return {"wrapper.cpp": self.fsharp_c, "wrapper.h": self.fsharp_h, "bind.fs": self.fsharp_bind, "translate_file.json": self.fsharp_translate_file}
 
 	def _get_type(self, name):
 		for type in self._bound_types:
@@ -388,10 +416,10 @@ uint32_t %s(void* p) {
 	def __arg_from_c_to_cpp(self, val, retval_name, add_star=True):
 		src = ""
 		# check if there is special slice to convert
-		if isinstance(val["conv"], lib.go.stl.GoSliceToStdVectorConverter):
+		if isinstance(val["conv"], lib.fsharp.stl.FSharpSliceToStdVectorConverter):
 			# special if string or const char*
 			if "FSharpStringConverter" in str(val["conv"].T_conv): # or \
-				# "GoConstCharPtrConverter" in str(val["conv"].T_conv):
+				# "FSharpConstCharPtrConverter" in str(val["conv"].T_conv):
 				src += f"std::vector<{val['conv'].T_conv.ctype}> {retval_name};\n"\
 					f"for(int i_counter_c=0; i_counter_c < {retval_name}ToCSize; ++i_counter_c)\n"\
 					f"	{retval_name}.push_back(std::string({retval_name}ToCBuf[i_counter_c]));\n"
@@ -423,7 +451,7 @@ uint32_t %s(void* p) {
 				if isinstance(val['conv'], FSharpPtrTypeConverter):
 					stars = stars[1:]
 				
-				# if it's not a pointer, add a star anyway because we use pointer to use in go
+				# if it's not a pointer, add a star anyway because we use pointer to use in fsharp
 				if (not val["conv"].ctype.is_pointer() and ("carg" not in val or ("carg" in val and not val["carg"].ctype.is_pointer()))):
 					stars += "*"
 					if add_star:
@@ -442,7 +470,7 @@ uint32_t %s(void* p) {
 
 		return src, retval
 
-	def __arg_from_c_to_go(self, val, retval_name, non_owning=False):
+	def __arg_from_c_to_fsharp(self, val, retval_name, non_owning=False):
 		
 		rval_ownership = self._FABGen__ctype_to_ownership_policy(val["conv"].ctype)
 
@@ -481,10 +509,10 @@ uint32_t %s(void* p) {
 
 					# check if owning to have the right to destroy it
 					if rval_ownership != "NonOwning" and not is_ref and not non_owning:
-						src += f"	runtime.SetFinalizer({retval_name}GO, func(cleanval *{retval_boundname}) {{\n" \
+						src += f"	runtime.SetFinalizer({retval_name}FSharp, func(cleanval *{retval_boundname}) {{\n" \
 								f"		C.{clean_name_with_title(self._name)}{retval_boundname}Free(cleanval.h)\n" \
 								f"	}})\n"
-					retval_name = f"{retval_name}GO"
+					retval_name = f"{retval_name}FSharp"
 
 		# if pointer or ref
 		elif is_pointer:
@@ -523,14 +551,14 @@ uint32_t %s(void* p) {
 							f"		C.{clean_name_with_title(self._name)}{retval_boundname}Free(cleanval.h)\n"\
 							f"	}})\n"
 				src += "}\n"
-				retval_name = f"{retval_name}GO"
+				retval_name = f"{retval_name}FSharp"
 			else:
-				retval_name = f"({self.__get_arg_bound_name_to_go(val)})(unsafe.Pointer({retval_name}))\n"
+				retval_name = f"({self.__get_arg_bound_name_to_fsharp(val)})(unsafe.Pointer({retval_name}))\n"
 
 		return src, retval_name
 
-	def __arg_from_go_to_c(self, val, arg_name):
-		def convert_got_to_c(val, arg_name, arg_out_name, start_stars=0):
+	def __arg_from_fsharp_to_c(self, val, arg_name):
+		def convert_fsharpt_to_c(val, arg_name, arg_out_name, start_stars=0):
 			stars = self.__get_stars(val, start_stars)
 
 			if val["conv"].is_type_class():
@@ -543,8 +571,8 @@ uint32_t %s(void* p) {
 						c_call = f"{clean_name(arg_out_name).replace('&', '_')} := ({stars[1:]}C.{clean_name_with_title(self._name)}{clean_name_with_title(val['conv'].bound_name)})(unsafe.Pointer({clean_name(arg_name)}))\n"
 					else:
 						c_call = f"{clean_name(arg_out_name).replace('&', '_')} := ({stars}{str(val['conv'].bound_name)})(unsafe.Pointer({clean_name(arg_name)}))\n"
-				elif hasattr(base_conv, "go_to_c_type") and base_conv.go_to_c_type is not None:
-					c_call = f"{clean_name(arg_out_name).replace('&', '_')} := ({stars}{base_conv.go_to_c_type})(unsafe.Pointer({clean_name(arg_name)}))\n"
+				elif hasattr(base_conv, "fsharp_to_c_type") and base_conv.fsharp_to_c_type is not None:
+					c_call = f"{clean_name(arg_out_name).replace('&', '_')} := ({stars}{base_conv.fsharp_to_c_type})(unsafe.Pointer({clean_name(arg_name)}))\n"
 				else:
 					c_call = f"{clean_name(arg_out_name).replace('&', '_')} := ({stars}{base_conv.bound_name})(unsafe.Pointer({clean_name(arg_name)}))\n"
 			return c_call
@@ -556,7 +584,7 @@ uint32_t %s(void* p) {
 			if base_conv is None or base_conv.is_type_class():
 				c_call = f"{clean_name(arg_name)}ToC := {clean_name(arg_name)}.h\n"
 			else:
-				c_call = convert_got_to_c(val, arg_name, f"{arg_name}ToC")
+				c_call = convert_fsharpt_to_c(val, arg_name, f"{arg_name}ToC")
 		# if it's a class
 		elif val["conv"].is_type_class():
 			stars = self.__get_stars(val)
@@ -566,16 +594,16 @@ uint32_t %s(void* p) {
 			enum_conv = self._get_conv_from_bound_name(val["conv"].bound_name)
 			#if it's a ref to an enum
 			if len(self.__get_stars(val)) > 0:
-				c_call = convert_got_to_c(val, arg_name, f"{arg_name}ToC")
+				c_call = convert_fsharpt_to_c(val, arg_name, f"{arg_name}ToC")
 			else:
-				if enum_conv is not None and hasattr(enum_conv, "go_to_c_type") and enum_conv.go_to_c_type is not None:
-					arg_bound_name = enum_conv.go_to_c_type
+				if enum_conv is not None and hasattr(enum_conv, "fsharp_to_c_type") and enum_conv.fsharp_to_c_type is not None:
+					arg_bound_name = enum_conv.fsharp_to_c_type
 				else:
 					arg_bound_name = "C.int"
 					
 				c_call = f"{clean_name(arg_name)}ToC := {arg_bound_name}({clean_name(arg_name)})\n"
 		# special Slice
-		elif isinstance(val["conv"], lib.go.stl.GoSliceToStdVectorConverter):
+		elif isinstance(val["conv"], lib.fsharp.stl.FSharpSliceToStdVectorConverter):
 			c_call = ""
 			slice_name = clean_name(arg_name)
 			# special if string or const char*
@@ -598,7 +626,7 @@ uint32_t %s(void* p) {
 			c_call += f"{slice_name}ToC := (*reflect.SliceHeader)(unsafe.Pointer(&{slice_name}))\n"
 			c_call += f"{slice_name}ToCSize := C.size_t({slice_name}ToC.Len)\n"
 
-			c_call += convert_got_to_c({"conv": val["conv"].T_conv}, f"{slice_name}ToC.Data", f"{slice_name}ToCBuf", 1)
+			c_call += convert_fsharpt_to_c({"conv": val["conv"].T_conv}, f"{slice_name}ToC.Data", f"{slice_name}ToCBuf", 1)
 		# std function
 		elif "FSharpStdFunctionConverter" in str(val["conv"]):
 			c_call += f"{clean_name(arg_name)}ToC := (C.{clean_name_with_title(self._name)}{clean_name_with_title(val['conv'].bound_name)})({clean_name(arg_name)})\n"
@@ -623,7 +651,7 @@ uint32_t %s(void* p) {
 			c_call = val["conv"].to_c_call(clean_name(arg_name), f"{clean_name(arg_name)}ToC", is_pointer)
 		return c_call
 
-	def __get_arg_bound_name_to_go(self, val):
+	def __get_arg_bound_name_to_fsharp(self, val):
 		if val["conv"].is_type_class():
 			arg_bound_name = val["conv"].bound_name
 		else:
@@ -632,22 +660,22 @@ uint32_t %s(void* p) {
 				('storage_ctype' in val and (val['storage_ctype'].is_pointer() or (hasattr(val['storage_ctype'], 'ref') and any(s in val['storage_ctype'].ref for s in ["&", "*"])))) or \
 				isinstance(val['conv'], FSharpPtrTypeConverter):
 
-				if hasattr(val["conv"], "go_type") and val["conv"].go_type is not None:
-					arg_bound_name = str(val["conv"].go_type)
+				if hasattr(val["conv"], "fsharp_type") and val["conv"].fsharp_type is not None:
+					arg_bound_name = str(val["conv"].fsharp_type)
 				else:
 					base_conv = self._get_conv(str(val['conv'].ctype.scoped_typename))
 					if base_conv is None:
 						arg_bound_name = str(val["conv"].bound_name)
 					else:
-						if hasattr(base_conv, "go_type") and base_conv.go_type is not None:
-							arg_bound_name = base_conv.go_type
+						if hasattr(base_conv, "fsharp_type") and base_conv.fsharp_type is not None:
+							arg_bound_name = base_conv.fsharp_type
 						else:
 							arg_bound_name = base_conv.bound_name
 			else:
 				if val['conv'].bound_name in self._enums.keys():# if it's an enum
 					arg_bound_name = f"{val['conv'].bound_name}"
-				elif hasattr(val["conv"], "FSharp_type") and val["conv"].go_type is not None:
-					arg_bound_name = val["conv"].go_type
+				elif hasattr(val["conv"], "FSharp_type") and val["conv"].fsharp_type is not None:
+					arg_bound_name = val["conv"].fsharp_type
 				else:
 					arg_bound_name = val["conv"].bound_name
 
@@ -669,7 +697,7 @@ uint32_t %s(void* p) {
 			if "FSharpConstCharPtrConverter" in str(val["conv"]):
 				stars = stars[1:]
 
-			# Harfang class doesn't need to be a pointer in go (because it's a struct containing a wrap pointer C)
+			# Harfang class doesn't need to be a pointer in fsharp (because it's a struct containing a wrap pointer C)
 			if not self.__get_is_type_class_or_pointer_with_class(val["conv"]):
 				arg_bound_name = stars + arg_bound_name
 
@@ -679,7 +707,7 @@ uint32_t %s(void* p) {
 
 		# class or slice, clean the name with title
 		if self.__get_is_type_class_or_pointer_with_class(val["conv"]) or \
-			isinstance(val['conv'], lib.go.stl.GoSliceToStdVectorConverter):
+			isinstance(val['conv'], lib.fsharp.stl.FSharpSliceToStdVectorConverter):
 			arg_bound_name = clean_name_with_title(arg_bound_name)
 
 		# i'f it's a class, it's a pointer
@@ -732,7 +760,7 @@ uint32_t %s(void* p) {
 						arg_bound_name += f"{val['conv'].bound_name} "
 
 				# add a star (only if it's not a const char * SPECIAL CASE)
-				if "GoConstCharPtrConverter" not in str(val["conv"]) and ("carg" not in val or not val["carg"].ctype.const):
+				if "FSharpConstCharPtrConverter" not in str(val["conv"]) and ("carg" not in val or not val["carg"].ctype.const):
 					arg_bound_name += "*"
 
 				if "carg" in val and hasattr(val["carg"].ctype, "ref") and not val["carg"].ctype.const:
@@ -762,48 +790,48 @@ uint32_t %s(void* p) {
 						arg_bound_name += f"{val['conv'].bound_name} "
 		return arg_bound_name
 
-	def __extract_sequence_go(self, conv):
-		go = ""
+	def __extract_sequence_fsharp(self, conv):
+		fsharp = ""
 
 		classname = clean_name_with_title(conv.bound_name)
 
 		internal_conv = conv._features["sequence"].wrapped_conv
 
-		arg_bound_name = self.__get_arg_bound_name_to_go({"conv": internal_conv})
+		arg_bound_name = self.__get_arg_bound_name_to_fsharp({"conv": internal_conv})
 
 		# GET
-		go += f"// Get ...\n" \
+		fsharp += f"// Get ...\n" \
 				f"func (pointer *{classname}) Get(id int) {arg_bound_name} {{\n"
-		go += f"v := C.{clean_name_with_title(self._name)}{classname}GetOperator(pointer.h, C.int(id))\n"
+		fsharp += f"v := C.{clean_name_with_title(self._name)}{classname}GetOperator(pointer.h, C.int(id))\n"
 
-		src, retval_go = self.__arg_from_c_to_go({"conv": internal_conv}, "v")
-		go += src
-		go += f"return {retval_go}\n"
-		go += "}\n"
+		src, retval_fsharp = self.__arg_from_c_to_fsharp({"conv": internal_conv}, "v")
+		fsharp += src
+		fsharp += f"return {retval_fsharp}\n"
+		fsharp += "}\n"
 
 		# SET
-		go += f"// Set ...\n" \
+		fsharp += f"// Set ...\n" \
 				f"func (pointer *{classname}) Set(id int, v {arg_bound_name}) {{\n"
 		# convert to c
-		c_call = self.__arg_from_go_to_c({"conv": internal_conv}, "v")
+		c_call = self.__arg_from_fsharp_to_c({"conv": internal_conv}, "v")
 		if c_call != "":
-			go += c_call
+			fsharp += c_call
 		else:
-			go += "vToC := v\n"
+			fsharp += "vToC := v\n"
 
-		go += f"	C.{clean_name_with_title(self._name)}{classname}SetOperator(pointer.h, C.int(id), vToC)\n"
-		go += "}\n"
+		fsharp += f"	C.{clean_name_with_title(self._name)}{classname}SetOperator(pointer.h, C.int(id), vToC)\n"
+		fsharp += "}\n"
 
 		# Len
-		go += f"// Len ...\n" \
+		fsharp += f"// Len ...\n" \
 				f"func (pointer *{classname}) Len() int32 {{\n"
-		go += f"return int32(C.{clean_name_with_title(self._name)}{classname}LenOperator(pointer.h))\n"
-		go += "}\n"
+		fsharp += f"return int32(C.{clean_name_with_title(self._name)}{classname}LenOperator(pointer.h))\n"
+		fsharp += "}\n"
 
-		return go
+		return fsharp
 
 	def __extract_sequence(self, conv, is_in_header=False):
-		go = ""
+		fsharp = ""
 
 		cleanClassname = clean_name_with_title(conv.bound_name)
 
@@ -817,55 +845,55 @@ uint32_t %s(void* p) {
 
 		# GET
 		if is_in_header:
-			go += "extern "
-		go += f"{c_arg_bound_name} {clean_name_with_title(self._name)}{cleanClassname}GetOperator({clean_name_with_title(self._name)}{cleanClassname} h, int id)"
+			fsharp += "extern "
+		fsharp += f"{c_arg_bound_name} {clean_name_with_title(self._name)}{cleanClassname}GetOperator({clean_name_with_title(self._name)}{cleanClassname} h, int id)"
 
 		if is_in_header:
-			go += ";\n"
+			fsharp += ";\n"
 		else:
-			go += f"{{\n" \
+			fsharp += f"{{\n" \
 				"	bool error;\n" \
 				f"	{internal_conv.ctype} v;\n	"
-			go += conv._features['sequence'].get_item(f"(({conv.ctype}*)h)", "id", "v", "error")
+			fsharp += conv._features['sequence'].get_item(f"(({conv.ctype}*)h)", "id", "v", "error")
 
 			src, retval_c = self.__arg_from_cpp_to_c({"conv": internal_conv}, "v", False)
-			go += src
-			go += f"	return {retval_c};\n}}\n"
+			fsharp += src
+			fsharp += f"	return {retval_c};\n}}\n"
 
 		# SET
 		if is_in_header:
-			go += "extern "
-		go += f"void {clean_name_with_title(self._name)}{cleanClassname}SetOperator({clean_name_with_title(self._name)}{cleanClassname} h, int id, {c_arg_bound_name} v)"
+			fsharp += "extern "
+		fsharp += f"void {clean_name_with_title(self._name)}{cleanClassname}SetOperator({clean_name_with_title(self._name)}{cleanClassname} h, int id, {c_arg_bound_name} v)"
 
 		if is_in_header:
-			go += ";\n"
+			fsharp += ";\n"
 		else:
-			go += f"{{\n" \
+			fsharp += f"{{\n" \
 				"	bool error;\n"
 
 			src, inval = self.__arg_from_c_to_cpp({"conv": internal_conv}, "v", False)
-			go += src
+			fsharp += src
 
-			go += conv._features['sequence'].set_item(f"(({conv.ctype}*)h)", "id", inval, "error")
-			go += f"\n}}\n"
+			fsharp += conv._features['sequence'].set_item(f"(({conv.ctype}*)h)", "id", inval, "error")
+			fsharp += f"\n}}\n"
 
 		# LEN
 		if is_in_header:
-			go += "extern "
-		go += f"int {clean_name_with_title(self._name)}{cleanClassname}LenOperator({clean_name_with_title(self._name)}{cleanClassname} h)"
+			fsharp += "extern "
+		fsharp += f"int {clean_name_with_title(self._name)}{cleanClassname}LenOperator({clean_name_with_title(self._name)}{cleanClassname} h)"
 
 		if is_in_header:
-			go += ";\n"
+			fsharp += ";\n"
 		else:
-			go += f"{{\n" \
+			fsharp += f"{{\n" \
 				"	int size;\n	"
-			go += conv._features['sequence'].get_size(f"(({conv.ctype}*)h)", "size")
-			go += f"	return size;\n}}\n"
+			fsharp += conv._features['sequence'].get_size(f"(({conv.ctype}*)h)", "size")
+			fsharp += f"	return size;\n}}\n"
 
-		return go
+		return fsharp
 
-	def __extract_get_set_member_go(self, classname, member, static=False, name=None, bound_name=None, is_global=False, implicit_cast=None):
-		go = ""
+	def __extract_get_set_member_fsharp(self, classname, member, static=False, name=None, bound_name=None, is_global=False, implicit_cast=None):
+		fsharp = ""
 		conv = self.select_ctype_conv(member["ctype"])
 
 		if "bound_name" in member:
@@ -878,85 +906,85 @@ uint32_t %s(void* p) {
 		name = name.replace(":", "")
 		name = clean_name_with_title(name)
 
-		arg_bound_name = self.__get_arg_bound_name_to_go({"conv": conv})
+		arg_bound_name = self.__get_arg_bound_name_to_fsharp({"conv": conv})
 
 		def create_get_set(do_static):
 			# GET
-			go = ""
+			fsharp = ""
 
 			# if it's a const, just write it once
 			if is_global and member["ctype"].const:
-				go += f"// {name} ...\n"
+				fsharp += f"// {name} ...\n"
 				if self.__get_is_type_class_or_pointer_with_class(conv):
-					go += f"var {clean_name(name)} = {arg_bound_name.replace('*', '')}{{h:C.{clean_name_with_title(self._name)}{clean_name_with_title(classname)}Get{name}()}}\n"
+					fsharp += f"var {clean_name(name)} = {arg_bound_name.replace('*', '')}{{h:C.{clean_name_with_title(self._name)}{clean_name_with_title(classname)}Get{name}()}}\n"
 				elif implicit_cast is not None:
-					go += f"var {clean_name(name)} = {implicit_cast}(C.{clean_name_with_title(self._name)}{clean_name_with_title(classname)}Get{name}())\n"
+					fsharp += f"var {clean_name(name)} = {implicit_cast}(C.{clean_name_with_title(self._name)}{clean_name_with_title(classname)}Get{name}())\n"
 				else:
-					go += f"var {clean_name(name)} = {arg_bound_name}(C.{clean_name_with_title(self._name)}{clean_name_with_title(classname)}Get{name}())\n"
+					fsharp += f"var {clean_name(name)} = {arg_bound_name}(C.{clean_name_with_title(self._name)}{clean_name_with_title(classname)}Get{name}())\n"
 			else:
-				go += "// "
+				fsharp += "// "
 				if do_static:
-					go += f"{clean_name_with_title(classname)}"
-				go += f"Get{name} ...\n"
-				go += f"func "
+					fsharp += f"{clean_name_with_title(classname)}"
+				fsharp += f"Get{name} ...\n"
+				fsharp += f"func "
 				if do_static:
-					go += f"{clean_name_with_title(classname)}"
+					fsharp += f"{clean_name_with_title(classname)}"
 				else:
-					go += f"(pointer *{clean_name_with_title(classname)}) "
+					fsharp += f"(pointer *{clean_name_with_title(classname)}) "
 
-				go += f"Get{name}() {arg_bound_name} {{\n"
-				go += f"v := C.{clean_name_with_title(self._name)}{clean_name_with_title(classname)}Get{name}("
+				fsharp += f"Get{name}() {arg_bound_name} {{\n"
+				fsharp += f"v := C.{clean_name_with_title(self._name)}{clean_name_with_title(classname)}Get{name}("
 				if not static and not is_global:
-					go += "pointer.h"
-				go += ")\n"
+					fsharp += "pointer.h"
+				fsharp += ")\n"
 
 				# check if need convert from c
-				src, retval_go = self.__arg_from_c_to_go({"conv": conv}, "v", True)
-				go += src
-				go += f"return {retval_go}\n"
+				src, retval_fsharp = self.__arg_from_c_to_fsharp({"conv": conv}, "v", True)
+				fsharp += src
+				fsharp += f"return {retval_fsharp}\n"
 
-				go += "}\n"
+				fsharp += "}\n"
 
 			# SET
 			# add set only if the member is not const
 			if not member["ctype"].const:
-				go += f"// "
+				fsharp += f"// "
 				if do_static:
-					go += f"{clean_name_with_title(classname)}"
-				go += f"Set{name} ...\n" \
+					fsharp += f"{clean_name_with_title(classname)}"
+				fsharp += f"Set{name} ...\n" \
 						f"func "
 						
 				if do_static:
-					go += f"{clean_name_with_title(classname)}"
+					fsharp += f"{clean_name_with_title(classname)}"
 				else:
-					go += f"(pointer *{clean_name_with_title(classname)}) "
+					fsharp += f"(pointer *{clean_name_with_title(classname)}) "
 
-				go += f"Set{name}(v {arg_bound_name}) {{\n"
+				fsharp += f"Set{name}(v {arg_bound_name}) {{\n"
 
 				# convert to c
-				c_call = self.__arg_from_go_to_c({"conv": conv}, "v")
+				c_call = self.__arg_from_fsharp_to_c({"conv": conv}, "v")
 				if c_call != "":
-					go += c_call
+					fsharp += c_call
 				else:
-					go += "vToC := v\n"
+					fsharp += "vToC := v\n"
 
-				go += f"	C.{clean_name_with_title(self._name)}{clean_name_with_title(classname)}Set{name}("
+				fsharp += f"	C.{clean_name_with_title(self._name)}{clean_name_with_title(classname)}Set{name}("
 				if not static and not is_global:
-					go += "pointer.h, "
-				go += "vToC)\n"
-				go += "}\n"
-			return go
+					fsharp += "pointer.h, "
+				fsharp += "vToC)\n"
+				fsharp += "}\n"
+			return fsharp
 
 		# create twice, with and without static, to use it with the class and standalone
 		if not is_global:
-			go += create_get_set(False)
+			fsharp += create_get_set(False)
 		if static or is_global:
-			go += create_get_set(True)
+			fsharp += create_get_set(True)
 
-		return go
+		return fsharp
 
 	def __extract_get_set_member(self, classname, convClass, member, static=False, name=None, bound_name=None, is_global=False, is_in_header=False):
-		go = ""
+		fsharp = ""
 		conv = self.select_ctype_conv(member["ctype"])
 
 		if "bound_name" in member:
@@ -972,7 +1000,7 @@ uint32_t %s(void* p) {
 		cleanClassname = clean_name_with_title(classname)
 
 		# special Slice
-		if isinstance(conv, lib.go.stl.GoSliceToStdVectorConverter):
+		if isinstance(conv, lib.fsharp.stl.FSharpSliceToStdVectorConverter):
 			arg_bound_name = self.__get_arg_bound_name_to_c({"conv": conv.T_conv})
 		else:
 			arg_bound_name = self.__get_arg_bound_name_to_c({"conv": conv})
@@ -983,17 +1011,17 @@ uint32_t %s(void* p) {
 
 		# GET
 		if is_in_header:
-			go += "extern "
+			fsharp += "extern "
 
-		go += f"{c_arg_bound_name} {clean_name_with_title(self._name)}{cleanClassname}Get{name.replace(':', '')}("
+		fsharp += f"{c_arg_bound_name} {clean_name_with_title(self._name)}{cleanClassname}Get{name.replace(':', '')}("
 		if not static and not is_global:
-			go += f"{clean_name_with_title(self._name)}{cleanClassname} h"
-		go += ")"
+			fsharp += f"{clean_name_with_title(self._name)}{cleanClassname} h"
+		fsharp += ")"
 
 		if is_in_header:
-			go += ";\n"
+			fsharp += ";\n"
 		else:
-			go += "{"
+			fsharp += "{"
 			# check if the value is a ref
 			prefix = ""
 			if (hasattr(conv.ctype, "ref") and conv.ctype.ref in ["&", "*&"]) or \
@@ -1002,53 +1030,53 @@ uint32_t %s(void* p) {
 
 			if static or is_global:
 				if convClass is not None:
-					go += f"	auto ret = {prefix}{convClass.ctype}::{c_name};\n"
+					fsharp += f"	auto ret = {prefix}{convClass.ctype}::{c_name};\n"
 				else:
-					go += f"	auto ret = {prefix}{classname}::{c_name};\n"
+					fsharp += f"	auto ret = {prefix}{classname}::{c_name};\n"
 			else:
 				if convClass is not None and "proxy" in convClass._features:
-					go += f"\n	auto v = _type_tag_cast(h, {convClass.type_tag}, {convClass._features['proxy'].wrapped_conv.type_tag});\n"
-					go += f"	auto ret = {prefix}(({convClass._features['proxy'].wrapped_conv.ctype}*)v)->{c_name};\n"
+					fsharp += f"\n	auto v = _type_tag_cast(h, {convClass.type_tag}, {convClass._features['proxy'].wrapped_conv.type_tag});\n"
+					fsharp += f"	auto ret = {prefix}(({convClass._features['proxy'].wrapped_conv.ctype}*)v)->{c_name};\n"
 				else:
-					go += f"	auto ret = {prefix}(({convClass.ctype}*)h)->{c_name};\n"
+					fsharp += f"	auto ret = {prefix}(({convClass.ctype}*)h)->{c_name};\n"
 
 			src, retval_c = self.__arg_from_cpp_to_c({"conv": conv}, "ret", True)
-			go += src
-			go += f"return {retval_c};\n}}\n"
+			fsharp += src
+			fsharp += f"return {retval_c};\n}}\n"
 
 		# SET
 		# add set only if the member is not const
 		if not(member["ctype"].const or conv._non_copyable):
 			if is_in_header:
-				go += "extern "
+				fsharp += "extern "
 
-			go += f"void {clean_name_with_title(self._name)}{cleanClassname}Set{name.replace(':', '')}("
+			fsharp += f"void {clean_name_with_title(self._name)}{cleanClassname}Set{name.replace(':', '')}("
 			if not static and not is_global:
-				go += f"{clean_name_with_title(self._name)}{cleanClassname} h, "
-			go += f"{c_arg_bound_name} v)"
+				fsharp += f"{clean_name_with_title(self._name)}{cleanClassname} h, "
+			fsharp += f"{c_arg_bound_name} v)"
 
 			if is_in_header:
-				go += ";\n"
+				fsharp += ";\n"
 			else:
 
 				src, inval = self.__arg_from_c_to_cpp({"conv": conv}, "v")
-				go += src
+				fsharp += src
 
 				if static or is_global:
 					if convClass is not None:
-						go += f"{{ {convClass.ctype}::{c_name} = {inval};\n}}\n"
+						fsharp += f"{{ {convClass.ctype}::{c_name} = {inval};\n}}\n"
 					else:
-						go += f"{{ {classname}::{c_name} = {inval};\n}}\n"
+						fsharp += f"{{ {classname}::{c_name} = {inval};\n}}\n"
 				else:
 					if convClass is not None and "proxy" in convClass._features:
-						go += f"{{\n	auto w = _type_tag_cast(h, {convClass.type_tag}, {convClass._features['proxy'].wrapped_conv.type_tag});\n"
-						go += f"	(({convClass._features['proxy'].wrapped_conv.bound_name}*)w)->{c_name} = {inval};\n}}\n"
+						fsharp += f"{{\n	auto w = _type_tag_cast(h, {convClass.type_tag}, {convClass._features['proxy'].wrapped_conv.type_tag});\n"
+						fsharp += f"	(({convClass._features['proxy'].wrapped_conv.bound_name}*)w)->{c_name} = {inval};\n}}\n"
 					else:
-						go += f"{{ (({convClass.ctype}*)h)->{c_name} = {inval};}}\n"
-		return go
+						fsharp += f"{{ (({convClass.ctype}*)h)->{c_name} = {inval};}}\n"
+		return fsharp
 
-	def __extract_method_go(self, classname, convClass, method, static=False, name=None, bound_name=None, is_global=False, is_constructor=False):
-		go = ""
+	def __extract_method_fsharp(self, classname, convClass, method, static=False, name=None, bound_name=None, is_global=False, is_constructor=False):
+		fsharp = ""
 
 		if bound_name is None:
 			bound_name = method["bound_name"]
@@ -1058,9 +1086,9 @@ uint32_t %s(void* p) {
 		if bound_name == "OpenVRStateToViewState":
 			bound_name = bound_name
 
-		name_go = name
+		name_fsharp = name
 		if is_constructor:
-			name_go = "new_" + name_go
+			name_fsharp = "new_" + name_fsharp
 
 		uid = classname + bound_name if classname else bound_name
 
@@ -1071,13 +1099,13 @@ uint32_t %s(void* p) {
 			if proto["rval"]["conv"]:
 				retval = proto["rval"]["conv"].bound_name
 
-			go += "// " + clean_name_with_title(name_go)
+			fsharp += "// " + clean_name_with_title(name_fsharp)
 			# add bounding_name to the overload function
 			if "bound_name" in proto["features"]:
-				go += proto["features"]["bound_name"]
+				fsharp += proto["features"]["bound_name"]
 			# if automatic suffix generated
 			elif "suggested_suffix" in proto:
-				go += proto["suggested_suffix"]
+				fsharp += proto["suggested_suffix"]
 
 			# get doc
 			if classname == "" or is_constructor:
@@ -1086,44 +1114,44 @@ uint32_t %s(void* p) {
 				doc = self.get_symbol_doc(classname + "_" + bound_name)
 
 			if doc == "":
-				go += " ...\n"
+				fsharp += " ...\n"
 			else:
-				go += " " + re.sub(r'(\[)(.*?)(\])', r'\1harfang.\2\3', doc) + "\n"
+				fsharp += " " + re.sub(r'(\[)(.*?)(\])', r'\1harfang.\2\3', doc) + "\n"
 
-			go += "func "
+			fsharp += "func "
 			if not is_global:
-				go += f"(pointer *{clean_name_with_title(classname)}) "
-			go += f"{clean_name_with_title(name_go)}"
+				fsharp += f"(pointer *{clean_name_with_title(classname)}) "
+			fsharp += f"{clean_name_with_title(name_fsharp)}"
 
 			# add bounding_name to the overload function
 			if "bound_name" in proto["features"]:
-				go += proto["features"]["bound_name"]
+				fsharp += proto["features"]["bound_name"]
 			# if automatic suffix generated
 			elif "suggested_suffix" in proto:
-				go += proto["suggested_suffix"]
+				fsharp += proto["suggested_suffix"]
 
 			# add input(s) declaration
-			go += "("
+			fsharp += "("
 			if len(proto["args"]):
 				has_previous_arg = False
 				for argin in proto["argsin"]:
 					if has_previous_arg:
-						go += " ,"
+						fsharp += " ,"
 
 					# check if the input is in feature constant group, overrite the type
 					if "features" in proto and "constants_group" in proto["features"] and str(argin["carg"].name) in proto["features"]["constants_group"]:
-						go += f"{clean_name(argin['carg'].name)} {proto['features']['constants_group'][str(argin['carg'].name)]}"
+						fsharp += f"{clean_name(argin['carg'].name)} {proto['features']['constants_group'][str(argin['carg'].name)]}"
 					else:
-						go += f"{clean_name(argin['carg'].name)} {self.__get_arg_bound_name_to_go(argin)}"
+						fsharp += f"{clean_name(argin['carg'].name)} {self.__get_arg_bound_name_to_fsharp(argin)}"
 					has_previous_arg = True
 
-			go += ")"
+			fsharp += ")"
 
 			# add output(s) declaration
-			go += "("
+			fsharp += "("
 			has_previous_ret_arg = False
 			if proto["rval"]["conv"]:
-				go += self.__get_arg_bound_name_to_go(proto["rval"])
+				fsharp += self.__get_arg_bound_name_to_fsharp(proto["rval"])
 				has_previous_ret_arg = True
 			
 			# only add arg output, NOT ARG IN OUT (pass them by pointer, not return them)
@@ -1131,21 +1159,21 @@ uint32_t %s(void* p) {
 				for arg in proto['args']:
 					if 'arg_out' in proto['features'] and str(arg['carg'].name) in proto['features']['arg_out']:
 						if has_previous_ret_arg:
-							go += " ,"
+							fsharp += " ,"
 
-						go += self.__get_arg_bound_name_to_go(arg)
+						fsharp += self.__get_arg_bound_name_to_fsharp(arg)
 						has_previous_ret_arg = True
-			go += ")"
+			fsharp += ")"
 
 			# begin function declaration
-			go += "{\n"
+			fsharp += "{\n"
 
 			# convert arg in to c
 			if len(proto["args"]):
 				for arg in proto["args"]:
 					# if arg out only, declare this value
 					if "arg_out" in proto["features"] and str(arg["carg"].name) in proto["features"]["arg_out"]:
-						arg_bound_name = self.__get_arg_bound_name_to_go(arg)
+						arg_bound_name = self.__get_arg_bound_name_to_fsharp(arg)
 
 						if arg["carg"].ctype.is_pointer() or (hasattr(arg["carg"].ctype, "ref") and arg["carg"].ctype.ref == "&"):
 							# if it's a arg out and a class
@@ -1171,53 +1199,53 @@ uint32_t %s(void* p) {
 												id_proto_without_arg = proto_arg["suggested_suffix"]
 											break
 
-								go += f"{clean_name(arg['carg'].name)} := {arg_bound_name}{id_proto_without_arg}()\n"
+								fsharp += f"{clean_name(arg['carg'].name)} := {arg_bound_name}{id_proto_without_arg}()\n"
 							else:
 								# not a class, remove the * and make a new
-								go += f"{clean_name(arg['carg'].name)} := new({arg_bound_name.replace('*', '')})\n"
+								fsharp += f"{clean_name(arg['carg'].name)} := new({arg_bound_name.replace('*', '')})\n"
 						else:
-							go += f"var {clean_name(arg['carg'].name)} {arg_bound_name}\n"
+							fsharp += f"var {clean_name(arg['carg'].name)} {arg_bound_name}\n"
 
 					c_call = ""
 					if arg["conv"]:
-						c_call = self.__arg_from_go_to_c(arg, arg['carg'].name)
+						c_call = self.__arg_from_fsharp_to_c(arg, arg['carg'].name)
 					if c_call != "":
-						go += c_call
+						fsharp += c_call
 					else:
-						go += f"{clean_name(arg['carg'].name)}ToC := {clean_name(arg['carg'].name)}\n"
+						fsharp += f"{clean_name(arg['carg'].name)}ToC := {clean_name(arg['carg'].name)}\n"
 
 			# declare arg out
 			if retval != "":
-				go += "retval := "
+				fsharp += "retval := "
 
 			if is_constructor:
-				go += f"C.{clean_name_with_title(self._name)}Constructor{clean_name_with_title(name)}"
+				fsharp += f"C.{clean_name_with_title(self._name)}Constructor{clean_name_with_title(name)}"
 			else:
-				go += f"C.{clean_name_with_title(self._name)}{clean_name_with_title(name)}"
+				fsharp += f"C.{clean_name_with_title(self._name)}{clean_name_with_title(name)}"
 
 			# is global, add the Name of the class to be sure to avoid double name function name
 			if not is_global:
-				go += f"{clean_name_with_title(convClass.bound_name)}"
+				fsharp += f"{clean_name_with_title(convClass.bound_name)}"
 
 			# add bounding_name to the overload function
 			if "bound_name" in proto["features"]:
-				go += proto["features"]["bound_name"]
+				fsharp += proto["features"]["bound_name"]
 			# if automatic suffix generated
 			elif "suggested_suffix" in proto:
-				go += proto["suggested_suffix"]
+				fsharp += proto["suggested_suffix"]
 
-			go += "("
+			fsharp += "("
 			if not is_global and not is_constructor:
-				go += "pointer.h, "
+				fsharp += "pointer.h, "
 
 			if len(proto["args"]):
 				has_previous_arg = False
 				for arg in proto["args"]:
 					if has_previous_arg:
-						go += " ,"
+						fsharp += " ,"
 
 					# special Slice
-					if isinstance(arg["conv"], lib.go.stl.GoSliceToStdVectorConverter):
+					if isinstance(arg["conv"], lib.fsharp.stl.FSharpSliceToStdVectorConverter):
 						slice_name = clean_name(arg['carg'].name)
 						if "FSharpConstCharPtrConverter" in str(arg["conv"].T_conv) or \
 							"FSharpStringConverter" in str(arg["conv"].T_conv):	
@@ -1225,21 +1253,21 @@ uint32_t %s(void* p) {
 						# if it's a class, get a list of pointer to c class
 						elif self.__get_is_type_class_or_pointer_with_class(arg["conv"].T_conv):
 							slice_name = f"{slice_name}Pointer"
-						go += f"{slice_name}ToCSize, {slice_name}ToCBuf"
+						fsharp += f"{slice_name}ToCSize, {slice_name}ToCBuf"
 					else:
 						# if (arg['carg'].ctype.is_pointer() or (hasattr(arg['carg'].ctype, 'ref') and arg['carg'].ctype.ref == "&")) and \
 						# 	arg['conv'].bound_name != "string" and not arg['conv'].is_type_class():
-						# 	go += "&"
-						go += f"{clean_name(arg['carg'].name)}ToC"
+						# 	fsharp += "&"
+						fsharp += f"{clean_name(arg['carg'].name)}ToC"
 
 					has_previous_arg = True
-			go += ")\n"
+			fsharp += ")\n"
 			ret_args = []
 			if retval != "":
-				src, retval_go = self.__arg_from_c_to_go(proto["rval"], "retval")
-				go += src
+				src, retval_fsharp = self.__arg_from_c_to_fsharp(proto["rval"], "retval")
+				fsharp += src
 
-				ret_args.append(retval_go)
+				ret_args.append(retval_fsharp)
 
 			# return arg out
 			# only add arg output, NOT ARG IN OUT (pass them by pointer, not return them)
@@ -1247,36 +1275,36 @@ uint32_t %s(void* p) {
 				for arg in proto['args']:
 					if 'arg_out' in proto['features'] and str(arg['carg'].name) in proto['features']['arg_out']:
 						# add name
-						retval_go = clean_name(str(arg["carg"].name))
+						retval_fsharp = clean_name(str(arg["carg"].name))
 						# if it's a arg out and a class, don't convert because it was already done upper
 						if not self.__get_is_type_class_or_pointer_with_class(arg["conv"]):
-							retval_go = clean_name(str(arg["carg"].name)) + "ToC"
-							src, retval_go = self.__arg_from_c_to_go(arg, retval_go)
-							go += src
+							retval_fsharp = clean_name(str(arg["carg"].name)) + "ToC"
+							src, retval_fsharp = self.__arg_from_c_to_fsharp(arg, retval_fsharp)
+							fsharp += src
 							
-						ret_args.append(retval_go)
+						ret_args.append(retval_fsharp)
 
 			if len(ret_args) > 0:
-				go += "return "
+				fsharp += "return "
 			has_previous_arg = False
 			for retarg in ret_args:
 				if has_previous_arg:
 					# check and remove "\n" just in case
-					if go[-1] == "\n":
-						go = go[:-1]
-					go += ", "
+					if fsharp[-1] == "\n":
+						fsharp = fsharp[:-1]
+					fsharp += ", "
 				has_previous_arg = True
-				go += retarg
+				fsharp += retarg
 				
 			# check and remove "\n" just in case
-			if go[-1] == "\n":
-				go = go[:-1]
-			go += "\n}\n"
+			if fsharp[-1] == "\n":
+				fsharp = fsharp[:-1]
+			fsharp += "\n}\n"
 
-		return go
+		return fsharp
 
 	def __extract_method(self, classname, convClass, method, static=False, name=None, bound_name=None, is_global=False, is_in_header=False, is_constructor=False, overload_op=None):
-		go = ""
+		fsharp = ""
 
 		if bound_name is None:
 			bound_name = method["bound_name"]
@@ -1302,36 +1330,36 @@ uint32_t %s(void* p) {
 				retval = retval.replace("const const", "const")
 
 			if is_in_header:
-				go += "extern "
-			go += f"{retval} {clean_name_with_title(self._name)}{clean_name_with_title(wrap_name)}"
+				fsharp += "extern "
+			fsharp += f"{retval} {clean_name_with_title(self._name)}{clean_name_with_title(wrap_name)}"
 
 			# not global, add the Name of the class to be sure to avoid double name function name
 			if not is_global or (not is_constructor and is_global and convClass is not None):
-				go += f"{clean_name_with_title(convClass.bound_name)}"
+				fsharp += f"{clean_name_with_title(convClass.bound_name)}"
 
 			# add bounding_name to the overload function
 			if "bound_name" in proto["features"]:
-				go += proto["features"]["bound_name"]
+				fsharp += proto["features"]["bound_name"]
 			# if automatic suffix generated
 			elif "suggested_suffix" in proto:
-				go += proto["suggested_suffix"]
+				fsharp += proto["suggested_suffix"]
 
-			go += "("
+			fsharp += "("
 
 			has_previous_arg = False
 			# not global, member class, include the "this" pointer first
 			if not is_global or (not is_constructor and is_global and convClass is not None):
 				has_previous_arg = True
-				go += f"{clean_name_with_title(self._name)}{clean_name_with_title(convClass.bound_name)} this_"
+				fsharp += f"{clean_name_with_title(self._name)}{clean_name_with_title(convClass.bound_name)} this_"
 
 			if len(proto["args"]):
 				for argin in proto["args"]:
 					if has_previous_arg:
-						go += " ,"
+						fsharp += " ,"
 
 					# get arg name
 					# special Slice
-					if isinstance(argin["conv"], lib.go.stl.GoSliceToStdVectorConverter):
+					if isinstance(argin["conv"], lib.fsharp.stl.FSharpSliceToStdVectorConverter):
 						arg_bound_name = self.__get_arg_bound_name_to_c({"conv": argin["conv"].T_conv})
 					else:
 						arg_bound_name = self.__get_arg_bound_name_to_c(argin)
@@ -1341,19 +1369,19 @@ uint32_t %s(void* p) {
 					arg_bound_name = arg_bound_name.replace("const const", "const")
 
 					# special Slice
-					if isinstance(argin["conv"], lib.go.stl.GoSliceToStdVectorConverter):
-						go += f"size_t {clean_name(argin['carg'].name)}ToCSize, {arg_bound_name} *{clean_name(argin['carg'].name)}ToCBuf"
+					if isinstance(argin["conv"], lib.fsharp.stl.FSharpSliceToStdVectorConverter):
+						fsharp += f"size_t {clean_name(argin['carg'].name)}ToCSize, {arg_bound_name} *{clean_name(argin['carg'].name)}ToCBuf"
 					else:
 						# normal argument
-						go += f"{arg_bound_name} {argin['carg'].name}"
+						fsharp += f"{arg_bound_name} {argin['carg'].name}"
 					has_previous_arg = True
 
-			go += ")"
+			fsharp += ")"
 
 			if is_in_header:
-				go += ";\n"
+				fsharp += ";\n"
 			else:
-				go += "{\n"
+				fsharp += "{\n"
 
 				args = []
 				# if another route is set
@@ -1366,17 +1394,17 @@ uint32_t %s(void* p) {
 					# special case, which include the class has arg in first arg
 					if  not is_constructor and is_global and convClass is not None:
 						src, retval_c = self.__arg_from_c_to_cpp({"conv":convClass}, "this_")
-						go += src
+						fsharp += src
 						args.append(retval_c)
 
 					# other normal args
 					for argin in proto["args"]:
 						# special Slice
-						if isinstance(argin["conv"], lib.go.stl.GoSliceToStdVectorConverter):
+						if isinstance(argin["conv"], lib.fsharp.stl.FSharpSliceToStdVectorConverter):
 							src, retval_c = self.__arg_from_c_to_cpp(argin, clean_name(str(argin["carg"].name)))
 						else:
 							src, retval_c = self.__arg_from_c_to_cpp(argin, str(argin["carg"].name))
-						go += src
+						fsharp += src
 						args.append(retval_c)
 
 				if is_constructor:
@@ -1384,45 +1412,45 @@ uint32_t %s(void* p) {
 					retval = "void"
 					# if another route is set
 					if "route" in proto["features"]:
-						go += f"	return (void*){proto['features']['route'](args)}\n"
+						fsharp += f"	return (void*){proto['features']['route'](args)}\n"
 					elif "proxy" in convClass._features:
-						go += "	auto " + convClass._features["proxy"].wrap(f"new {convClass._features['proxy'].wrapped_conv.bound_name}({','.join(args)})", "v")
-						go += "	return v;\n"
+						fsharp += "	auto " + convClass._features["proxy"].wrap(f"new {convClass._features['proxy'].wrapped_conv.bound_name}({','.join(args)})", "v")
+						fsharp += "	return v;\n"
 					else:
-						go += f"	return (void*)(new {convClass.ctype}({','.join(args)}));\n"
+						fsharp += f"	return (void*)(new {convClass.ctype}({','.join(args)}));\n"
 				else:
 					# if there is return value
 					if retval != "void":
-						go += "	auto ret = "
+						fsharp += "	auto ret = "
 
 					# special comparison
 					if overload_op is not None:
-							go += f"(*({convClass.ctype}*)this_)"
-							go += overload_op
-							go += f"({args[0]});\n"
+							fsharp += f"(*({convClass.ctype}*)this_)"
+							fsharp += overload_op
+							fsharp += f"({args[0]});\n"
 					# classic call to function
 					else:
 						# transform & to *
 						if hasattr(proto["rval"]["storage_ctype"], "ref") and any(s in proto["rval"]["storage_ctype"].ref for s in ["&"]):
-							go += "&"
+							fsharp += "&"
 
 						# if another route is set
 						if "route" in proto["features"]:
-							go += proto["features"]["route"](args) + "\n"
+							fsharp += proto["features"]["route"](args) + "\n"
 						else:
 							# not global, member class, include the "this" pointer first
 							if not is_global:
-								go += f"(*({convClass.ctype}*)this_)"
+								fsharp += f"(*({convClass.ctype}*)this_)"
 								if convClass.ctype.is_pointer():
-									go += "->"
+									fsharp += "->"
 								else:
-									go += "."
+									fsharp += "."
 
 							# cpp function name
-							go += cpp_function_name
+							fsharp += cpp_function_name
 
 							# add function's arguments
-							go += f"({','.join(args)});\n"
+							fsharp += f"({','.join(args)});\n"
 
 						# return arg out
 						if "arg_out" in proto["features"] or "arg_in_out" in proto["features"]:
@@ -1430,21 +1458,21 @@ uint32_t %s(void* p) {
 								if ('arg_out' in proto['features'] and str(arg['carg'].name) in proto['features']['arg_out']) or \
 									('arg_in_out' in proto['features'] and str(arg['carg'].name) in proto['features']['arg_in_out']):
 									# FOR NOW ONLY FOR THE STD::STRING
-									if "GoStringConverter" in str(arg["conv"]) and \
+									if "FSharpStringConverter" in str(arg["conv"]) and \
 										"carg" in arg and hasattr(arg["carg"].ctype, "ref") and any(s in arg["carg"].ctype.ref for s in ["&"]):
 										# it's a pointer (or there is a bug)
 										retval_cpp = f"(&({str(arg['carg'].name)}_cpp))"
 										src, retval_cpp = self.__arg_from_cpp_to_c(arg, retval_cpp, static)
-										go += src
-										go += f"	{str(arg['carg'].name)} = {retval_cpp};\n"
+										fsharp += src
+										fsharp += f"	{str(arg['carg'].name)} = {retval_cpp};\n"
 
 				if retval != "void":
 					src, retval_c = self.__arg_from_cpp_to_c(proto["rval"], "ret", static)
-					go += src
-					go += f"return {retval_c};\n"
-				go += "}\n"
+					fsharp += src
+					fsharp += f"return {retval_c};\n"
+				fsharp += "}\n"
 
-		return go
+		return fsharp
 
 	# VERY SPECIAL
 	# check in every methods, 
@@ -1489,15 +1517,15 @@ uint32_t %s(void* p) {
 			if conv.is_type_class():
 				# add equal of deep copy
 				if conv._supports_deep_compare:
-					go = ""
+					fsharp = ""
 					if "proxy" in conv._features:
-						go += f"bool _{conv.bound_name}_Equal({conv.ctype} *a, {conv.ctype} *b){{\n"
-						go += f"	auto cast_a = _type_tag_cast(a, {conv.type_tag}, {conv._features['proxy'].wrapped_conv.type_tag});\n"
-						go += f"	auto cast_b = _type_tag_cast(b, {conv.type_tag}, {conv._features['proxy'].wrapped_conv.type_tag});\n"
+						fsharp += f"bool _{conv.bound_name}_Equal({conv.ctype} *a, {conv.ctype} *b){{\n"
+						fsharp += f"	auto cast_a = _type_tag_cast(a, {conv.type_tag}, {conv._features['proxy'].wrapped_conv.type_tag});\n"
+						fsharp += f"	auto cast_b = _type_tag_cast(b, {conv.type_tag}, {conv._features['proxy'].wrapped_conv.type_tag});\n"
 
 						wrapped_conv = conv._features["proxy"].wrapped_conv
 						if wrapped_conv.is_type_class():
-							go += f"	return ({wrapped_conv.bound_name}*)cast_a == ({wrapped_conv.bound_name}*)cast_b;\n"
+							fsharp += f"	return ({wrapped_conv.bound_name}*)cast_a == ({wrapped_conv.bound_name}*)cast_b;\n"
 						else:
 							# check the convert from the base (in case of ptr)
 							if wrapped_conv.ctype.is_pointer() or (hasattr(wrapped_conv.ctype, "ref") and any(s in wrapped_conv.ctype.ref for s in ["&", "*"])):
@@ -1508,13 +1536,13 @@ uint32_t %s(void* p) {
 									type_bound_name = str(base_conv.ctype)
 							else:
 								type_bound_name = str(wrapped_conv.ctype)
-							go += f"	return ({type_bound_name}*)cast_a == ({type_bound_name}*)cast_b;\n"
+							fsharp += f"	return ({type_bound_name}*)cast_a == ({type_bound_name}*)cast_b;\n"
 					else:
-						go += f"bool _{conv.bound_name}_Equal({conv.bound_name} *a, {conv.bound_name} *b){{\n"
-						go += f"	return *a == *b;\n"
-					go += "}\n"
+						fsharp += f"bool _{conv.bound_name}_Equal({conv.bound_name} *a, {conv.bound_name} *b){{\n"
+						fsharp += f"	return *a == *b;\n"
+					fsharp += "}\n"
 
-					self.insert_code(go)
+					self.insert_code(fsharp)
 					if "proxy" in conv._features:
 						self.bind_method(conv, "Equal", "bool", [f"{conv.ctype} *b"], {"route": route_lambda(f"_{conv.bound_name}_Equal")})
 					else:
@@ -1542,14 +1570,14 @@ uint32_t %s(void* p) {
 
 		# helper to add from itself and from parent class
 		def extract_conv_and_bases(convs_to_extract, extract_func, bases_convs_to_extract):
-			go = ""
+			fsharp = ""
 			saved_names = []
 			for conv_to_extract in convs_to_extract:
 				if "name" in conv_to_extract:
 					saved_names.append(conv_to_extract["name"])
 				elif "op" in conv_to_extract:
 					saved_names.append(conv_to_extract["op"])
-				go += extract_func(conv_to_extract)
+				fsharp += extract_func(conv_to_extract)
 
 			# add static member get set for base class
 			for base_convs_to_extract in bases_convs_to_extract:
@@ -1562,8 +1590,8 @@ uint32_t %s(void* p) {
 						n = conv_to_extract["op"]
 					if n not in saved_names:
 						saved_names.append(n)
-						go += extract_func(conv_to_extract)
-			return go
+						fsharp += extract_func(conv_to_extract)
+			return fsharp
 
 		# .h
 		fsharp_h = '#pragma once\n' \
@@ -1587,7 +1615,7 @@ uint32_t %s(void* p) {
 			else:
 				arg_bound_name = "int"
 				
-			go_h += f"extern {arg_bound_name} Get{bound_name}(const int id);\n"
+			fsharp_h += f"extern {arg_bound_name} Get{bound_name}(const int id);\n"
 
 		# write all typedef first
 		for conv in self._bound_types:
@@ -1596,7 +1624,7 @@ uint32_t %s(void* p) {
 
 			cleanBoundName = clean_name_with_title(conv.bound_name)
 			if self.__get_is_type_class_or_pointer_with_class(conv) :
-				go_h += f"typedef void* {clean_name_with_title(self._name)}{cleanBoundName};\n"
+				fsharp_h += f"typedef void* {clean_name_with_title(self._name)}{cleanBoundName};\n"
 
 			if "FSharpStdFunctionConverter" in str(conv):
 				func_name = conv.base_type.replace("std::function<", "").replace("&", "*")[:-1] # [:-1] to remove the > of std::function
@@ -1610,7 +1638,7 @@ uint32_t %s(void* p) {
 						conv = self.select_ctype_conv(ctype)
 						args_boundname.append(self.__get_arg_bound_name_to_c({"conv": conv, "carg": type('carg', (object,), {'ctype':ctype})()}))
 
-				go_h += f"typedef {func_name[:first_parenthesis]} (*{clean_name_with_title(self._name)}{cleanBoundName})({','.join(args_boundname)});\n"
+				fsharp_h += f"typedef {func_name[:first_parenthesis]} (*{clean_name_with_title(self._name)}{cleanBoundName})({','.join(args_boundname)});\n"
 
 		# write the rest of the classes
 		for conv in self._bound_types:
@@ -1675,7 +1703,7 @@ uint32_t %s(void* p) {
 
 
 		# cpp
-		fsharp_c = '// go wrapper c\n' \
+		fsharp_c = '// fsharp wrapper c\n' \
 				'#include \"wrapper.h\"\n' \
 				'#include <memory>\n'
 				
@@ -1762,19 +1790,19 @@ uint32_t %s(void* p) {
 
 		self.fsharp_c = fsharp_c
 
-		# .go
+		# .fsharp
 		fsharp_bind = f"package {clean_name_with_title(self._name)}\n" \
 				'// #include "wrapper.h"\n' \
-				'// #cgo CFLAGS: -I . -Wall -Wno-unused-variable -Wno-unused-function -O3\n' \
-				'// #cgo CXXFLAGS: -std=c++14 -O3\n'
-		fsharp_bind += self.cgo_directives
-		fsharp_bind += f"// #cgo LDFLAGS: -lstdc++ -L. -l{self._name}\n" \
+				'// #cfsharp CFLAGS: -I . -Wall -Wno-unused-variable -Wno-unused-function -O3\n' \
+				'// #cfsharp CXXFLAGS: -std=c++14 -O3\n'
+		fsharp_bind += self.cfsharp_directives
+		fsharp_bind += f"// #cfsharp LDFLAGS: -lstdc++ -L. -l{self._name}\n" \
 				'import "C"\n\n' \
 				'import (\n'
 		# check if reflect package is needed
 		for conv in self._FABGen__type_convs.values():
 			# special Slice
-			if isinstance(conv, lib.go.stl.GoSliceToStdVectorConverter):
+			if isinstance(conv, lib.fsharp.stl.FSharpSliceToStdVectorConverter):
 				fsharp_bind += '	"reflect"\n'
 				break
 		# add runtime package if we have class
@@ -1786,13 +1814,13 @@ uint32_t %s(void* p) {
 		fsharp_bind += '	"unsafe"\n' \
 				')\n'
 
-		with open("lib/go/WrapperConverter.go_", "r") as file:
+		with open("lib/fsharp/WrapperConverter.fs_", "r") as file:
 			lines = file.readlines()
 			fsharp_bind += "".join(lines)
 			fsharp_bind += "\n"
 
-		# // #cgo CFLAGS: -Iyour-include-path
-		# // #cgo LDFLAGS: -Lyour-library-path -lyour-library-name-minus-the-lib-part
+		# // #cfsharp CFLAGS: -Iyour-include-path
+		# // #cfsharp LDFLAGS: -Lyour-library-path -lyour-library-name-minus-the-lib-part
 
 		for conv in self._bound_types:
 			if conv.nobind:
@@ -1801,8 +1829,8 @@ uint32_t %s(void* p) {
 			cleanBoundName = clean_name_with_title(conv.bound_name)
 
 			# special Slice
-			if isinstance(conv, lib.go.stl.GoSliceToStdVectorConverter):
-				arg_boung_name = self.__get_arg_bound_name_to_go({"conv":conv.T_conv})
+			if isinstance(conv, lib.fsharp.stl.FSharpSliceToStdVectorConverter):
+				arg_boung_name = self.__get_arg_bound_name_to_fsharp({"conv":conv.T_conv})
 				fsharp_bind += f"// {clean_name_with_title(conv.bound_name)} ...\n" \
 							f"type {clean_name_with_title(conv.bound_name)} []{arg_boung_name}\n\n"
 
@@ -1820,27 +1848,27 @@ uint32_t %s(void* p) {
 							"}\n\n" \
 							f"// New{cleanBoundName}FromCPointer ...\n" \
 							f"func New{cleanBoundName}FromCPointer(p unsafe.Pointer) *{cleanBoundName} {{\n" \
-							f"	retvalGO := &{cleanBoundName}{{h: (C.{clean_name_with_title(self._name)}{cleanBoundName})(p)}}\n" \
-							f"	return retvalGO\n" \
+							f"	retvalFSharp := &{cleanBoundName}{{h: (C.{clean_name_with_title(self._name)}{cleanBoundName})(p)}}\n" \
+							f"	return retvalFSharp\n" \
 							"}\n"
 			
 			# it's a sequence
 			if "sequence" in conv._features:
-				fsharp_bind += self.__extract_sequence_go(conv)
+				fsharp_bind += self.__extract_sequence_fsharp(conv)
 
 			# static members
 			fsharp_bind += extract_conv_and_bases(conv.static_members, \
-									lambda member: self.__extract_get_set_member_go(conv.bound_name, member, static=True), \
+									lambda member: self.__extract_get_set_member_fsharp(conv.bound_name, member, static=True), \
 									[base_class.static_members for base_class in conv._bases])
 
 			# members
 			fsharp_bind += extract_conv_and_bases(conv.members, \
-									lambda member: self.__extract_get_set_member_go(conv.bound_name, member, static=False), \
+									lambda member: self.__extract_get_set_member_fsharp(conv.bound_name, member, static=False), \
 									[base_class.members for base_class in conv._bases])
 
 			# constructors
 			if conv.constructor:
-				fsharp_bind += self.__extract_method_go(conv.bound_name, conv, conv.constructor, bound_name=f"{conv.bound_name}", is_global=True, is_constructor=True)
+				fsharp_bind += self.__extract_method_fsharp(conv.bound_name, conv, conv.constructor, bound_name=f"{conv.bound_name}", is_global=True, is_constructor=True)
 
 			# destructor for all type class
 			if self.__get_is_type_class_or_pointer_with_class(conv) :
@@ -1858,28 +1886,28 @@ uint32_t %s(void* p) {
 
 			# arithmetic operators
 			fsharp_bind += extract_conv_and_bases(conv.arithmetic_ops, \
-									lambda arithmetic: self.__extract_method_go(conv.bound_name, conv, arithmetic, bound_name=gen.get_clean_symbol_name(arithmetic['op'])), \
+									lambda arithmetic: self.__extract_method_fsharp(conv.bound_name, conv, arithmetic, bound_name=gen.get_clean_symbol_name(arithmetic['op'])), \
 									[base_class.arithmetic_ops for base_class in conv._bases])
 			# comparison_ops
 			fsharp_bind += extract_conv_and_bases(conv.comparison_ops, \
-									lambda comparison: self.__extract_method_go(conv.bound_name, conv, comparison, bound_name=gen.get_clean_symbol_name(comparison['op'])), \
+									lambda comparison: self.__extract_method_fsharp(conv.bound_name, conv, comparison, bound_name=gen.get_clean_symbol_name(comparison['op'])), \
 									[base_class.comparison_ops for base_class in conv._bases])
 
 			# static methods
 			fsharp_bind += extract_conv_and_bases(conv.static_methods, \
-									lambda method: self.__extract_method_go(conv.bound_name, conv, method, static=True), \
+									lambda method: self.__extract_method_fsharp(conv.bound_name, conv, method, static=True), \
 									[base_class.static_methods for base_class in conv._bases])
 			# methods
 			fsharp_bind += extract_conv_and_bases(conv.methods, \
-									lambda method: self.__extract_method_go(conv.bound_name, conv, method), \
+									lambda method: self.__extract_method_fsharp(conv.bound_name, conv, method), \
 									[base_class.methods for base_class in conv._bases])
 
 		# enum
 		for bound_name, enum in self._enums.items():
 			fsharp_bind += f"// {bound_name} ...\n"
 			enum_conv = self._get_conv_from_bound_name(bound_name)
-			if enum_conv is not None and hasattr(enum_conv, "go_type") and enum_conv.go_type is not None:
-				fsharp_bind += f"type {bound_name} {enum_conv.go_type}\n"
+			if enum_conv is not None and hasattr(enum_conv, "fsharp_type") and enum_conv.fsharp_type is not None:
+				fsharp_bind += f"type {bound_name} {enum_conv.fsharp_type}\n"
 			else:
 				fsharp_bind += f"type {bound_name} int\n"
 			fsharp_bind += "var (\n"
@@ -1890,7 +1918,7 @@ uint32_t %s(void* p) {
 
 		# functions
 		for func in self._bound_functions:
-			fsharp_bind += self.__extract_method_go("", None, func, is_global=True)
+			fsharp_bind += self.__extract_method_fsharp("", None, func, is_global=True)
 
 		# global variables
 		# sort by group if needed
@@ -1906,23 +1934,23 @@ uint32_t %s(void* p) {
 		for group_name, var_group in bound_variables_groups.items():
 			fsharp_bind += f"// {group_name} ...\n"
 			var_conv = self.select_ctype_conv(var_group[0]["ctype"])
-			if var_conv is not None and hasattr(var_conv, "go_type") and var_conv.fsharp_type is not None:
+			if var_conv is not None and hasattr(var_conv, "fsharp_type") and var_conv.fsharp_type is not None:
 				fsharp_bind += f"type {group_name} {var_conv.fsharp_type}\n"
 			else:
 				fsharp_bind += f"type {group_name} int\n"
 
 			for id, var in enumerate(var_group):
-				fsharp_bind += self.__extract_get_set_member_go("", var, is_global=True, implicit_cast=group_name)
+				fsharp_bind += self.__extract_get_set_member_fsharp("", var, is_global=True, implicit_cast=group_name)
 
 		# add bound variables without group
 		for var in self._bound_variables:
 			if "group" not in var or var["group"] is None:
-				fsharp_bind += self.__extract_get_set_member_go("", var, is_global=True)
+				fsharp_bind += self.__extract_get_set_member_fsharp("", var, is_global=True)
 
-		self.go_bind = go_bind
+		self.fsharp_bind = fsharp_bind
 
-		# Create Translate file c++ to go name
-		go_translate_file = {}
+		# Create Translate file c++ to fsharp name
+		fsharp_translate_file = {}
 
 		def bind_method_translate(classname, convClass, method, static=False, name=None, bound_name=None, is_global=False, is_constructor=False):
 			if bound_name is None:
@@ -1930,30 +1958,30 @@ uint32_t %s(void* p) {
 			if name is None:
 				name = bound_name
 
-			name_go = name
+			name_fsharp = name
 			if is_constructor:
-				name_go = "new_" + name_go
+				name_fsharp = "new_" + name_fsharp
 
 			protos = self._build_protos(method["protos"])
 			return_protos_name = []
 			for id_proto, proto in enumerate(protos):
-				method_name_go = f"{clean_name_with_title(name_go)}"
+				method_name_fsharp = f"{clean_name_with_title(name_fsharp)}"
 
 				# add bounding_name to the overload function
 				if "bound_name" in proto["features"]:
-					method_name_go += proto["features"]["bound_name"]
+					method_name_fsharp += proto["features"]["bound_name"]
 				# if automatic suffix generated
 				elif "suggested_suffix" in proto:
-					method_name_go += proto["suggested_suffix"]
+					method_name_fsharp += proto["suggested_suffix"]
 			
-				return_protos_name.append(method_name_go)
+				return_protos_name.append(method_name_fsharp)
 			return name, return_protos_name
 
 		for conv in self._bound_types:
 			if conv.nobind:
 				continue
 
-			go_translate_file[conv.bound_name] = {"name": clean_name_with_title(conv.bound_name)}
+			fsharp_translate_file[conv.bound_name] = {"name": clean_name_with_title(conv.bound_name)}
 
 			# members
 			members = {}
@@ -1969,7 +1997,7 @@ uint32_t %s(void* p) {
 				members[bound_name] = [f"Get{name}", f"Set{name}"]
 
 			if len(members):
-				go_translate_file[conv.bound_name]["members"] = members
+				fsharp_translate_file[conv.bound_name]["members"] = members
 				
 			# functions
 			functions = {}
@@ -1991,19 +2019,19 @@ uint32_t %s(void* p) {
 				functions[name] = protos_name
 				
 			if len(functions):
-				go_translate_file[conv.bound_name]["functions"] = functions
+				fsharp_translate_file[conv.bound_name]["functions"] = functions
 
 		# enum
 		for bound_name, enum in self._enums.items():
-			go_translate_file[bound_name] = bound_name
-			go_bind += "var (\n"
+			fsharp_translate_file[bound_name] = bound_name
+			fsharp_bind += "var (\n"
 			for id, name in enumerate(enum.keys()):
-				go_translate_file[name] = clean_name(name)
+				fsharp_translate_file[name] = clean_name(name)
 		
 		# functions
 		for func in self._bound_functions:
 			name, protos_name = bind_method_translate("", None, func, is_global=True)
-			go_translate_file[name] = protos_name
+			fsharp_translate_file[name] = protos_name
 
 		# global variables
 		for member in self._bound_variables:
@@ -2015,6 +2043,6 @@ uint32_t %s(void* p) {
 
 			name = bound_name.replace(":", "")
 			name = clean_name_with_title(name)
-			go_translate_file[bound_name] = [f"Get{name}", f"Set{name}"]
+			fsharp_translate_file[bound_name] = [f"Get{name}", f"Set{name}"]
 
-		self.go_translate_file = json.dumps(go_translate_file, indent=4, sort_keys=True)
+		self.fsharp_translate_file = json.dumps(fsharp_translate_file, indent=4, sort_keys=True)
