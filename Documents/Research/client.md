@@ -2,6 +2,7 @@
 ## Who is the client
 <!-- write down here your research on who is the client, his priorities, his specificities, etc -->
 ​HARFANG®3D is a 3D engine that allows professionals to create 3D games and applications. HARFANG®3D builds real-time 3D tools for industry professionals. Its software suite is tailored to developers, designers and engineers aiming to efficiently and seamlessly develop, implement & deploy 3D solutions (HMI, VR/AR, simulation, interactive 3D), regardless of development language or platform constraints.
+
 - Was founded in 2016
 
 Some of their customers:
@@ -9,7 +10,7 @@ Some of their customers:
 - SNCF
 ​
 ## His/her field
-​- Software development
+- Software development
 ​
 ## Competition
 **[Unity](https://unity.com/):**
