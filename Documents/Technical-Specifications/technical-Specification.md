@@ -268,7 +268,7 @@ But we don't need to concern about the certification because the customers said 
 |2nd week|We look at how to use the FABGen already exists. After that, we try to use FABGen.|
 |3rd and 4th week|We are going deeper and starting to launch the test<br> Test the Go part<br>Test the Lua part<br>Check the quality<br>Create all dynamic link library(dll) to use C code for the F#|
 |5th and 6th week|We finish all the test with F#. We start to prepare the presentation.|
-|7th week|This is the last step of the |, everything should be done and ready to present to the client !<br>Oral presentation.
+|7th week|This is the last step of the project everything should be done and ready to present to the client !<br>Oral presentation.|
 
 # 6. Implement functions
   
