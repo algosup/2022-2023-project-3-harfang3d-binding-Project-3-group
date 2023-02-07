@@ -508,6 +508,32 @@ This is the command line to generate the DLL file we will use in the F# |.
  clang++  -shared -o <name_for_dll_file>.dll <name_of_cpp_file>.cpp
  ```
 
+ In other way we can use CMake to generate the DLL file. For that you need to create a CMakeLists.txt file with the following content.
+
+ ```cmake
+cmake_minimum_required(VERSION 3.10)
+project(<name_of_dll_file>)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+
+```
+
+Then we need to add the following lines to the CMakeLists.txt file.
+
+```cmake
+add_library(<name_of_dll_file> SHARED <name_of_cpp_file>.cpp)
+target_include_directories(<name_of_dll_file> PUBLIC <path_to_harfang3d_include_files>)
+target_link_libraries(<name_of_dll_file> <path_to_harfang3d_lib_files>)
+```
+
+Then we can generate the DLL file with the following command.
+
+```
+cmake --build . --config Release
+```
+
 
 # 9.Test plan
 
@@ -536,6 +562,8 @@ Here is the [Test plan](https://github.com/algosup/2022-2023-|-3-harfang3d-bindi
 | IL | Intermediate Language is a stack-based instruction set and computer programming language, intermediate between high-level languages and the computer's native machine code.|
 | DLL | A dynamic-link library (DLL) is a library that contains code and data that can be used by more than one program at the same time.|
 |Clang|Clang is a compiler front-end for the C, C++, Objective-C, and Objective-C++ programming languages.|
+|CMake|CMake is an open-source, cross-platform family of tools designed to build, test and package software.|
+
 
 
 
