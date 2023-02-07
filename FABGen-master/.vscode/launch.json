@@ -145,7 +145,7 @@
 			"python": "${command:python.interpreterPath}",
 			"program": "${workspaceRoot}/tests.py",
 			"cwd": "${workspaceRoot}",
-			"args": ["--luabase", "D:/harfang/sdk", "--x64"],
+			"args": ["--luabase", "C:/Users/LucasAubard/Desktop/Lua", "--x64"],
 			"envFile": "${workspaceRoot}/.env",
 			"debugOptions": [
 				"WaitOnAbnormalExit",

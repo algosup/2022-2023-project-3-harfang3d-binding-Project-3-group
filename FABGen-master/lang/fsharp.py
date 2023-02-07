@@ -339,7 +339,7 @@ uint32_t %s(void* p) {
 
 	def _get_conv(self, conv_name):
 		if conv_name in self._FABGen__type_convs:
-			return self.get_conv(conv_name)
+			return self.et_conv(conv_name)
 		return None
 
 	def _get_conv_from_bound_name(self, bound_name):

@@ -22,7 +22,7 @@ parser = argparse.ArgumentParser(description='Run generator unit tests.')
 parser.add_argument('--pybase', dest='python_base_path', help='Path to the Python interpreter')
 parser.add_argument('--luabase', dest='lua_base_path', help='Path to the Lua interpreter')
 parser.add_argument('--go', dest='go_build', help='Build GO', action="store_true")
-parser.add_argument('--fsharp', dest='go_build', help='Build Fsharp', action="store_true")
+parser.add_argument('--fsharp', dest='dotnet_build', help='Build Fsharp', action="store_true")
 parser.add_argument('--debug', dest='debug_test', help='Generate a working solution to debug a test')
 parser.add_argument('--x64', dest='x64', help='Build for 64 bit architecture', action='store_true', default=False)
 parser.add_argument('--linux', dest='linux', help='Build on Linux', action='store_true', default=False)
@@ -40,9 +40,9 @@ if args.python_base_path:
 # -- CMake generator
 if not args.linux:
 	if args.x64:
-		cmake_generator = 'Visual Studio 16 2019'
+		cmake_generator = 'Visual Studio 17 2022'
 	else:
-		cmake_generator = 'Visual Studio 16 2019'
+		cmake_generator = 'Visual Studio 17 2022'
 
 	print("Using CMake generator: %s" % cmake_generator)
 
@@ -440,7 +440,7 @@ class GoTestBed:
 		success = True
 		try:
 			subprocess.check_output('go mod init mytest', shell=True, stderr=subprocess.STDOUT)
-			subprocess.check_output("go fmt mytest", shell=True, stderr=subprocess.STDOUT)
+			# subprocess.check_output("gofmt -w test.go", shell=True, stderr=subprocess.STDOUT)
 			subprocess.check_output("goimports -w bind.go", shell=True, stderr=subprocess.STDOUT)
 			subprocess.check_output('go test -run ""', shell=True, stderr=subprocess.STDOUT)
 		except subprocess.CalledProcessError as e:
