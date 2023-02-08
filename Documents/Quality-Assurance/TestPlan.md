@@ -116,7 +116,7 @@ List of the different activities used for an efficient test management:
 <!-- WIP -->
 # Test case
 **Features need to be tested:** Transform a C++ function in F# function
-**Features need not be tested:** Transform a F# function in C++ function
+**Features need not to be tested:** Transform a F# function in C++ function
 | Test Case ID 	| Test Case Description                                               	| Test Steps                 	| Test Data              	| Expected Results                                 	| Actual Results                                   	| Pass/Fail 	|
 |--------------	|---------------------------------------------------------------------	|----------------------------	|------------------------	|--------------------------------------------------	|--------------------------------------------------	|-----------	|
 | TC_1         	| Check the distance to origin in Vector 2                            	| Dotnet run on the project  	| Vector2(2.0, 2.0)      	| Distance to origin in Vector 2: 2.828427         	| Distance to origin in Vector 2: 2.828427         	| Pass      	|
