@@ -71,6 +71,23 @@
 				"RedirectOutput"
 			]
 		},
+		{
+			"name": "Fsharp: test --debug",
+			"type": "python",
+			"request": "launch",
+			"stopOnEntry": false,
+			"python": "${command:python.interpreterPath}",
+			"program": "${workspaceRoot}/tests.py",
+			"cwd": "${workspaceRoot}",
+			"args": ["--fsharp", "--x64"],
+			"envFile": "${workspaceRoot}/.env",
+			"debugOptions": [
+				"WaitOnAbnormalExit",
+				"WaitOnNormalExit",
+				"RedirectOutput"
+			]
+		},
+		
 
 		{
 			"name": "CPython: Tests --linux",
