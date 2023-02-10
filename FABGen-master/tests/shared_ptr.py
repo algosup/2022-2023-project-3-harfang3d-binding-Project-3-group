@@ -104,3 +104,23 @@ func Test(t *testing.T) {
 	assert.True(t, spn.IsNil(), "should be nil.")
 }
 '''
+
+test_fsharp = '''\
+open MyTest
+
+[<Test>]
+let test () =
+	let sp = getSharedPtrToSimpleStruct()
+
+	Assert.AreEqual (sp.U, 4.0), "should be the same.")
+	Assert.AreEqual (sp.V, 7), "should be the same.")
+
+	let sp2 = newSsimpleStruct(9.0)
+
+	Assert.AreEqual (sp2.U, 9.0), "should be the same.")
+	Assert.AreEqual (sp2.V, 90), "should be the same.")
+
+	let spn = getEmptySharedPtr()
+
+	Assert.IsTrue (spn.IsNil(), "should be null.")
+'''

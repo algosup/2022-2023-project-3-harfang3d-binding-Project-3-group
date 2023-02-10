@@ -43,3 +43,12 @@ func Test(t *testing.T) {
 	assert.Nil(t, v, "should be nil.")
 }
 '''
+
+test_fsharp = '''\
+open MyTest
+
+[<Test>]
+let test () =
+	let v = returnNullptr()
+	Assert.IsNull(v, "should be null.")
+'''

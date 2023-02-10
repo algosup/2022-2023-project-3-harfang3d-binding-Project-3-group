@@ -87,3 +87,24 @@ func Test(t *testing.T) {
 	assert.Equal(t, s.GetC(), int32(2), "should be the same.")
 }
 '''
+
+test_fsharp = '''\
+open MyTest
+
+[<Test>]
+let ``test simple struct`` () =
+	let s = new simple_struct()
+
+	assert(s.a = 3, "should be the same.")
+	assert(s.b = 11, "should be the same.")
+	assert(s.c = 1, "should be the same.")
+	
+	s.a <- 1
+	s.b <- 7
+	s.c <- 2
+	
+	assert(s.a = 1, "should be the same.")
+	assert(s.b = 7, "should be the same.")
+	assert(s.c = 2, "should be the same.")
+
+'''

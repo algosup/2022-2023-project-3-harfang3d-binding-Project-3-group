@@ -78,3 +78,15 @@ func Test(t *testing.T) {
 	assert.Equal(t, future.Get(), int32(8), "should be the same.")
 }
 """
+
+test_fsharp = """\
+open MyTest
+
+[<Test>]
+let test () =
+	let future = GetFutureValue()
+	Assert.IsTrue (future.Valid())
+
+	future.Wait()
+	Assert.AreEqual (future.Get(), 8, "should be the same.")
+"""

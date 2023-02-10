@@ -95,3 +95,25 @@ func Test(t *testing.T) {
 	assert.Equal(t, NEc, NamedEnum(4096), "should be the same.")
 }
 '''
+
+test_fsharp = '''\
+open MyTest
+
+[<Test>]
+let test() =
+	assert(GE_a = 0, "should be the same.")
+	assert(GE_b = 1, "should be the same.")
+	assert(GE_c = 8, "should be the same.")
+
+	assert(SE_a = 0, "should be the same.")
+	assert(SE_b = 128, "should be the same.")
+	assert(SE_c = 512, "should be the same.")
+
+	assert(TE_a = 0, "should be the same.")
+	assert(TE_b = 1, "should be the same.")
+	assert(TE_c = 16384, "should be the same.")
+
+	assert(NE_a = 0, "should be the same.")
+	assert(NE_b = 1, "should be the same.")
+	assert(NE_c = 4096, "should be the same.")
+'''

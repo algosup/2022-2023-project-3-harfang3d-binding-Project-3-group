@@ -122,3 +122,47 @@ func Test(t *testing.T) {
 	assert.Equal(t, v, int32(14), "should be the same.")
 }
 '''
+
+test_fsharp = '''\
+open MyTest
+
+let get_int () = get_int ()
+let get_global_int () = get_global_int ()
+let set_global_int () = set_global_int ()
+let get_global_int_multiplied () = get_global_int_multiplied ()
+let get_global_int_multiplied_with_k k = get_global_int_multiplied k
+let get_modify_arg_in_out v = get_modify_arg_in_out v
+let get_modify_arg_in_out_with_k v k = get_modify_arg_in_out v k
+
+let get () = get ()
+let get_with_v v = get v
+let get_with_v_k v k = get (v, k)
+let get_with_v_k_b v k b = get (v, k, b)
+
+[<Test>]
+let test () =
+	assert (get_int () = 8, "should be the same.")
+
+	assert (get_global_int () = 0, "should be the same.")
+	set_global_int ()
+	assert (get_global_int () = 8, "should be the same.")
+
+	// overload
+	assert (get () = 0, "should be the same.")
+	assert (get_with_v 2 = 1, "should be the same.")
+	assert (get_with_v_k 4 3 = 12, "should be the same.")
+	assert (get_with_v_k_b 4 3 2 = 14, "should be the same.")
+
+	// optional argument
+	assert (get_global_int_multiplied () = 15, "should be the same.")
+	assert (get_global_int_multiplied_with_k 2 = 6, "should be the same.")
+	
+	// argument in out
+	let v = 2
+	get_modify_arg_in_out v
+	assert (v = 17, "should be the same.")
+
+	let v = 2
+	get_modify_arg_in_out_with_k v 4
+	assert (v = 14, "should be the same.")
+'''

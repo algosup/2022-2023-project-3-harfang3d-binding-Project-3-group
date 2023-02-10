@@ -120,3 +120,35 @@ func Test(t *testing.T) {
 	assert.Equal(t, w, int32(20), "should be the same.")
 }
 '''
+
+test_fsharp = '''\
+open System
+open NUnit.Framework
+open my_test
+
+[<TestFixture>]
+type Test() =
+	[<Test>]
+	member this.test() =
+		let a = A()
+		let a = modify_in_out_struct a
+		Assert.AreEqual(a.v, 3, "should be the same.")
+
+		let a, b = out_values_function_call(2, 3)
+		Assert.AreEqual(a, 16, "should be the same.")
+		Assert.AreEqual(b, 42, "should be the same.")
+		
+		let r, a, b = out_values_function_call_rval(2)
+		Assert.AreEqual(r, 2, "should be the same.")
+		Assert.AreEqual(a, 16, "should be the same.")
+		Assert.AreEqual(b, 28, "should be the same.")
+		
+		let r, a, b = out_values_function_call_rval(2, 2)
+		Assert.AreEqual(r, 4, "should be the same.")
+		Assert.AreEqual(a, 16, "should be the same.")
+		Assert.AreEqual(b, 28, "should be the same.")
+
+		let r, v = in_out_value(5)
+		Assert.AreEqual(r, true, "should be the same.")
+		Assert.AreEqual(v, 20, "should be the same.")
+'''

@@ -47,3 +47,12 @@ func Test(t *testing.T) {
 	assert.Equal(t, GetFloat(), float32(8), "should be the same.")
 }
 """
+
+test_fsharp = """\
+open MyTest
+
+[<Test>]
+let test () =
+	Assert.AreEqual (GetInt(), 8, "should be the same.")
+	Assert.AreEqual (GetFloat(), 8.0, "should be the same.")
+"""

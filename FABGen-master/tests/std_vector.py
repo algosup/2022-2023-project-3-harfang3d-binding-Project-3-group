@@ -42,6 +42,8 @@ int consume_pointer_to_int(const int *p) {
 		gen.bind_constructor(std_vector_int, ['?LuaTableOfInt sequence'])
 	elif gen.get_language() == 'Go':
 		gen.bind_constructor(std_vector_int, ['?GoSliceOfInt sequence'])
+	elif gen.get_language() == 'FSharp':
+		gen.bind_constructor(std_vector_int, ['?int[] sequence'])
 
 	gen.bind_method(std_vector_int, 'size', 'int', [])
 	gen.bind_method(std_vector_int, 'push_back', 'void', ['int v'])
@@ -63,6 +65,9 @@ int consume_pointer_to_int(const int *p) {
 		gen.bind_constructor(std_vector_int_ptr, ['?LuaTableOfInt_ptr sequence'])
 	elif gen.get_language() == 'Go':
 		gen.bind_constructor(std_vector_int_ptr, ['?GoSliceOfInt_ptr sequence'])
+	elif gen.get_language() == 'FSharp':
+		gen.bind_constructor(std_vector_int_ptr, ['?IntPointer[] sequence'])
+	
 
 	gen.bind_method(std_vector_int_ptr, 'size', 'int', [])
 	gen.bind_method(std_vector_int_ptr, 'push_back', 'void', ['int* v'])
@@ -245,4 +250,61 @@ func Test(t *testing.T) {
 	assert.Equal(t, vPtr.Size(), int32(2), "should be the same.")
 	assert.Equal(t, vPtr.Len(), int32(2), "should be the same.")
 }
+'''
+
+test_fsharp = '''\
+open System
+open NUnit.Framework
+open MyTest
+
+let v = VectorOfInt()
+
+Assert.AreEqual(v.Size(), 0, "should be the same.")
+Assert.AreEqual(v.Length, 0, "should be the same.")
+
+v.PushBack(5)
+v.PushBack(1)
+v.PushBack(9)
+
+Assert.AreEqual(v.Size(), 3, "should be the same.")
+Assert.AreEqual(v.Length, 3, "should be the same.")
+
+Assert.AreEqual(v.At(1), 1, "should be the same.")
+Assert.AreEqual(v.At(2), 9, "should be the same.")
+Assert.AreEqual(v.At(0), 5, "should be the same.")
+
+Assert.AreEqual(v.[1], 1, "should be the same.")
+Assert.AreEqual(v.[2], 9, "should be the same.")
+Assert.AreEqual(v.[0], 5, "should be the same.")
+
+v.[1] <- 16
+
+Assert.AreEqual(v.[2], 9, "should be the same.")
+Assert.AreEqual(v.[0], 5, " should be the same.")
+Assert.AreEqual(v.[1], 16, "should be the same.")
+
+v.[0] <- v.[0] * 4
+
+Assert.AreEqual(v.[0], 20, "should be the same.")
+
+Assert.AreEqual(MyTest.consume_pointer_to_int(v.Data()), 16, "should be the same.")
+
+// implicit cast to const int *
+Assert.AreEqual(MyTest.consume_pointer_to_int(v), 16, "should be the same.")
+
+// construct from GoSlice
+
+let w = VectorOfInt([|5; 2; 8|])
+
+Assert.AreEqual(w.[0], 5, "should be the same.")
+Assert.AreEqual(w.[1], 2, "should be the same.")
+Assert.AreEqual(w.[2], 8, "should be the same.")
+
+let vPtr = VectorOfIntPtr()
+
+vPtr.PushBack(null)
+vPtr.PushBack(v.Data())
+
+Assert.AreEqual(vPtr.Size(), 2, "should be the same.")
+Assert.AreEqual(vPtr.Length, 2, "should be the same.")
 '''

@@ -54,3 +54,12 @@ func Test(t *testing.T) {
 }
 """
 
+test_fsharp = """\
+open MyTest
+
+[<Test>]
+let test () =
+	let o = Object()
+	Assert.AreEqual (o.Get(4), 15, "should be the same.")
+"""
+

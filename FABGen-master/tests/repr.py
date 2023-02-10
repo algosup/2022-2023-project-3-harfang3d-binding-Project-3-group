@@ -39,3 +39,8 @@ test_go = '''\
 package mytest
 
 '''
+
+test_fsharp = '''\
+open MyTest
+
+'''

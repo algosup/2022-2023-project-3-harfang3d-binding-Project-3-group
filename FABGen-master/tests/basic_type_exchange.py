@@ -96,3 +96,21 @@ func Test(t *testing.T) {
 	assert.Equal(t, AddIntByReference(&a, &b), 7, "should be the same.")
 }
 '''
+
+test_fsharp = '''\
+open NUnit.Framework
+open MyTest
+
+[<Test>]
+let ``Test`` () =
+	Assert.AreEqual(8, return_int(), "should be the same.")
+	Assert.AreEqual(8.0, return_float(), "should be the same.")
+	Assert.AreEqual("const char * -> string", return_const_char_ptr(), "should be the same.")
+	
+	Assert.AreEqual(9, return_int_by_pointer(), "should be the same.")
+	Assert.AreEqual(9, return_int_by_reference(), "should be the same.")
+
+	Assert.AreEqual(7, add_int_by_value(3, 4), "should be the same.")
+	Assert.AreEqual(7, add_int_by_pointer(3, 4), "should be the same.")
+	Assert.AreEqual(7, add_int_by_reference(3, 4), "should be the same.")
+'''

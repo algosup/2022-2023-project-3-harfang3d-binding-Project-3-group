@@ -124,3 +124,11 @@ func Test(t *testing.T) {
 	TestStdFunction(t)
 }
 '''
+
+test_fsharp = '''\
+open MyTest
+
+[<Test>]
+let test () =
+	TestStdFunction()
+'''

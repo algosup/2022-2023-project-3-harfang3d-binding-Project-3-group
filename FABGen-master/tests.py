@@ -591,6 +591,12 @@ if args.go_build:
 	gen.verbose = False
 	run_tests(gen, test_names, GoTestBed())
 
+if args.fsharp_build:
+	gen = lang.fsharp.FSharpGenerator()
+	gen.verbose = False
+	run_tests(gen, test_names, FsharpTestBed())
+
+
 
 #
 print("[Final summary]")

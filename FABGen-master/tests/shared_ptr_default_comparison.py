@@ -92,3 +92,23 @@ func Test(t *testing.T) {
 	assert.True(t, a.Equal(d), "should be the equal.")
 }
 '''
+
+test_fsharp = '''\
+open MyTest
+
+[<Test>]
+let test () =
+	let a = GetObj0()
+	let b = GetObj0()
+
+	Assert.IsTrue(a.Equals(b))
+
+	let c = GetObj1()
+
+	Assert.IsFalse(a.Equals(c), "should be different.")
+	Assert.IsFalse(b.Equals(c), "should be different.")
+
+	let d = GetObj2()
+
+	Assert.IsTrue(a.Equals(d), "should be the equal.")
+'''
