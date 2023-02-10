@@ -139,3 +139,34 @@ func Test(t *testing.T) {
 	assert.Equal(t, sOut2.GetA(), int32(28), "should be the same.")
 }
 '''
+
+test_fsharp = '''\
+open MyTest
+
+let s = SimpleStruct()
+
+assert(s.GetA() = 1),"should be the same.")
+assert(s.SetA(8, 2) = true),"should be the same.")
+
+assert(s.GetA() = 10),"should be the same.")
+
+assert(s.SetA(9) = 9),"should be the same.")
+assert(s.GetA() = 9),"should be the same.")
+
+assert(s.GetStaticInt() = 4),"should be the same.")
+
+let sOut = getModifyArgOut()
+assert(sOut.GetA() = 4),"should be the same.")
+
+let sOut = getModifyArgOut(k=s)
+assert(sOut.GetA() = 28),"should be the same.")
+
+let s2 = SimpleStruct2(WithOtherStruct=sOut)
+assert(s2.GetA() = 16),"should be the same.")
+
+let sOut2 = getModifyArgOut2()
+assert(sOut2.GetA() = 4),"should be the same.")
+
+let sOut2 = getModifyArgOut2(k=s)
+assert(sOut2.GetA() = 28),"should be the same.")
+'''

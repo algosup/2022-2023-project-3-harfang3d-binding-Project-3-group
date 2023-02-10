@@ -65,3 +65,18 @@ func Test(t *testing.T) {
 	assert.Equal(t, u.GetV(), int32(4), "should be the same.")
 }
 """
+test_fsharp = """\
+namespace mytest
+
+open NUnit.Framework
+
+[<TestFixture>]
+type Test() =
+	[<Test>]
+	let ``test``() =
+		let s = new my_test.SimpleStruct()
+		let u = new my_test.SimpleStruct(4)
+		
+		Assert.AreEqual(s.V, -8), "should be the same.")
+		Assert.AreEqual(u.V, 4), "should be the same.")
+"""

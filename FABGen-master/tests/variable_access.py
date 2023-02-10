@@ -91,3 +91,23 @@ func Test(t *testing.T) {
 	assert.Equal(t, GetU(), float32(7), "should be the same.")
 }
 '''
+
+test_fsharp = '''\
+open System
+open NUnit.Framework
+open MyTest
+
+[<Test>]
+let ``test`` () =
+	Assert.AreEqual(2, v), "should be the same.")
+	v <- 5
+	Assert.AreEqual(5, v), "should be the same.")
+	
+	Assert.AreEqual(4, s.v), "should be the same.")
+	s.v <- 9
+	Assert.AreEqual(9, s.v), "should be the same.")
+
+	Assert.AreEqual(14, w), "should be the same.")
+
+	Assert.AreEqual(7, u), "should be the same.")
+'''

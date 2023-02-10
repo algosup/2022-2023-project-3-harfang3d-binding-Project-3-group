@@ -168,3 +168,39 @@ func Test(t *testing.T) {
 	assert.Equal(t, DerivedClassGetStaticOverride(), int32(42), "should be the same.")
 }
 '''
+
+test_fsharp = '''\
+open NUnit.Framework
+open MyTest
+
+[<Test>]
+let ``test`` () =
+	let base = base_class()
+	assert(base.base_method() = 4), "should be the same.")
+	assert(base.base_method_override() = 4), "should be the same.")
+
+	let derived = derived_class()
+	assert(derived.base_method() = 4), "should be the same.")         // can still access base class
+	assert(derived.derived_method() = 8), "should be the same.")      // can access its own methods
+	assert(derived.base_method_override() = 8), "should be the same.") // properly overshadows redeclared base methods
+
+	// argument casting through inheritance tree
+	assert(read_virtual_method_through_base_class(base) = 6), "should be the same.")
+	assert(read_virtual_method_through_base_class(derived) = 9), "should be the same.")
+
+	// member access through inheritance tree
+	assert(base.u = 6), "should be the same.")
+	assert(derived.u = 6), "should be the same.") // can access base class member
+	assert(base.v = 7), "should be the same.")
+	assert(derived.v = 7), "should be the same.") // can access base class static member
+
+	assert(base.override = 4), "should be the same.")
+	assert(base.static_override = 1), "should be the same.")
+	assert(derived.override = 12), "should be the same.")       // member overshadowing
+	assert(derived.static_override = 42), "should be the same.") // static member overshadowing
+
+	assert(base_class.v = 7), "should be the same.")
+	assert(derived_class.v = 7), "should be the same.")
+	assert(base_class.static_override = 1), "should be the same.")
+	assert(derived_class.static_override = 42), "should be the same.")
+'''

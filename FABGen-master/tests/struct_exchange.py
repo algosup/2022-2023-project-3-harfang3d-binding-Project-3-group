@@ -107,3 +107,24 @@ func Test(t *testing.T) {
 	assert.True(t, TestSimpleStruct(), "should be true.")
 }
 '''
+
+test_fsharp = '''\
+open System
+open NUnit.Framework
+open my_test
+
+[<Test>]
+let ``test simple struct`` () =
+	// take by value
+	let s = return_simple_struct_by_value()
+	take_simple_struct_by_value(s)
+	assert(test_simple_struct() = true, "should be true.")
+
+	let s = return_simple_struct_by_pointer()
+	take_simple_struct_by_value(s)
+	assert(test_simple_struct() = true, "should be true.")
+	
+	let s = return_simple_struct_by_ref()
+	take_simple_struct_by_value(s)
+	assert(test_simple_struct() = true, "should be true.")
+'''

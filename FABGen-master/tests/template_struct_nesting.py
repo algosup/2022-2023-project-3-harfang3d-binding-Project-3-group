@@ -69,3 +69,15 @@ func Test(t *testing.T) {
 	assert.Equal(t, n.GetV(), int32(9), "should be the same.")
 }
 """
+
+test_fsharp = """\
+open System
+open NUnit.Framework
+open MyTest
+
+[<Test>]
+let ``Test`` () =
+	let s = new EnclosingTemplateInt()
+	let n = GetNestedStructInt(s)
+	Assert.AreEqual(n.V, 9), "should be the same.")
+"""

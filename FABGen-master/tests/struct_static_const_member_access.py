@@ -67,3 +67,23 @@ func Test(t *testing.T) {
 	assert.Equal(t, SimpleStructGetS(), "some string", "should be the same.")
 }
 '''
+
+test_fsharp = '''\
+open NUnit.Framework
+
+open MyTest
+
+[<Test>]
+let ``test simple struct`` () =
+	let v = SimpleStruct()
+	assert(v.V = 3)
+
+	assert(SimpleStruct.i = 5)
+
+
+[<Test>]
+let ``test simple struct static member`` () =
+
+	assert(SimpleStruct.i = 5)
+
+'''

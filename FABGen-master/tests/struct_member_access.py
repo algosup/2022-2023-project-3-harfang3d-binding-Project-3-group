@@ -137,3 +137,37 @@ func Test(t *testing.T) {
 	assert.Equal(t, s.GetD(), int32(9), "should be the same.")
 }
 """
+
+test_fsharp = '''\
+open my_test
+
+let s = return_simple_struct_by_pointer()
+
+assert(s.a = 7), "should be the same.")
+assert(s.b = 17.5), "should be the same.")
+assert(s.c = true), "should be the same.")
+assert(s.d = 9), "should be the same.")
+assert(s.text_field = "some content"), "should be the same.")
+
+s.a <- -2
+s.b <- -4.5
+s.c <- false
+
+assert(s.a = -2), "should be the same.")
+assert(s.b = -4.5), "should be the same.")
+assert(s.c = false), "should be the same.")
+
+s.a <- s.a + 4
+assert(s.a = 2), "should be the same.")
+
+// write to const member
+
+let write_to_const_failed = false
+try
+	s.d <- 12
+with
+	| _ -> write_to_const_failed <- true
+assert(write_to_const_failed = true), "should be the same.")
+
+assert(s.d = 9), "should be the same.")
+'''
