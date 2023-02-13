@@ -1,31 +1,65 @@
-let wrapFloat = (f) => {
-  return {
-    valueOf: () => f,
-    toString: () => f.toString()
-  };
-};
+module program = 
 
-let wrapString = (s) => {
-  return {
-    valueOf: () => s,
-    toString: () => s
-  };
-};
+    let wrapFloat (fsValue:float32 byref) : nativeptr<float> * (unit -> unit) =
+        if fsValue = null then
+            (null, fun() -> ())
+        else
+            let cValue = fsValue.contents
+            let wrapped = nativeptr.ofunmanaged(cValue)
+            (wrapped, fun() -> fsValue <- !cValue)
 
-let wrapBytes = (b) => {
-  return {
-    valueOf: () => b,
-    toString: () => b.toString()
-  };
-};
+    let wrapString (value:string) : nativeptr<char> * (unit -> unit) =
+        let wrapped = Marshal.StringToHGlobalAnsi(value)
+        (wrapped, fun() -> Marshal.FreeHGlobal(wrapped))
 
-struct stringBuffer {
-    ptr  unsafe.Pointer
-	size int
-}
+    let wrapBytes (value:byte[]) : nativeptr<void> * (unit -> unit) =
+        let wrapped = GCHandle.Alloc(value, GCHandleType.Pinned)
+        (nativeptr.ofint(wrapped.AddrOfPinnedObject.ToInt32()), fun() -> wrapped.Free())
 
-let newStringBuffer = (s) => {
-  let buf = stringBuffer{ptr: unsafe.Pointer(&s), size: len(s)}
-  return buf
-};
+    type StringBuffer =
+        {
+            mutable ptr: nativeptr<void>
+            mutable size: int
+        }
 
+    let newStringBuffer (initialValue:string) =
+        let rawText = System.Text.Encoding.UTF8.GetBytes(initialValue)
+        let bufSize = rawText.Length + 1
+        let newPtr = Marshal.AllocHGlobal(bufSize)
+        let zeroOffset = bufSize - 1
+        Marshal.Copy(rawText, 0, newPtr, zeroOffset)
+        Marshal.WriteByte(newPtr, zeroOffset, 0uy)
+        {ptr = nativeptr.ofint(newPtr.ToInt32()); size = bufSize}
+
+    let resizeStringBuffer (buf:StringBuffer) (requestedSize:int) =
+        let bufSize = if requestedSize < 1 then 1 else requestedSize
+        let newPtr = Marshal.AllocHGlobal(bufSize)
+        let copySize = if bufSize > buf.size then buf.size else bufSize
+        Marshal.Copy(buf.ptr.ToPointer(), (*byte) newPtr, 0, copySize)
+        Marshal.WriteByte(newPtr, bufSize - 1, 0uy)
+        Marshal.FreeHGlobal(buf.ptr.ToIntPtr())
+        buf.ptr <- nativeptr.ofint(newPtr.ToInt32())
+        buf.size <- bufSize
+
+    let freeStringBuffer (buf:StringBuffer) =
+        Marshal.FreeHGlobal(buf.ptr.ToIntPtr())
+        buf.ptr <- null
+        buf.size <- 0
+
+    let stringFromBuffer (buf:StringBuffer) : string =
+        if buf.ptr = null || buf.size < 1 then
+            ""
+        else
+            Marshal.PtrToStringUTF8(buf.ptr.ToIntPtr())
+
+    let unrealisticLargePointer = 1 <<< 30
+
+    let ptrToByteSlice (p:nativeptr<void>) : byte[] =
+        let arr = Array.zeroCreate<byte> unrealisticLargePointer
+        Marshal.Copy(p.ToPointer(), arr, 0, unrealisticLargePointer)
+        Array.filter (fun c -> c <> 0uy) arr
+
+    let ptrToUint16Slice (p:nativeptr<void>) : uint16[] =
+        let arr = Array.zeroCreate<uint16> (unrealisticLargePointer / 2)
+        Marshal.Copy(p.ToPointer(), arr, 0, unrealisticLargePointer / 2)
+        Array.filter (fun c -> c <> 0us) arr

@@ -123,9 +123,10 @@ func Test(t *testing.T) {
 '''
 
 test_fsharp = '''\
+namespace myTest
 open System
 open NUnit.Framework
-open my_test
+open program
 
 [<TestFixture>]
 type Test() =

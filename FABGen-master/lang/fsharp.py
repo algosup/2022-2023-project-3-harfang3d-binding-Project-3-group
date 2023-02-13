@@ -158,7 +158,7 @@ class FSharpClassTypeDefaultConverter(FSharpTypeConverterCommon):
 		return ""
 
 	def to_c_call(self, in_var, out_var_p, is_pointer):
-		out = f"{out_var_p.replace('&', '_')} := {in_var}.h\n"
+		out = f"{out_var_p.replace('&', '_')} <- {in_var}.h\n"
 		return out
 
 	def from_c_call(self, out_var, expr, ownership):
@@ -505,11 +505,11 @@ uint32_t %s(void* p) {
 					retval_boundname = val["conv"].bound_name
 					retval_boundname = clean_name_with_title(retval_boundname)
 
-					src += f"	{retval_name}FSharp := &{retval_boundname}{{h:{retval_name}}}\n"
+					src += f"	{retval_name}FSharp <- &{retval_boundname}{{h:{retval_name}}}\n"
 
 					# check if owning to have the right to destroy it
 					if rval_ownership != "NonOwning" and not is_ref and not non_owning:
-						src += f"	runtime.SetFinalizer({retval_name}FSharp, func(cleanval *{retval_boundname}) {{\n" \
+						src += f"	runtime.SetFinalizer({retval_name}FSharp, let(cleanval *{retval_boundname}) {{\n" \
 								f"		C.{clean_name_with_title(self._name)}{retval_boundname}Free(cleanval.h)\n" \
 								f"	}})\n"
 					retval_name = f"{retval_name}FSharp"
@@ -532,7 +532,7 @@ uint32_t %s(void* p) {
 					if "FSharpConstCharPtrConverter" in str(val["conv"]):
 						prefix = "&" * (len(stars)-1)
 
-					src+= f"{retval_name}FSharp := string({conversion_ret})\n"
+					src+= f"{retval_name}FSharp <- string({conversion_ret})\n"
 					retval_name = prefix + retval_name + "FSharp"
 				else:
 					conversion_ret = retval_name
@@ -547,7 +547,7 @@ uint32_t %s(void* p) {
 
 				# check if owning to have the right to destroy it
 				if rval_ownership != "NonOwning" and not is_ref and not non_owning:
-					src += f"	runtime.SetFinalizer({retval_name}FSharp, func(cleanval *{retval_boundname}) {{\n" \
+					src += f"	runtime.SetFinalizer({retval_name}FSharp, let(cleanval *{retval_boundname}) {{\n" \
 							f"		C.{clean_name_with_title(self._name)}{retval_boundname}Free(cleanval.h)\n"\
 							f"	}})\n"
 				src += "}\n"
@@ -562,19 +562,19 @@ uint32_t %s(void* p) {
 			stars = self.__get_stars(val, start_stars)
 
 			if val["conv"].is_type_class():
-				c_call = f"{clean_name(arg_out_name).replace('&', '_')} := ({stars}C.{clean_name_with_title(self._name)}{clean_name_with_title(val['conv'].bound_name)})(unsafe.Pointer({clean_name(arg_name)}))\n"
+				c_call = f"{clean_name(arg_out_name).replace('&', '_')} <- ({stars}C.{clean_name_with_title(self._name)}{clean_name_with_title(val['conv'].bound_name)})(unsafe.Pointer({clean_name(arg_name)}))\n"
 			else:
 				# get base conv (without pointer)
 				base_conv = self._get_conv(str(val["conv"].ctype.scoped_typename))
 				if base_conv is None:
 					if isinstance(val["conv"], FSharpPtrTypeConverter):
-						c_call = f"{clean_name(arg_out_name).replace('&', '_')} := ({stars[1:]}C.{clean_name_with_title(self._name)}{clean_name_with_title(val['conv'].bound_name)})(unsafe.Pointer({clean_name(arg_name)}))\n"
+						c_call = f"{clean_name(arg_out_name).replace('&', '_')} <- ({stars[1:]}C.{clean_name_with_title(self._name)}{clean_name_with_title(val['conv'].bound_name)})(unsafe.Pointer({clean_name(arg_name)}))\n"
 					else:
-						c_call = f"{clean_name(arg_out_name).replace('&', '_')} := ({stars}{str(val['conv'].bound_name)})(unsafe.Pointer({clean_name(arg_name)}))\n"
+						c_call = f"{clean_name(arg_out_name).replace('&', '_')} <- ({stars}{str(val['conv'].bound_name)})(unsafe.Pointer({clean_name(arg_name)}))\n"
 				elif hasattr(base_conv, "fsharp_to_c_type") and base_conv.fsharp_to_c_type is not None:
-					c_call = f"{clean_name(arg_out_name).replace('&', '_')} := ({stars}{base_conv.fsharp_to_c_type})(unsafe.Pointer({clean_name(arg_name)}))\n"
+					c_call = f"{clean_name(arg_out_name).replace('&', '_')} <- ({stars}{base_conv.fsharp_to_c_type})(unsafe.Pointer({clean_name(arg_name)}))\n"
 				else:
-					c_call = f"{clean_name(arg_out_name).replace('&', '_')} := ({stars}{base_conv.bound_name})(unsafe.Pointer({clean_name(arg_name)}))\n"
+					c_call = f"{clean_name(arg_out_name).replace('&', '_')} <- ({stars}{base_conv.bound_name})(unsafe.Pointer({clean_name(arg_name)}))\n"
 			return c_call
 		
 		c_call = ""
@@ -582,13 +582,13 @@ uint32_t %s(void* p) {
 		if isinstance(val["conv"], FSharpPtrTypeConverter):
 			base_conv = self._get_conv(str(val["conv"].ctype.scoped_typename))
 			if base_conv is None or base_conv.is_type_class():
-				c_call = f"{clean_name(arg_name)}ToC := {clean_name(arg_name)}.h\n"
+				c_call = f"{clean_name(arg_name)}ToC <- {clean_name(arg_name)}.h\n"
 			else:
 				c_call = convert_fsharpt_to_c(val, arg_name, f"{arg_name}ToC")
 		# if it's a class
 		elif val["conv"].is_type_class():
 			stars = self.__get_stars(val)
-			c_call = f"{clean_name(arg_name)}ToC := {stars[1:]}{clean_name(arg_name)}.h\n"
+			c_call = f"{clean_name(arg_name)}ToC <- {stars[1:]}{clean_name(arg_name)}.h\n"
 		# if it's an enum
 		elif val["conv"].bound_name in self._enums.keys():
 			enum_conv = self._get_conv_from_bound_name(val["conv"].bound_name)
@@ -601,7 +601,7 @@ uint32_t %s(void* p) {
 				else:
 					arg_bound_name = "C.int"
 					
-				c_call = f"{clean_name(arg_name)}ToC := {arg_bound_name}({clean_name(arg_name)})\n"
+				c_call = f"{clean_name(arg_name)}ToC <- {arg_bound_name}({clean_name(arg_name)})\n"
 		# special Slice
 		elif isinstance(val["conv"], lib.fsharp.stl.FSharpSliceToStdVectorConverter):
 			c_call = ""
@@ -610,7 +610,7 @@ uint32_t %s(void* p) {
 			if "FSharpConstCharPtrConverter" in str(val["conv"].T_conv) or \
 				"FSharpStringConverter" in str(val["conv"].T_conv):
 				c_call += f"var {slice_name}SpecialString []*C.char\n"
-				c_call += f"for _, s := range {slice_name} {{\n"
+				c_call += f"for _, s <- range {slice_name} {{\n"
 				c_call += f"	{slice_name}SpecialString = append({slice_name}SpecialString, C.CString(s))\n"
 				c_call += f"}}\n"
 				slice_name = f"{slice_name}SpecialString"
@@ -618,18 +618,18 @@ uint32_t %s(void* p) {
 			# if it's a class, get a list of pointer to c class
 			elif self.__get_is_type_class_or_pointer_with_class(val["conv"].T_conv):
 				c_call += f"var {slice_name}Pointer  []C.{clean_name_with_title(self._name)}{clean_name_with_title(val['conv'].T_conv.bound_name)}\n"
-				c_call += f"for _, s := range {slice_name} {{\n"
+				c_call += f"for _, s <- range {slice_name} {{\n"
 				c_call += f"	{slice_name}Pointer = append({slice_name}Pointer, s.h)\n"
 				c_call += f"}}\n"
 				slice_name = f"{slice_name}Pointer"
 
-			c_call += f"{slice_name}ToC := (*reflect.SliceHeader)(unsafe.Pointer(&{slice_name}))\n"
-			c_call += f"{slice_name}ToCSize := C.size_t({slice_name}ToC.Len)\n"
+			c_call += f"{slice_name}ToC <- (*reflect.SliceHeader)(unsafe.Pointer(&{slice_name}))\n"
+			c_call += f"{slice_name}ToCSize <- C.size_t({slice_name}ToC.Len)\n"
 
 			c_call += convert_fsharpt_to_c({"conv": val["conv"].T_conv}, f"{slice_name}ToC.Data", f"{slice_name}ToCBuf", 1)
 		# std function
 		elif "FSharpStdFunctionConverter" in str(val["conv"]):
-			c_call += f"{clean_name(arg_name)}ToC := (C.{clean_name_with_title(self._name)}{clean_name_with_title(val['conv'].bound_name)})({clean_name(arg_name)})\n"
+			c_call += f"{clean_name(arg_name)}ToC <- (C.{clean_name_with_title(self._name)}{clean_name_with_title(val['conv'].bound_name)})({clean_name(arg_name)})\n"
 		else:
 			how_many_stars = 0
 			# compute how many stars (to handle specifically the const char *)
@@ -801,8 +801,8 @@ uint32_t %s(void* p) {
 
 		# GET
 		fsharp += f"// Get ...\n" \
-				f"func (pointer *{classname}) Get(id int) {arg_bound_name} {{\n"
-		fsharp += f"v := C.{clean_name_with_title(self._name)}{classname}GetOperator(pointer.h, C.int(id))\n"
+				f"let (pointer *{classname}) Get(id int) {arg_bound_name} {{\n"
+		fsharp += f"v <- C.{clean_name_with_title(self._name)}{classname}GetOperator(pointer.h, C.int(id))\n"
 
 		src, retval_fsharp = self.__arg_from_c_to_fsharp({"conv": internal_conv}, "v")
 		fsharp += src
@@ -811,20 +811,20 @@ uint32_t %s(void* p) {
 
 		# SET
 		fsharp += f"// Set ...\n" \
-				f"func (pointer *{classname}) Set(id int, v {arg_bound_name}) {{\n"
+				f"let (pointer *{classname}) Set(id int, v {arg_bound_name}) {{\n"
 		# convert to c
 		c_call = self.__arg_from_fsharp_to_c({"conv": internal_conv}, "v")
 		if c_call != "":
 			fsharp += c_call
 		else:
-			fsharp += "vToC := v\n"
+			fsharp += "vToC <- v\n"
 
 		fsharp += f"	C.{clean_name_with_title(self._name)}{classname}SetOperator(pointer.h, C.int(id), vToC)\n"
 		fsharp += "}\n"
 
 		# Len
 		fsharp += f"// Len ...\n" \
-				f"func (pointer *{classname}) Len() int32 {{\n"
+				f"let (pointer *{classname}) Len() int32 {{\n"
 		fsharp += f"return int32(C.{clean_name_with_title(self._name)}{classname}LenOperator(pointer.h))\n"
 		fsharp += "}\n"
 
@@ -926,14 +926,14 @@ uint32_t %s(void* p) {
 				if do_static:
 					fsharp += f"{clean_name_with_title(classname)}"
 				fsharp += f"Get{name} ...\n"
-				fsharp += f"func "
+				fsharp += f"let "
 				if do_static:
 					fsharp += f"{clean_name_with_title(classname)}"
 				else:
 					fsharp += f"(pointer *{clean_name_with_title(classname)}) "
 
 				fsharp += f"Get{name}() {arg_bound_name} {{\n"
-				fsharp += f"v := C.{clean_name_with_title(self._name)}{clean_name_with_title(classname)}Get{name}("
+				fsharp += f"v <- C.{clean_name_with_title(self._name)}{clean_name_with_title(classname)}Get{name}("
 				if not static and not is_global:
 					fsharp += "pointer.h"
 				fsharp += ")\n"
@@ -952,7 +952,7 @@ uint32_t %s(void* p) {
 				if do_static:
 					fsharp += f"{clean_name_with_title(classname)}"
 				fsharp += f"Set{name} ...\n" \
-						f"func "
+						f"let "
 						
 				if do_static:
 					fsharp += f"{clean_name_with_title(classname)}"
@@ -966,7 +966,7 @@ uint32_t %s(void* p) {
 				if c_call != "":
 					fsharp += c_call
 				else:
-					fsharp += "vToC := v\n"
+					fsharp += "vToC <- v\n"
 
 				fsharp += f"	C.{clean_name_with_title(self._name)}{clean_name_with_title(classname)}Set{name}("
 				if not static and not is_global:
@@ -1118,7 +1118,7 @@ uint32_t %s(void* p) {
 			else:
 				fsharp += " " + re.sub(r'(\[)(.*?)(\])', r'\1harfang.\2\3', doc) + "\n"
 
-			fsharp += "func "
+			fsharp += "let "
 			if not is_global:
 				fsharp += f"(pointer *{clean_name_with_title(classname)}) "
 			fsharp += f"{clean_name_with_title(name_fsharp)}"
@@ -1199,10 +1199,10 @@ uint32_t %s(void* p) {
 												id_proto_without_arg = proto_arg["suggested_suffix"]
 											break
 
-								fsharp += f"{clean_name(arg['carg'].name)} := {arg_bound_name}{id_proto_without_arg}()\n"
+								fsharp += f"{clean_name(arg['carg'].name)} <- {arg_bound_name}{id_proto_without_arg}()\n"
 							else:
 								# not a class, remove the * and make a new
-								fsharp += f"{clean_name(arg['carg'].name)} := new({arg_bound_name.replace('*', '')})\n"
+								fsharp += f"{clean_name(arg['carg'].name)} <- new({arg_bound_name.replace('*', '')})\n"
 						else:
 							fsharp += f"var {clean_name(arg['carg'].name)} {arg_bound_name}\n"
 
@@ -1212,11 +1212,11 @@ uint32_t %s(void* p) {
 					if c_call != "":
 						fsharp += c_call
 					else:
-						fsharp += f"{clean_name(arg['carg'].name)}ToC := {clean_name(arg['carg'].name)}\n"
+						fsharp += f"{clean_name(arg['carg'].name)}ToC <- {clean_name(arg['carg'].name)}\n"
 
 			# declare arg out
 			if retval != "":
-				fsharp += "retval := "
+				fsharp += "retval <- "
 
 			if is_constructor:
 				fsharp += f"C.{clean_name_with_title(self._name)}Constructor{clean_name_with_title(name)}"
@@ -1791,14 +1791,11 @@ uint32_t %s(void* p) {
 		self.fsharp_c = fsharp_c
 
 		# .fsharp
-		fsharp_bind = f"package {clean_name_with_title(self._name)}\n" \
-				'// #include "wrapper.h"\n' \
-				'// #cfsharp CFLAGS: -I . -Wall -Wno-unused-variable -Wno-unused-function -O3\n' \
-				'// #cfsharp CXXFLAGS: -std=c++14 -O3\n'
+		fsharp_bind = f"namespace {clean_name_with_title(self._name)}\n" 
 		fsharp_bind += self.cfsharp_directives
 		fsharp_bind += f"// #cfsharp LDFLAGS: -lstdc++ -L. -l{self._name}\n" \
-				'import "C"\n\n' \
-				'import (\n'
+				'open System' \
+				'open System.Runtime.InteropServices' \
 		# check if reflect package is needed
 		for conv in self._FABGen__type_convs.values():
 			# special Slice
@@ -1847,8 +1844,8 @@ uint32_t %s(void* p) {
 							f"	h C.{clean_name_with_title(self._name)}{cleanBoundName}\n" \
 							"}\n\n" \
 							f"// New{cleanBoundName}FromCPointer ...\n" \
-							f"func New{cleanBoundName}FromCPointer(p unsafe.Pointer) *{cleanBoundName} {{\n" \
-							f"	retvalFSharp := &{cleanBoundName}{{h: (C.{clean_name_with_title(self._name)}{cleanBoundName})(p)}}\n" \
+							f"let New{cleanBoundName}FromCPointer(p unsafe.Pointer) *{cleanBoundName} {{\n" \
+							f"	retvalFSharp <- &{cleanBoundName}{{h: (C.{clean_name_with_title(self._name)}{cleanBoundName})(p)}}\n" \
 							f"	return retvalFSharp\n" \
 							"}\n"
 			
@@ -1873,12 +1870,12 @@ uint32_t %s(void* p) {
 			# destructor for all type class
 			if self.__get_is_type_class_or_pointer_with_class(conv) :
 				fsharp_bind += f"// Free ...\n" \
-				f"func (pointer *{cleanBoundName}) Free(){{\n" \
+				f"let (pointer *{cleanBoundName}) Free(){{\n" \
 				f"	C.{clean_name_with_title(self._name)}{cleanBoundName}Free(pointer.h)\n" \
 				f"}}\n"
 				
 				fsharp_bind += f"// IsNil ...\n" \
-				f"func (pointer *{cleanBoundName}) IsNil() bool{{\n" \
+				f"let (pointer *{cleanBoundName}) IsNil() bool{{\n" \
 				f"	return pointer.h == C.{clean_name_with_title(self._name)}{cleanBoundName}(nil)\n" \
 				f"}}\n"
 
@@ -2019,7 +2016,7 @@ uint32_t %s(void* p) {
 				functions[name] = protos_name
 				
 			if len(functions):
-				fsharp_translate_file[conv.bound_name]["functions"] = functions
+				fsharp_translate_file[conv.bound_name]["let"] = functions
 
 		# enum
 		for bound_name, enum in self._enums.items():
