@@ -67,7 +67,8 @@ The Harfang project is on a open source Github with 3 liscences:
 
 ## Glossary
 <!-- write down all the words specific to the product's field, or any technical field you're working in, with a short definition -->
-​| Words                                               	| Definition                                                                                                                                                            	|
+
+| Words                                               	| Definition                                                                                                                                                            	|
 |-----------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
 | MIT License (Massachusetts Institute of Technology) 	| A permissive free software license, it puts only very limited restriction on reuse and has, therefore, high license compatibility.                                    	|
 | GNU Lesser General Public License                   	| A free-software license published by the Free Software Foundation.                                                                                                    	|
