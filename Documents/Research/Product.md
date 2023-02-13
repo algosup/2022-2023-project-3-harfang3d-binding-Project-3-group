@@ -11,7 +11,7 @@
 ​
 ​
 ## Competition
-​**[Unity](https://unity.com/):**
+**[Unity](https://unity.com/):**
 - It's a cross-platform game engine developed by Unity Technologies. The engine has since been gradually extended to support a variety of desktop, mobile, console and virtual reality platforms.
 - First released in June 2005.
 - Windows, Linux and MacOS
