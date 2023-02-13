@@ -23,7 +23,7 @@ def bind_std(gen):
         def from_c_call(self, out_var, expr, ownership):
             return f"Marshal.PtrToStringAnsi({out_var})"
 
-    gen.bind_type("const char*", FSharpConstCharPtrConverter)
+    gen.bind_type(FSharpConstCharPtrConverter("const char*"))
 
     class FSharpBasicTypeConverter(lang.fsharp.FSharpTypeConverterCommon):
         def __init__(self, type, to_c_storage_type=None, bound_name=None, from_c_storage_type=None, needs_c_storage_class=False):

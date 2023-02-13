@@ -28,6 +28,7 @@ void modify_in_out_struct(A *a) { a->v = 3; }
 	gen.insert_code('bool in_out_value(int *in_out) { *in_out = *in_out * 4; return true; }')
 	gen.bind_function('in_out_value', 'bool', ['int *in_out'], {'arg_in_out': ['in_out']})
 
+
 	gen.finalize()
 	return gen.get_output()
 

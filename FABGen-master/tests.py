@@ -588,13 +588,14 @@ if args.lua_base_path:
 
 if args.go_build:
 	gen = lang.go.GoGenerator()
-	gen.verbose = False
+	gen.verbose = True
 	run_tests(gen, test_names, GoTestBed())
 
 if args.fsharp_build:
 	gen = lang.fsharp.FSharpGenerator()
-	gen.verbose = False
 	run_tests(gen, test_names, FsharpTestBed())
+	gen.verbose = True
+	
 
 
 
