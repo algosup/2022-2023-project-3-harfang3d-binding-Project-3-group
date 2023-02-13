@@ -22,7 +22,7 @@ def bind_defaults(gen):
 		lib.go.stl.bind_stl(gen)
 
 
-	elif gen.get_language() == 'fsharp':
+	elif gen.get_language() == 'FSharp':
 		import lib.fsharp.std
 		import lib.fsharp.stl
 
