@@ -76,7 +76,8 @@ Some of their customers:
 
 ## Glossary
 <!-- write down all the words specific to the client's field, or the products your creating for the client (or both) with a short definition -->
-​​| Words                                               	| Definition                                                                                                                                                            	|
+
+| Words                                               	| Definition                                                                                                                                                            	|
 |-----------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
 | MIT License (Massachusetts Institute of Technology) 	| A permissive free software license, it puts only very limited restriction on reuse and has, therefore, high license compatibility.                                    	|
 | GNU Lesser General Public License                   	| A free-software license published by the Free Software Foundation.                                                                                                    	|
