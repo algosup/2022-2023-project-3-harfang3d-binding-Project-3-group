@@ -72,7 +72,10 @@ func Test(t *testing.T) {
 '''
 
 test_fsharp = '''\
-open my_test
+namespace myTest
+open System
+open NUnit.Framework
+open program
 
 let a = GetBaseClass()
 let b = Cast_base_class_To_derived_class a

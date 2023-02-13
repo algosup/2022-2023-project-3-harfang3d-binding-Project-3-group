@@ -47,5 +47,6 @@ package mytest
 '''
 
 test_fsharp = '''\
-open MyTest
+namespace myTest
+open program
 '''

@@ -32,7 +32,10 @@ struct enclosing_struct {
 
 
 test_python = '''\
-import my_test
+namespace myTest
+open System
+open NUnit.Framework
+open program
 
 #
 n = my_test.nested_struct()

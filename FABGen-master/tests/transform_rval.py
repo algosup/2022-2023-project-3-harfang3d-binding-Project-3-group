@@ -111,7 +111,10 @@ func Test(t *testing.T) {
 '''
 
 test_fsharp = '''\
-open my_test
+namespace myTest
+open System
+open NUnit.Framework
+open program
 
 let B = get_b()
 assert (B.b = 3)

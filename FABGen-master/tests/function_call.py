@@ -124,7 +124,10 @@ func Test(t *testing.T) {
 '''
 
 test_fsharp = '''\
-open MyTest
+namespace myTest
+open System
+open NUnit.Framework
+open program
 
 let get_int () = get_int ()
 let get_global_int () = get_global_int ()

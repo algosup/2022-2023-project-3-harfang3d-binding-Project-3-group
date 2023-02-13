@@ -139,7 +139,10 @@ func Test(t *testing.T) {
 """
 
 test_fsharp = '''\
-open my_test
+namespace myTest
+open System
+open NUnit.Framework
+open program
 
 let s = return_simple_struct_by_pointer()
 

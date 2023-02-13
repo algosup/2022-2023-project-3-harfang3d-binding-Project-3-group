@@ -49,7 +49,10 @@ func Test(t *testing.T) {
 """
 
 test_fsharp = """\
-open MyTest
+namespace myTest
+open System
+open NUnit.Framework
+open program
 
 [<Test>]
 let test () =

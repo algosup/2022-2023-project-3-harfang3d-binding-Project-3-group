@@ -253,9 +253,10 @@ func Test(t *testing.T) {
 '''
 
 test_fsharp = '''\
+namespace myTest
 open System
 open NUnit.Framework
-open MyTest
+open program
 
 let v = VectorOfInt()
 
