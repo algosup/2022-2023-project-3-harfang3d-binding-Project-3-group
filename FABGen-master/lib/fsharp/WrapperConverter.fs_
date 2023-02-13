@@ -1,0 +1,31 @@
+let wrapFloat = (f) => {
+  return {
+    valueOf: () => f,
+    toString: () => f.toString()
+  };
+};
+
+let wrapString = (s) => {
+  return {
+    valueOf: () => s,
+    toString: () => s
+  };
+};
+
+let wrapBytes = (b) => {
+  return {
+    valueOf: () => b,
+    toString: () => b.toString()
+  };
+};
+
+struct stringBuffer {
+    ptr  unsafe.Pointer
+	size int
+}
+
+let newStringBuffer = (s) => {
+  let buf = stringBuffer{ptr: unsafe.Pointer(&s), size: len(s)}
+  return buf
+};
+

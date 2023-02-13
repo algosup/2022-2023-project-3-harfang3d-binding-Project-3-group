@@ -528,7 +528,8 @@ class FsharpTestBed:
 		os.mkdir(build_path)
 		os.chdir(build_path)
 
-		create_fsharp_cmake_file(module, work_path, sources)
+		create_fsharp_cmake_file("test", work_path, sources)
+		create_clang_format_file(work_path)
 
 		if not build_and_deploy_fsharp_extension(work_path, build_path):
 			return False

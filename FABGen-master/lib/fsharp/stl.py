@@ -1,6 +1,6 @@
 import lang.fsharp
 
-def bind_std(gen):
+def bind_stl(gen):
     gen.add_include("System.Runtime.InteropServices")
     gen.add_include('vector', True)
     gen.add_include('string', True)
@@ -26,7 +26,7 @@ def bind_std(gen):
         def from_c_call(self, out_var, expr, ownership):
             return f"Marshal.PtrToStringAnsi({out_var})"
 
-    gen.bind_type("std::string", FSharpStringConverter)
+    gen.bind_type(FSharpStringConverter("std::string"))
 
 def bind_function_T(gen, type, bound_name=None):
     class FSharpStdFunctionConverter(lang.fsharp.FSharpTypeConverterCommon):

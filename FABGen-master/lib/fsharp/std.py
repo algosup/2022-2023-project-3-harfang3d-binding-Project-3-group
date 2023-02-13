@@ -68,7 +68,7 @@ def bind_std(gen):
     gen.bind_type(FSharpBasicTypeConverter("float32", "float", "float32"))
     gen.bind_type(FSharpBasicTypeConverter("float", "float", "float32"))
     gen.bind_type(FSharpBasicTypeConverter("intptr_t", "intptr_t", "uintptr"))
-    gen.bind_type(FSharpBasicTypeConverter("unsigned long", "C.uint64_t", "uint64"))
+    gen.bind_type(FSharpBasicTypeConverter("unsigned long", "uint64_t", "uint64"))
     gen.bind_type(FSharpBasicTypeConverter("uint64_t", "uint64_t ", "uint64"))
     gen.bind_type(FSharpBasicTypeConverter("double", "double", "float64"))
 
@@ -93,4 +93,4 @@ def bind_std(gen):
 
         def from_c_call(self, out_var, expr, ownership):
             return f"{out_var}"
-    gen.bind_type(FSharpBoolConverter("bool", "C.bool", "bool")).nobind = True
+    gen.bind_type(FSharpBoolConverter("bool", "bool", "bool")).nobind = True
