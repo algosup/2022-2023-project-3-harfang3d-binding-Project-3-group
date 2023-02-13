@@ -53,6 +53,8 @@ Some of their customers:
 **​HARFANG®3D company:**
 - [​HARFANG®3D Linkedin](https://www.linkedin.com/company/harfang3d/)
 - [​HARFANG®3D website](https://www.harfang3d.com/en_US/)
+- [​HARFANG®3D Github](https://github.com/harfang3d)
+- [​HARFANG® Commercial Licence](https://github.com/harfang3d/harfang3d/blob/main/LICENSE-HARFANG-COMMERCIAL)
 
 **​HARFANG®3D staff:**
 - [François Gutherz](https://www.linkedin.com/in/astrofra/), CTO & Project leader HARFANG®3D
@@ -74,7 +76,12 @@ Some of their customers:
 
 ## Glossary
 <!-- write down all the words specific to the client's field, or the products your creating for the client (or both) with a short definition -->
-​
+​​| Words                                               	| Definition                                                                                                                                                            	|
+|-----------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+| MIT License (Massachusetts Institute of Technology) 	| A permissive free software license, it puts only very limited restriction on reuse and has, therefore, high license compatibility.                                    	|
+| GNU Lesser General Public License                   	| A free-software license published by the Free Software Foundation.                                                                                                    	|
+| Game engine                                         	| It's a software framework primarily designed for the development of video games and generally includes relevant libraries and support programs.                       	|
+| Language binding                                    	| A wrapper libraries that bridge between two programming languages so that a library that was written for one language can also be implicitly used in another language 	|
 ​
 # Communication
 ## Who?
