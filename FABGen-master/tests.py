@@ -483,7 +483,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 ''')
 
-		if args.debug:
+		if args.debug_test:
 			file.write('''set(CMAKE_BUILD_TYPE Debug)''')
 		else:
 			file.write('''set(CMAKE_BUILD_TYPE Release)''')
