@@ -76,6 +76,4 @@ The Harfang project is on a open source Github with 3 licences:
 | Language binding                                    	| A wrapper libraries that bridge between two programming languages so that a library that was written for one language can also be implicitly used in another language 	|
 | Open source                                         	| Denoting software for which the original source code is made freely available and may be redistributed and modified.                                                  	|
 ​
-# Comparison table
-​
 ​
