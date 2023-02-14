@@ -36,8 +36,8 @@
 - OpenSpace develops an AI-driven photo documentation tool that automatically creates navigable photo representations of job sites.
 ​
 ### Open source project
-The Harfang project is on a open source Github with 3 liscences:
-| Liscence                               	| Description                                                                                                                                                                                                                                                                                                                                               	|
+The Harfang project is on a open source Github with 3 licences:
+| Licence                               	| Description                                                                                                                                                                                                                                                                                                                                               	|
 |----------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
 | GNU Lesser General Public License v3.0 	| Allows developers and companies to use and integrate a software component released under the LGPL into their own (even proprietary) software without being required by the terms of a strong copyleft license to release the source code of their own components.                                                                                         	|
 | MIT License                            	| Gives users express permission to reuse code for any purpose, sometimes even if code is part of proprietary software. As long as users include the original copy of the MIT license in their distribution, they can make any changes or modifications to the code to suit their own needs                                                                 	|
@@ -74,6 +74,7 @@ The Harfang project is on a open source Github with 3 liscences:
 | GNU Lesser General Public License                   	| A free-software license published by the Free Software Foundation.                                                                                                    	|
 | Game engine                                         	| It's a software framework primarily designed for the development of video games and generally includes relevant libraries and support programs.                       	|
 | Language binding                                    	| A wrapper libraries that bridge between two programming languages so that a library that was written for one language can also be implicitly used in another language 	|
+| Open source                                         	| Denoting software for which the original source code is made freely available and may be redistributed and modified.                                                  	|
 ​
 # Comparison table
 ​
