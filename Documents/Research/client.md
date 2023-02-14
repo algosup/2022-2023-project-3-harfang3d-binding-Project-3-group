@@ -77,13 +77,15 @@ Some of their customers:
 ## Glossary
 <!-- write down all the words specific to the client's field, or the products your creating for the client (or both) with a short definition -->
 
-| Words                                               	| Definition                                                                                                                                                            	|
-|-----------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
-| MIT License (Massachusetts Institute of Technology) 	| A permissive free software license, it puts only very limited restriction on reuse and has, therefore, high license compatibility.                                    	|
-| GNU Lesser General Public License                   	| A free-software license published by the Free Software Foundation.                                                                                                    	|
-| Game engine                                         	| It's a software framework primarily designed for the development of video games and generally includes relevant libraries and support programs.                       	|
-| Language binding                                    	| A wrapper libraries that bridge between two programming languages so that a library that was written for one language can also be implicitly used in another language 	|
-​
+| Words                                               	| Definition                                                                                                                                                                     	| Sources                                                                                  	|
+|-----------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|------------------------------------------------------------------------------------------	|
+| MIT License (Massachusetts Institute of Technology) 	| A permissive free software license, it puts only very limited restriction on reuse and has, therefore, high license compatibility.                                             	| [Wikipedia](https://en.wikipedia.org/wiki/MIT_License)                                   	|
+| GNU Lesser General Public License                   	| A free-software license published by the Free Software Foundation.                                                                                                             	| [Wikipedia](https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License)             	|
+| Game engine                                         	| It's a software framework primarily designed for the development of video games and generally includes relevant libraries and support programs.                                	| [Wikipedia](https://en.wikipedia.org/wiki/Game_engine)                                   	|
+| Language binding                                    	| A wrapper libraries that bridge between two programming languages so that a library that was written for one language can also be implicitly used in another language.         	| [Stack Overflow](https://stackoverflow.com/questions/25865/what-is-a-language-binding)  	|
+| Wrapper function                                    	| A function that is intended to call one or more other functions, sometimes purely for convenience, and sometimes adapting them to do a slightly different task in the process. 	| [MDN Web Docs Glossary](https://developer.mozilla.org/en-US/docs/Glossary/Wrapper)       	|
+| Open source                                         	| Denoting software for which the original source code is made freely available and may be redistributed and modified.                                                           	| Definition from Oxford Languages.                                                       	|
+| FABGen                                              	| Fabgen is a set of Python scripts to generate C++ binding code to different languages.                                                                                         	| [readme](https://github.com/ejulien/FABGen#readme)                                       	|
 # Communication
 ## Who?
 
@@ -95,7 +97,5 @@ Some of their customers:
 
 Our main contact for this project is **François Gutherz**, then **Emmanuel Julien**. For more technical questions we can ask **Thomas Simonet** too.
 
-<!-- Add link to the data organisation or source -->
-<!-- licence orthographe -->
 <!-- Why this link are usefull -> competition -->
 <!-- What information we find on source -->
