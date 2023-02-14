@@ -94,3 +94,8 @@ Some of their customers:
 | Thomas Simonet, Lead Developer R&D VR and Car simulation 	| Slack                           	| thomas.simonnet@harfang3d.com  	|
 
 Our main contact for this project is **François Gutherz**, then **Emmanuel Julien**. For more technical questions we can ask **Thomas Simonet** too.
+
+<!-- Add link to the data organisation or source -->
+<!-- licence orthographe -->
+<!-- Why this link are usefull -> competition -->
+<!-- What information we find on source -->
