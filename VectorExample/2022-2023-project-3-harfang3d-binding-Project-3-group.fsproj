@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+<PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>_2022_2023_project_3_harfang3d_binding_Project_3_group</RootNamespace>
+</PropertyGroup>
+
+<ItemGroup>
+	<Compile Include="vector.fs" />
+	<Compile Include="Test/testVector.fs" />
+	<Compile Include="main.fs" />
+	<None Include="lib/libvector.dylib">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+</ItemGroup>
+
+<ItemGroup>
+  <PackageReference Include="FsUnit" Version="5.2.0" />
+  <PackageReference Include="NUnit" Version="3.13.3" />
+  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+  <PackageReference Include="NUnit3TestAdapter" Version="4.2.0" />
+</ItemGroup>
+
+</Project>
