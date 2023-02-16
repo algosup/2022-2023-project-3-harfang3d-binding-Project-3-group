@@ -10,13 +10,10 @@
 
 <hr>
 
-# Summary
-
 <details>
 
 <summary>Table of content</summary>
     
-- [Summary](#summary)
 - [Context](#context)
 - [Goal](#goal)
 - [Solution](#solution)

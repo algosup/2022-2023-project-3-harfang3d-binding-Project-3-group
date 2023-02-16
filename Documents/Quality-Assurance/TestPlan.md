@@ -9,13 +9,11 @@
 <p align="center"> ALGOSUP, Group 3. All Rights Reserved. </p>
 
 <hr>
-# Test plan - Harfang 3D
 
-<summary>
-        <b>Table of Content</b>
-</summary>
+<details>
 
-- [Test plan - Harfang 3D](#test-plan---harfang-3d)
+<summary>Table of content</summary>
+
 - [Test policy](#test-policy)
   - [Mission of testing](#mission-of-testing)
 - [Test strategy](#test-strategy)
@@ -29,9 +27,10 @@
       - [Testers](#testers)
       - [How to report a bug](#how-to-report-a-bug)
   - [Test Environment Management](#test-environment-management)
-  - [Configuration management](#configuration-management)
 - [Test case](#test-case)
+- [Acceptance criteria](#acceptance-criteria)
 - [Glossary](#glossary)
+</details>
 
 # Test policy
 ## Mission of testing
@@ -112,11 +111,10 @@ List of the different activities used for an efficient test management:
 5. Issues on the environment's monitoring
 6. Co-ordination untill an issue resolution.
 
-## Configuration management
-<!-- WIP -->
 # Test case
 **Features need to be tested:** Transform a C++ function in F# function
 **Features need not to be tested:** Transform a F# function in C++ function
+
 | Test Case ID 	| Test Case Description                                               	| Test Steps                 	| Test Data              	| Expected Results                                 	| Actual Results                                   	| Pass/Fail 	|
 |--------------	|---------------------------------------------------------------------	|----------------------------	|------------------------	|--------------------------------------------------	|--------------------------------------------------	|-----------	|
 | TC_1         	| Check the distance to origin in Vector 2                            	| Dotnet run on the project  	| Vector2(2.0, 2.0)      	| Distance to origin in Vector 2: 2.828427         	| Distance to origin in Vector 2: 2.828427         	| Pass      	|
@@ -124,6 +122,12 @@ List of the different activities used for an efficient test management:
 | TC_3         	| Check the distance to origin in Vector 3                            	| Dotnet run on the project  	| Vector3(1.0, 2.0, 3.0) 	| Distance to origin in Vector 3: 3.741657         	| Distance to origin in Vector 3: 3.741657         	| Pass      	|
 | TC_4         	| Check the percent distance to origin in Vector 3                    	| Dotnet run on the project  	| Vector3(1.0, 2.0, 3.0) 	| Percent distance to origin in Vector 3: 1.870829 	| Percent distance to origin in Vector 3: 1.870829 	| Pass      	|
 | TC_5         	| Know if the user use a Mac or a Windows to import dll or dylib file 	| Dotnet run on the project  	| /                      	| Run successfully on Windows                      	| Not as expected                                  	| Fail      	|
+
+# Acceptance criteria
+- All tests should run
+- All tests should pass
+- The code should be readable and commented
+- The code should be usable without crashes
 
 # Glossary
 | Words                                                                     	| Definition                                                                                                                                                                                                                                                                                                                                                                                                            	|

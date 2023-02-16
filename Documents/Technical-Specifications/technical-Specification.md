@@ -14,56 +14,56 @@
 <hr>
 
 <details> 
-<summary style="text-decoration: underline; font-size:100%">Table of contents:</summary>
+<summary style="text-decoration: underline; font-size:100%">Table of contents</summary>
 
-- [1. Introduction](#1-introduction)
-	- [a. Overview](#a-overview)
-	- [b. Goal](#b-goal)
-	- [c. Context](#c-context)
-	- [d. Product and Technical Requirements](#d-product-and-technical-requirements)
-	- [e. Future Goals](#e-future-goals)
-	- [f. Assumptions](#f-assumptions)
-- [2. Solutions](#2-solutions)
-	- [a. Current Solution / Design](#a-current-solution--design)
-	- [b. Proposed Solution / Design](#b-proposed-solution--design)
+- [Introduction](#introduction)
+	- [Overview](#overview)
+	- [Goal](#goal)
+	- [Context](#context)
+	- [Product and Technical Requirements](#product-and-technical-requirements)
+	- [Future Goals](#future-goals)
+	- [Assumptions](#assumptions)
+- [Solutions](#solutions)
+	- [Current Solution / Design](#current-solution--design)
+	- [Proposed Solution / Design](#proposed-solution--design)
 		- [Create a mapping of elementary types](#create-a-mapping-of-elementary-types)
 		- [Implement a C API wrapping the C/C++ objects](#implement-a-c-api-wrapping-the-cc-objects)
 		- [Better integration with the target language](#better-integration-with-the-target-language)
-	- [c. Release / Roll-out and Deployment Plan](#c-release--roll-out-and-deployment-plan)
-- [3. New FABGen architecture with F#](#3-new-fabgen-architecture-with-f)
-- [4. Further Considerations](#4-further-considerations)
-	- [a. Impact on customers of HARFANG3D](#a-impact-on-customers-of-harfang3d)
-	- [b. European considerations](#b-european-considerations)
-	- [c. Security considerations](#c-security-considerations)
-	- [d. Legal considerations](#d-legal-considerations)
-- [5. Work](#5-work)
-	- [a Architecture Diagram](#a-architecture-diagram)
-	- [b. Prioritization](#b-prioritization)
-	- [c. Milestones](#c-milestones)
-- [6. Implement functions](#6-implement-functions)
-	- [a. Function 1 : Add a new language](#a-function-1--add-a-new-language)
-	- [b. Function 2 : Add a folder fsharp](#b-function-2--add-a-folder-fsharp)
-	- [c. Function 3 : Add a function for fsharp](#c-function-3--add-a-function-for-fsharp)
-	- [d. Function 4 : Import the new language](#d-function-4--import-the-new-language)
-- [7. Differences types between F# and C++](#7-differences-types-between-f-and-c)
-	- [a. Integer types](#a-integer-types)
-	- [b. Floating types](#b-floating-types)
-	- [c. Boolean type](#c-boolean-type)
-	- [d. Void type](#d-void-type)
-	- [e. String type](#e-string-type)
-- [8. Function change to convert the Go into C++ to after convert the C++ into F#](#8-function-change-to-convert-the-go-into-c-to-after-convert-the-c-into-f)
-	- [a. Function to convert Go types into C++ types](#a-function-to-convert-go-types-into-c-types)
-- [9.Test plan](#9test-plan)
-- [10. Glossary](#10-glossary)
-- [11. End matter](#11-end-matter)
-	- [a. References](#a-references)
-	- [b. Acknowledgement](#b-acknowledgement)
-	- [c. Team members](#c-team-members)
+	- [Release / Roll-out and Deployment Plan](#release--roll-out-and-deployment-plan)
+- [New FABGen architecture with F#](#new-fabgen-architecture-with-f)
+- [Further Considerations](#further-considerations)
+	- [Impact on customers of HARFANG3D](#impact-on-customers-of-harfang3d)
+	- [European considerations](#european-considerations)
+	- [Security considerations](#security-considerations)
+	- [Legal considerations](#legal-considerations)
+- [Work](#work)
+	- [Architecture Diagram](#architecture-diagram)
+	- [Prioritization](#prioritization)
+	- [Milestones](#milestones)
+- [Implement functions](#implement-functions)
+	- [Function 1 : Add a new language](#function-1--add-a-new-language)
+	- [Function 2 : Add a folder fsharp](#function-2--add-a-folder-fsharp)
+	- [Function 3 : Add a function for fsharp](#function-3--add-a-function-for-fsharp)
+	- [Function 4 : Import the new language](#function-4--import-the-new-language)
+- [Differences types between F# and C++](#differences-types-between-f-and-c)
+	- [Integer types](#integer-types)
+	- [Floating types](#floating-types)
+	- [Boolean type](#boolean-type)
+	- [Void type](#void-type)
+	- [String type](#string-type)
+- [Function change to convert the Go into C++ to after convert the C++ into F#](#function-change-to-convert-the-go-into-c-to-after-convert-the-c-into-f)
+	- [Function to convert Go types into C++ types](#function-to-convert-go-types-into-c-types)
+- [Test plan](#test-plan)
+- [Glossary](#glossary)
+- [End matter](#end-matter)
+	- [References](#references)
+	- [Acknowledgement](#acknowledgement)
+	- [Team members](#team-members)
 </details>
 
-# 1. Introduction
+# Introduction
 
-## a. Overview
+## Overview
 
 FABgen is a code generator for C/C++ libraries. It is a tool that takes a C/C++ library and generates a Python, Lua, or Go module that can be used to access the library from the target language.
 FABgen was written for the Harfang 3D | to bring the C++ engine to languages such as Python, Lua and Go. It was written as a replacement for SWIG, a very well-known binding generator supporting a lot of target languages.
@@ -76,15 +76,15 @@ Very old and complex codebase. Language support is written partially in C and SW
 
 Using Python to implement FABgen and the binding definitions themselves. Implementing as much as possible of the features in a common part of the program. As a newer | FABgen also tries to leverage newer APIs whenever possible for example by supporting CPython limited ABI so that extension modules it generates can be used by any version of CPython >3.2 without recompilation (at least in theory, the Py_LIMITED_API support in CPython is finicky at best).
 
-## b. Goal
+## Goal
 
 FABGen was written for the [HARFANG®3D](https://www.harfang3d.com/en_US/) | to bring the C++ engine to languages such as Python, Lua and Go. It was written as a replacement for SWIG, a very well-known binding generator supporting a lot of target languages. SWIG has different issues and that's why HARFANG®3D company create another binding generator. Our objective is to create a binding for F#.<br><br>
 The goal is to implement F# in FABgen to allow non-coding experts to have access to this software. C++ is a very specific language for non-coding experts people so implementing other languages such as Python, F# and Rust allows other experts to easily use FABGen. Adding F# to FABGen will benefit the F# users who need a 3D engine. In addition, people looking for an alternative to SWIG when binding a C++ library to F# might find it useful. F# is known for being a relatively concise and easy-to-learn language, which can allow you to write code more quickly and with fewer errors. Also, F# uses the .NET "int" data type, which is natively optimized for mathematical calculations and bit operations, which can make F# code runs faster than code is written in other languages.<br><br>
 
-## c. Context
+## Context
 At the moment, the 3D engine created by [HARFANG3D](https://www.harfang3d.com/en_US/) is not allowed in all programming languages. Users can't use F# language or Rust language at this moment. This poses a problem especially now when users want to code in these languages. With this | the company wants its future users to be able to use these different languages.
 
-## d. Product and Technical Requirements
+## Product and Technical Requirements
 
 Product requirements :
 - Our product needs to add a language on the FABgen existing to improve it.
@@ -93,15 +93,15 @@ Technical requirements :
 - Following the company's need, **HARFANG3D** advised us to use the same principle to add F# support to FABgen as the one used to add GO support. 
 - Like in addition to being a real | it's also a school |. 
 
-## e. Future Goals
+## Future Goals
 At the moment, the customer only needs to add the F# language. They just want to see our ideas and how we solve this problem technically. So the main goal is to bring a solution to the customer. For the future, it's to add some other languages.
 
-## f. Assumptions
+## Assumptions
 To create our solution product, we need like written the code in python to translate the other programming languages.
   
-# 2. Solutions
+# Solutions
 
-## a. Current Solution / Design 
+## Current Solution / Design 
 
 For the past years, Harfang3D used to work with SWIG, but they had issues like:
 
@@ -119,7 +119,7 @@ Now, the problem is the number of languages supported (only three):
 -   Lua 5.3+,
 -   Go 1.11+.
 
-## b. Proposed Solution / Design
+## Proposed Solution / Design
 
 The proposed solution is to add more languages, starting with Rust.
 
@@ -170,12 +170,12 @@ lib.add(a.ctypes.data_as(ctypes.POINTER(ctypes.c_float)),
 print(c)
 ```
 
-## c. Release / Roll-out and Deployment Plan
+## Release / Roll-out and Deployment Plan
 
 **HARFANG3D** wants to release the product as soon as possible.
 
 
-# 3. New FABGen architecture with F#
+# New FABGen architecture with F#
 
 FABGen had already a specific architecture for files and folders, so you must follow the pattern.
 
@@ -217,32 +217,32 @@ FABGen had already a specific architecture for files and folders, so you must fo
 
 </pre>
 
-# 4. Further Considerations
-## a. Impact on customers of HARFANG3D
+# Further Considerations
+## Impact on customers of HARFANG3D
 
  **HARFANG3D** users cannot at the moment, use the F# language. So if we can add this language, it will be a real plus for the company. It will allow them to have more customers and be more competitive.
 
- ## b. European considerations
+ ## European considerations
 
 HARFANG3D is implemented all over Europe and the regulation about an iso-surface represents points of a constant value within a volume of space. This class holds a fixed-size 3-dimensional grid of values that can efficiently be converted to an iso-surface at runtime for example are the same from all countries.
 
-## c. Security considerations
+## Security considerations
 
 The main element of safety is the safety of the software. The software must be safe for customers. We must avoid any problems related to malware and hackers. The software must be safe for the company. We must avoid any problems related to the company's reputation. The software must be safe for the users. We must avoid any problems related to the users' reputation.
 
-## d. Legal considerations
+## Legal considerations
 
 The legal aspect is very important. Indeed, the product must be certified. For example, in Europe, the certification is ISO. ISO permits have a good quality product.
 But we don't need to concern about the certification because the customers said we don't need to take this into account.
 
-# 5. Work
+# Work
 
 
-## a Architecture Diagram
+## Architecture Diagram
 
 <img src="../img/Architecture_diagram-ADDC_fabgen.drawio.png" alt="Architecture_diagram-ADDC_fabgen.drawio"/>
 
-## b. Prioritization
+## Prioritization
 
 | Flexibility                        | importance             |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -261,7 +261,7 @@ But we don't need to concern about the certification because the customers said 
 | Permit the user to use F#|F0|
 
 
-## c. Milestones
+## Milestones
 | Number of weeks                        | Work we need to do             |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 |1st week| In The first week we will finish the introduction of the |, writing the documentation and the functional specification. Writing the technical and the Architecture diagram.|
@@ -270,9 +270,9 @@ But we don't need to concern about the certification because the customers said 
 |5th and 6th week|We finish all the test with F#. We start to prepare the presentation.|
 |7th week|This is the last step of the project everything should be done and ready to present to the client !<br>Oral presentation.|
 
-# 6. Implement functions
+# Implement functions
   
-## a. Function 1 : Add a new language 
+## Function 1 : Add a new language 
 
 Inside the lang folder we create a fsharp.py file.
 
@@ -292,11 +292,11 @@ class StdSharedPtrProxyFeature:
         return '%s = new std::shared_ptr<%s>(%s);\n' % (out_var, self.wrapped_conv.ctype, in_var)
 ```
 
-## b. Function 2 : Add a folder fsharp
+## Function 2 : Add a folder fsharp
 
 Inside the lib folder, we create a Fsharp folder. In this folder we have the same files as other languages so, __ init__.py, std.py and stl.py .
 
-## c. Function 3 : Add a function for fsharp
+## Function 3 : Add a function for fsharp
 
 Inside the __ init__.py file, we add to the existing function the language for Fsharp.
 
@@ -309,7 +309,7 @@ elif gen.get_language() == 'FSharp':
         lib.fsharp.stl.bind_stl(gen)
 ```
 
-## d. Function 4 : Import the new language
+## Function 4 : Import the new language
 
 Inside the bind.py file we import the new language.
 
@@ -317,9 +317,9 @@ Inside the bind.py file we import the new language.
 import lang.fsharp
 ```
 
-# 7. Differences types between F# and C++
+# Differences types between F# and C++
 
-## a. Integer types
+## Integer types
 F#|C & C++|
 ----|-------|
 byte|(signed) char|
@@ -334,24 +334,24 @@ uint64|unsigned long|
 uint64|unsigned long long int|
 
 
-## b. Floating types
+## Floating types
 |F#|C & C++|
 |----|-------|
 |float32|float|
 |float or double|double|
 |-|long double|
 
-## c. Boolean type
+## Boolean type
 F#|C & C++|
 |----|----|
 |bool|bool|
 
-## d. Void type
+## Void type
 F#|C & C++|
 ----|-------|
 unit|void|
 
-## e. String type
+## String type
 F#|C & C++|
 ----|-------|
 char|char|
@@ -361,9 +361,9 @@ string|string|
 
 
 
-# 8. Function change to convert the Go into C++ to after convert the C++ into F#
+# Function change to convert the Go into C++ to after convert the C++ into F#
 
-## a. Function to convert Go types into C++ types
+## Function to convert Go types into C++ types
 
 We take at the base the function in python to convert it into C++.
   
@@ -535,11 +535,11 @@ cmake --build . --config Release
 ```
 
 
-# 9.Test plan
+# Test plan
 
 Here is the [Test plan](https://github.com/algosup/2022-2023-|-3-harfang3d-binding-|-3-group/blob/main/Documents/Quality-Assurance/TestPlan.md) for the |. It is a document that describes the test cases that will be used to verify that the software product meets or exceeds the customer’s requirements and that all of the software product’s features work as expected.
 
-# 10. Glossary
+# Glossary
 
 | Terms                        | Definition             |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -567,9 +567,9 @@ Here is the [Test plan](https://github.com/algosup/2022-2023-|-3-harfang3d-bindi
 
 
 
-# 11. End matter
+# End matter
 
-## a. References
+## References
 
 https://www.harfang3d.com/en_US/
 https://devguide.python.org/documenting/
@@ -578,7 +578,7 @@ https://devguide.python.org/documentation/start-documenting/index.html
 https://fsharpforfunandprofit.com
 https://www.swig.org/doc.html
 
-## b. Acknowledgement
+## Acknowledgement
 
 | Name | Contact             |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -589,7 +589,7 @@ https://www.swig.org/doc.html
 |François Gutherz|francois.gutherz@harfang3d.com|
 |Emmanuel Julien|emmanuel.julien@harfang3d.com|
 
-## c. Team members
+## Team members
 
 | Name and Github| Role             |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
