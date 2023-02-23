@@ -48,8 +48,8 @@ Attached below is a diagram illustrating the relationship between HARFANG®3D an
 **Company distribution**
 | Person           	| Company role         	| Contact                        	|
 |------------------	|----------------------	|--------------------------------	|
-| François Gutherz 	| CTO & Project leader 	| francois.gutherz@harfang3d.com 	|
-| Emmanuel Julien  	| Lead developer       	| emmanuel.julien@harfang3d.com  	|
+| François Gutherz 	| CTO & Project leader 	| mail	|
+| Emmanuel Julien  	| Lead developer       	| mail  	|
 
 
 # Solution

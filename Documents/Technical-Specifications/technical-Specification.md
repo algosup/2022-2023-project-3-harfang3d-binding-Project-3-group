@@ -582,12 +582,12 @@ https://www.swig.org/doc.html
 
 | Name | Contact             |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|Robert Pickering|robertfpickering@fastmail.com|
-|Delphine Prousteau|dprousteau@quanaup.fr|
-|Jihane Billacois|jihb@sent.com|
-|Caroline Cordier|caroline.cordier@gmail.com|
-|François Gutherz|francois.gutherz@harfang3d.com|
-|Emmanuel Julien|emmanuel.julien@harfang3d.com|
+|Robert Pickering|Mail|
+|Delphine Prousteau|Mail|
+|Jihane Billacois|Mail|
+|Caroline Cordier|Mail|
+|François Gutherz|Mail|
+|Emmanuel Julien|Mail|
 
 ## Team members
 

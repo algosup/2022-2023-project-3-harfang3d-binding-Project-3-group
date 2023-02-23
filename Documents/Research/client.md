@@ -89,11 +89,11 @@ Some of their customers:
 # Communication
 ## Who?
 
-| Name                                                     	| Preferred communication channel 	| Contact                        	|
-|----------------------------------------------------------	|---------------------------------	|--------------------------------	|
-| François Gutherz, CTO & Project leader HARFANG®3D        	| Mail, visio, appointment, Slack 	| francois.gutherz@harfang3d.com 	|
-| Emmanuel Julien, Lead developer HARFANG®3D               	| Mail                            	| emmanuel.julien@harfang3d.com  	|
-| Thomas Simonet, Lead Developer R&D VR and Car simulation 	| Slack                           	| thomas.simonnet@harfang3d.com  	|
+| Name                                                     	| Preferred communication channel 	|
+|----------------------------------------------------------	|---------------------------------	|
+| François Gutherz, CTO & Project leader HARFANG®3D        	| Mail, visio, appointment, Slack 	|
+| Emmanuel Julien, Lead developer HARFANG®3D               	| Mail                            	|
+| Thomas Simonet, Lead Developer R&D VR and Car simulation 	| Slack                           	|
 
 Our main contact for this project is **François Gutherz**, then **Emmanuel Julien**. For more technical questions we can ask **Thomas Simonet** too.
 
