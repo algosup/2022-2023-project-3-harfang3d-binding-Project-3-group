@@ -7,11 +7,14 @@
 ​
 ## Target audience/customer
 **Designer:** Have a better visualization without necessarily knowing how to code.
-**senior Developer:** All senior developer with knowledge about F#, GO, LUA, Rust or Python.
-**junior Developer:** All junior developer with knowledge about F#, GO, LUA, Rust or Python.
-**non-expert in programation:** This software could be use by non-expert in programation people for their own sector if they need augmented or virtual reality.
 
-### intended sector
+**Senior Developer:** All senior developer with knowledge about F#, GO, LUA, Rust or Python.
+
+**Junior Developer:** All junior developer with knowledge about F#, GO, LUA, Rust or Python.
+
+**Non-expert in programation:** This software could be use by non-expert in programation people for their own sector if they need augmented or virtual reality.
+
+### Intended sector
 ​For industry, medical research, military applications, education, science...
 
 ## Competition
